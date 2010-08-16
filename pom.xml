@@ -75,7 +75,7 @@
         <name>The eFaps Team</name>
         <url>http://www.efaps.org</url>
     </organization>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -335,6 +335,10 @@
             <artifactId>efaps-erp-accounting</artifactId>
             <version>${project.version}</version>
         </dependency>
+         <dependency>
+            <groupId>org.efaps.apps</groupId>
+            <artifactId>issues</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
-
 </project>
