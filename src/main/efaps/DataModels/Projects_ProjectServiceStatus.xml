@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ Copyright 2003 - 2009 The eFaps Team
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author:          The eFaps Team
+ Revision:        $Rev$
+ Last Changed:    $Date$
+ Last Changed By: $Author$
+
+-->
+
+<datamodel-statusgroup  xmlns="http://www.efaps.org/xsd"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+  <uuid>d5e36113-c9f2-4bf0-bcc5-b79279b73a6e</uuid>
+  <file-application>eFaps-ERP-Projects</file-application>
+  <file-revision>$Rev$</file-revision>
+
+  <definition>
+
+    <version-expression>(version==latest)</version-expression>
+    <name>Projects_ProjectServiceStatus</name>
+    <parent>Projects_ProjectStatus</parent>
+
+    <status key="Open">
+      <description>Project was created, and is worked in.</description>
+    </status>
+
+    <status key="Closed">
+      <description>Project was closed.</description>
+    </status>
+
+   <status key="Canceled">
+     <description>Project was canceled.</description>
+    </status>
+
+  </definition>
+</datamodel-statusgroup>
+

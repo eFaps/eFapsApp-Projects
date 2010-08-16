@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+  Copyright 2009 moxter.net S.A.C.
+
+  All Rights Reserved.
+  This program contains proprietary and trade secret information of
+  moxter.net S.A.C. Copyright notice is precautionary only and does not
+  evidence any actual or intended publication of such program.
+
+  Author:          moxter.net S.A.C.
+  Revision:        $Rev$
+  Last Changed:    $Date$
+  Last Changed By: $Author$
+
+-->
+
+<access-set xmlns="http://www.efaps.org/xsd"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>f4ccec58-376e-4eb8-94c0-e2fa4037820c</uuid>
+    <file-application>eFaps-ERP-Projects</file-application>
+    <file-revision>$Rev$</file-revision>
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+        <name>Projects_Modifier</name>
+
+        <access-type>show</access-type>
+        <access-type>read</access-type>
+        <access-type>modify</access-type>
+        <access-type>checkout</access-type>
+        <access-type>checkin</access-type>
+        <access-type>create</access-type>
+
+        <type>Projects_ProjectService</type>
+        <type>Projects_ServiceRequest</type>
+        <type>Projects_WorkOrder</type>
+        <type>Projects_WorkReport</type>
+
+        <status group="Projects_ProjectServiceStatus">
+            <key>Open</key>
+            <key>Closed</key>
+            <key>Canceled</key>
+        </status>
+
+         <status group="Projects_ServiceRequestStatus">
+            <key>Open</key>
+            <key>Accepted</key>
+            <key>Closed</key>
+            <key>Canceled</key>
+        </status>
+
+         <status group="Projects_WorkOrderStatus">
+            <key>Open</key>
+            <key>Closed</key>
+            <key>Canceled</key>
+        </status>
+
+        <status group="Projects_WorkReportStatus">
+            <key>Open</key>
+            <key>Closed</key>
+            <key>Canceled</key>
+        </status>
+
+        <role>Projects_Modifier</role>
+    </definition>
+
+</access-set>
+
+
