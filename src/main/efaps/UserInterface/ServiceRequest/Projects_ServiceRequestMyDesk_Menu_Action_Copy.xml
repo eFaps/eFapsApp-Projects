@@ -28,7 +28,7 @@
             xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
 
     <uuid>f93b6b24-10a2-4aca-bad7-a88340f44eb0</uuid>
-    <file-application>eFaps-ERP-Projects</file-application>
+    <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev$</file-revision>
 
     <definition>

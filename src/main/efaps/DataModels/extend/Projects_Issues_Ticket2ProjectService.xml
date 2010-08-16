@@ -17,9 +17,9 @@
  limitations under the License.
 
  Author:          The eFaps Team
- Revision:        $Rev: 4203 $
- Last Changed:    $Date: 2010-04-21 12:16:47 -0500 (Wed, 21 Apr 2010) $
- Last Changed By: $Author: miguel.a.aranya $
+ Revision:        $Rev$
+ Last Changed:    $Date$
+ Last Changed By: $Author$
 
 -->
 
@@ -28,7 +28,7 @@
                  xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>a685e79a-c320-4dcb-ad3f-6bbbfecc5850</uuid>
     <file-application>eFapsApp-Issues</file-application>
-    <file-revision>$Rev: 4203 $</file-revision>
+    <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Projects_Issues_Ticket2ProjectService</name>

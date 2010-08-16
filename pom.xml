@@ -33,8 +33,8 @@
     * Module Definition
     ************************************************************************* -->
     <packaging>jar</packaging>
-    <groupId>org.efaps.module</groupId>
-    <artifactId>efaps-erp-projects</artifactId>
+    <groupId>org.efaps.apps</groupId>
+    <artifactId>projects</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>eFaps ERP Projects Module</name>
     <description>
@@ -331,8 +331,8 @@
     <dependencies>
         <!-- eFaps ERP Products Module -->
         <dependency>
-            <groupId>org.efaps.module</groupId>
-            <artifactId>efaps-erp-accounting</artifactId>
+            <groupId>org.efaps.apps</groupId>
+            <artifactId>accounting</artifactId>
             <version>${project.version}</version>
         </dependency>
          <dependency>
