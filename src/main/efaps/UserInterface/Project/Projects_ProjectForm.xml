@@ -86,7 +86,7 @@
                    method="autoComplete4Contact"
                    name="Projects_ProjectForm.contact.UI_Field_Autocomplete"
                    event="UI_FIELD_AUTOCOMPLETE">
-                <property name="Type">Sales_ContactsClient</property>
+                <property name="Type">Sales_Contacts_ClassClient</property>
             </trigger>
             <trigger program="org.efaps.esjp.projects.Project"
                     method="updateFields4Contact"
