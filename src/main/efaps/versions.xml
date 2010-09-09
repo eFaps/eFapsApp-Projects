@@ -58,6 +58,11 @@
         </dependency>
         <dependency order="6">
             <groupId>org.efaps.apps</groupId>
+            <artifactId>issues</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency order="7">
+            <groupId>org.efaps.apps</groupId>
             <artifactId>accounting</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
