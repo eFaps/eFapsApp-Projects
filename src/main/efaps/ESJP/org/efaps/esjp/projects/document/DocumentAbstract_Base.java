@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,26 +24,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
-import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Parameter.ParameterValues;
+import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Instance;
+import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.PrintQuery;
-import org.efaps.db.SearchQuery;
+import org.efaps.db.QueryBuilder;
+import org.efaps.esjp.ci.CIContacts;
 import org.efaps.util.EFapsException;
 
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ * @version $Id: DocumentAbstract_Base.java 3725 2010-02-15 04:15:09Z jan.moxter
+ *          $
  */
 @EFapsUUID("f50c42d3-f5c2-4537-a5d1-8f91dec485c5")
 @EFapsRevision("$Rev$")
@@ -53,15 +57,16 @@ public abstract class DocumentAbstract_Base
      * Autocomplete for the field used to select a contact. Depending on the
      * first character of the given input it is decided if the search will be
      * done for the name or for the taxnumber/Identity Carde. If the first
-     * character is a number it will be searched in the name field, if it is
-     * a letter it will be searched in the classification that contains the
+     * character is a number it will be searched in the name field, if it is a
+     * letter it will be searched in the classification that contains the
      * taxnumber or Identity Card.
      *
-     * @param _parameter    Parameter as passed from eFaps
+     * @param _parameter Parameter as passed from eFaps
      * @return Return containing map needed for an autocomplete field
      * @throws EFapsException on error
      */
-    public Return autoComplete4Contact(final Parameter _parameter) throws EFapsException
+    public Return autoComplete4Contact(final Parameter _parameter)
+        throws EFapsException
     {
         final String input = (String) _parameter.get(ParameterValues.OTHERS);
         final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
@@ -70,15 +75,14 @@ public abstract class DocumentAbstract_Base
         if (input.length() > 0) {
             final boolean nameSearch = !Character.isDigit(input.charAt(0));
             if (nameSearch) {
-                final SearchQuery query = new SearchQuery();
-                query.setQueryTypes(type);
-                query.addWhereExprMatchValue("Name", input + "*").setIgnoreCase(true);
-                query.addSelect("OID");
-                query.addSelect("Name");
-                query.execute();
-                while (query.next()) {
-                    final String name = (String) query.get("Name");
-                    final String oid = (String) query.get("OID");
+                final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
+                queryBldr.addWhereAttrMatchValue("Name", input + "*").setIgnoreCase(true);
+                final MultiPrintQuery multi = queryBldr.getPrint();
+                multi.addAttribute("OID", "Name");
+                multi.execute();
+                while (multi.next()) {
+                    final String name = multi.<String>getAttribute("Name");
+                    final String oid = multi.<String>getAttribute("OID");
                     final Map<String, String> map = new HashMap<String, String>();
                     map.put("eFapsAutoCompleteKEY", oid);
                     map.put("eFapsAutoCompleteVALUE", name);
@@ -86,30 +90,26 @@ public abstract class DocumentAbstract_Base
                     list.add(map);
                 }
             } else {
-                final SearchQuery query = new SearchQuery();
-                query.setQueryTypes("Contacts_ClassOrganisation");
-                query.addWhereExprMatchValue("TaxNumber", input + "*");
-                query.addSelect("ContactId");
-                query.addSelect("TaxNumber");
-                query.execute();
+                final QueryBuilder queryBldr = new QueryBuilder(CIContacts.ClassOrganisation);
+                queryBldr.addWhereAttrMatchValue(CIContacts.ClassOrganisation.TaxNumber, input + "*");
+                final MultiPrintQuery multi = queryBldr.getPrint();
+                multi.addAttribute(CIContacts.ClassOrganisation.ContactId, CIContacts.ClassOrganisation.TaxNumber);
+                multi.execute();
                 final Map<String, Instance> tax2instances = new TreeMap<String, Instance>();
-                while (query.next()) {
-                    tax2instances.put((String) query.get("TaxNumber"),
-                                      Instance.get(type, ((Long) query.get("ContactId")).toString()));
+                while (multi.next()) {
+                    tax2instances.put(multi.<String>getAttribute("TaxNumber"),
+                                      Instance.get(type, (multi.<Long>getAttribute("ContactId")).toString()));
                 }
-                query.close();
 
-                final SearchQuery query2 = new SearchQuery();
-                query2.setQueryTypes("Contacts_ClassPerson");
-                query2.addWhereExprMatchValue("IdentityCard", input + "*");
-                query2.addSelect("ContactId");
-                query2.addSelect("IdentityCard");
-                query2.execute();
-                while (query2.next()) {
-                    tax2instances.put((String) query2.get("IdentityCard"),
-                                      Instance.get(type, ((Long) query2.get("ContactId")).toString()));
+                final QueryBuilder queryBldr2 = new QueryBuilder(CIContacts.ClassPerson);
+                queryBldr2.addWhereAttrMatchValue(CIContacts.ClassPerson.IdentityCard, input + "*");
+                final MultiPrintQuery multi2 = queryBldr2.getPrint();
+                multi2.addAttribute(CIContacts.ClassPerson.ContactId, CIContacts.ClassPerson.IdentityCard);
+                multi2.execute();
+                while (multi2.next()) {
+                    tax2instances.put(multi2.<String>getAttribute("IdentityCard"),
+                                      Instance.get(type, (multi2.<Long>getAttribute("ContactId")).toString()));
                 }
-                query2.close();
 
                 for (final Entry<String, Instance> entry : tax2instances.entrySet()) {
                     final PrintQuery print = new PrintQuery(entry.getValue());
@@ -132,11 +132,12 @@ public abstract class DocumentAbstract_Base
     /**
      * Method to update the fields for the contact.
      *
-     * @param _parameter    Parameter as passed from eFaps
+     * @param _parameter Parameter as passed from eFaps
      * @return Return containing map needed to update the fields
      * @throws EFapsException on error
      */
-    public Return updateFields4Contact(final Parameter _parameter) throws EFapsException
+    public Return updateFields4Contact(final Parameter _parameter)
+        throws EFapsException
     {
         final Instance instance = Instance.get(_parameter.getParameterValue("contact"));
         final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
@@ -156,10 +157,11 @@ public abstract class DocumentAbstract_Base
      * Method to get the value for the field directly under the Contact.
      *
      * @param _instance Instacne of the contact
-     * @return  String for the field
-     * @throws EFapsException   on error
+     * @return String for the field
+     * @throws EFapsException on error
      */
-    protected String getFieldValue4Contact(final Instance _instance) throws EFapsException
+    protected String getFieldValue4Contact(final Instance _instance)
+        throws EFapsException
     {
         final PrintQuery print = new PrintQuery(_instance);
         print.addSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]");
@@ -172,14 +174,20 @@ public abstract class DocumentAbstract_Base
         final StringBuilder strBldr = new StringBuilder();
         strBldr.append(dni ? DBProperties.getProperty("Contacts_ClassPerson/IdentityCard.Label")
                             : DBProperties.getProperty("Contacts_ClassOrganisation/TaxNumber.Label"))
-                 .append(": ").append(dni ? idcard : taxnumber).append("  -  ")
-                 .append(DBProperties.getProperty("Sales_Contacts_ClassClient/BillingAdressStreet.Label"))
-                 .append(": ")
-                 .append(print.getSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]"));
+            .append(": ").append(dni ? idcard : taxnumber).append("  -  ")
+            .append(DBProperties.getProperty("Sales_Contacts_ClassClient/BillingAdressStreet.Label"))
+            .append(": ")
+            .append(print.getSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]"));
         return strBldr.toString();
     }
 
-
+    /**
+     * Method for obtains a javascript.
+     *
+     * @param _parameter Parameter as passed from the eFaps API.
+     * @return new Return.
+     * @throws EFapsException on error.
+     */
     public Return getJavaScriptUIValue(final Parameter _parameter)
         throws EFapsException
     {

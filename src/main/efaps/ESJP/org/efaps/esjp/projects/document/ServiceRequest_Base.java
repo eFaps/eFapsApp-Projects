@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
-import org.efaps.esjp.projects.Projects;
+import org.efaps.esjp.ci.CIProjects;
 import org.efaps.util.EFapsException;
 
 /**
@@ -38,25 +38,28 @@ import org.efaps.util.EFapsException;
  */
 @EFapsUUID("d77c0a30-4414-422a-8a8d-6426a8c3014e")
 @EFapsRevision("$Rev$")
-public class ServiceRequest_Base extends DocumentAbstract
+public class ServiceRequest_Base
+    extends DocumentAbstract
 {
     /**
      * Method used to create a new ServiceRequest.
+     *
      * @param _parameter Parameter as passed from the eFasp API
      * @return new Return
      * @throws EFapsException on error
      */
-    public Return create(final Parameter _parameter) throws EFapsException
+    public Return create(final Parameter _parameter)
+        throws EFapsException
     {
         final Long contactid = Instance.get(_parameter.getParameterValue("contact")).getId();
         final String date = _parameter.getParameterValue("date");
 
-        final Insert insert = new Insert(Projects.SERVICEREQUEST.getUuid());
-        insert.add("Name", _parameter.getParameterValue("name"));
-        insert.add("Salesperson", _parameter.getParameterValue("salesperson"));
-        insert.add("Contact", contactid);
-        insert.add("Date", date);
-        insert.add("Status", Status.find(Projects.SERVICEREQUESTSTATUS.getUuid(), "Open").getId());
+        final Insert insert = new Insert(CIProjects.ServiceRequest);
+        insert.add(CIProjects.ServiceRequest.Name, _parameter.getParameterValue("name"));
+        insert.add(CIProjects.ServiceRequest.Salesperson, _parameter.getParameterValue("salesperson"));
+        insert.add(CIProjects.ServiceRequest.Contact, contactid);
+        insert.add(CIProjects.ServiceRequest.Date, date);
+        insert.add(CIProjects.ServiceRequest.Status, Status.find(CIProjects.ServiceRequestStatus.uuid, "Open").getId());
         insert.execute();
         return new Return();
     }

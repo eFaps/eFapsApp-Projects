@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
-import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Parameter.ParameterValues;
+import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
@@ -84,7 +84,8 @@ public abstract class Project_Base
         final Instance inst = insert.getInstance();
 
         final Instance callInst = _parameter.getCallInstance();
-        // if the call instance is a service request the status can be set to the next,
+        // if the call instance is a service request the status can be set to
+        // the next,
         // and connect to the service
         if (callInst != null && callInst.getType().equals(CIProjects.ServiceRequest.getType())) {
             final Update update = new Update(callInst);
@@ -100,11 +101,10 @@ public abstract class Project_Base
         return new Return();
     }
 
-
     /**
      * Autocomplete for the field used to select a contact.
      *
-     * @param _parameter    Parameter as passed from eFaps
+     * @param _parameter Parameter as passed from eFaps
      * @return Return containing map needed for an autocomplete field
      * @throws EFapsException on error
      */
@@ -136,11 +136,10 @@ public abstract class Project_Base
         return retVal;
     }
 
-
     /**
      * Autocomplete for the field used to select a project.
      *
-     * @param _parameter    Parameter as passed from eFaps
+     * @param _parameter Parameter as passed from eFaps
      * @return Return containing map needed for an autocomplete field
      * @throws EFapsException on error
      */
@@ -148,7 +147,7 @@ public abstract class Project_Base
         throws EFapsException
     {
         final String input = (String) _parameter.get(ParameterValues.OTHERS);
-        final Map <String, Map<String, String>> sortMap = new TreeMap<String, Map<String, String>>();
+        final Map<String, Map<String, String>> sortMap = new TreeMap<String, Map<String, String>>();
         if (input.length() > 0) {
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
             queryBldr.addWhereAttrMatchValue(CIProjects.ProjectAbstract.Name, input + "*").setIgnoreCase(true);
@@ -175,11 +174,10 @@ public abstract class Project_Base
         return retVal;
     }
 
-
     /**
      * Method to update the fields for the contact.
      *
-     * @param _parameter    Parameter as passed from eFaps
+     * @param _parameter Parameter as passed from eFaps
      * @return Return containing map needed to update the fields
      * @throws EFapsException on error
      */
@@ -200,13 +198,12 @@ public abstract class Project_Base
         return retVal;
     }
 
-
     /**
      * Method to get the value for the field directly under the Contact.
      *
      * @param _instance Instacne of the contact
-     * @return  String for the field
-     * @throws EFapsException   on error
+     * @return String for the field
+     * @throws EFapsException on error
      */
     protected String getFieldValue4Contact(final Instance _instance)
         throws EFapsException
@@ -222,16 +219,17 @@ public abstract class Project_Base
         final StringBuilder strBldr = new StringBuilder();
         strBldr.append(dni ? DBProperties.getProperty("Contacts_ClassPerson/IdentityCard.Label")
                             : DBProperties.getProperty("Contacts_ClassOrganisation/TaxNumber.Label"))
-            .append(": ").append(dni ? idcard : taxnumber).append("  -  ")
-            .append(DBProperties.getProperty("Sales_Contacts_ClassClient/BillingAdressStreet.Label"))
-            .append(": ")
-            .append(print.getSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]"));
+                        .append(": ").append(dni ? idcard : taxnumber).append("  -  ")
+                        .append(DBProperties.getProperty("Sales_Contacts_ClassClient/BillingAdressStreet.Label"))
+                        .append(": ")
+                        .append(print.getSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]"));
         return strBldr.toString();
     }
 
     /**
      * Method returns a javacript to set the values for the contact.
-     * @param _parameter    Parameter as passed from eFaps
+     *
+     * @param _parameter Parameter as passed from eFaps
      * @return Return with javascript
      * @throws EFapsException on error
      */
@@ -242,7 +240,7 @@ public abstract class Project_Base
 
         final StringBuilder js = new StringBuilder();
         js.append("<script type=\"text/javascript\">");
-        if (inst != null && inst.getType().getUUID().equals(Projects.SERVICEREQUEST.getUuid())) {
+        if (inst != null && inst.getType().getUUID().equals(CIProjects.ServiceRequest.uuid)) {
             final PrintQuery print = new PrintQuery(inst);
             print.addSelect("linkto[Contact].oid", "linkto[Contact].attribute[Name]");
             print.execute();
@@ -264,9 +262,10 @@ public abstract class Project_Base
     }
 
     /**
-     * Method to connect a document to a service. the type of the ralation
-     * is evaluated and set automatically.
-     * @param _parameter    Parameter as passed from eFaps
+     * Method to connect a document to a service. the type of the ralation is
+     * evaluated and set automatically.
+     *
+     * @param _parameter Parameter as passed from eFaps
      * @return empty Return
      * @throws EFapsException on error
      */
@@ -358,10 +357,10 @@ public abstract class Project_Base
         return multi.next();
     }
 
-
     /**
      * Create a Label for accounting from a project.
-     * @param  _parameter Parameter as passed from the eFaps API
+     *
+     * @param _parameter Parameter as passed from the eFaps API
      * @return new empty Return
      * @throws EFapsException on error
      */

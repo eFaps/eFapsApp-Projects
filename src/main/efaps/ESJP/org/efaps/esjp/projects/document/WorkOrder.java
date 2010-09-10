@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  */
 @EFapsUUID("3762003a-d37d-4870-a6b3-117f263556f7")
 @EFapsRevision("$Rev$")
-public class WorkOrder extends WorkOrder_Base
+public class WorkOrder
+    extends WorkOrder_Base
 {
 
 }

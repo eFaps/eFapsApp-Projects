@@ -29,7 +29,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
-import org.efaps.esjp.projects.Projects;
+import org.efaps.esjp.ci.CIProjects;
 import org.efaps.util.EFapsException;
 
 /**
@@ -40,43 +40,48 @@ import org.efaps.util.EFapsException;
  */
 @EFapsUUID("8d8ef20d-8e38-4e39-b2d3-a555959dcaff")
 @EFapsRevision("$Rev$")
-public class WorkOrder_Base extends DocumentAbstract
+public class WorkOrder_Base
+    extends DocumentAbstract
 {
     /**
      * Method used to create a new ServiceRequest.
+     *
      * @param _parameter Parameter as passed from the eFasp API
      * @return new Return
      * @throws EFapsException on error
      */
-    public Return create(final Parameter _parameter) throws EFapsException
+    public Return create(final Parameter _parameter)
+        throws EFapsException
     {
         final Long contactid = Instance.get(_parameter.getParameterValue("contact")).getId();
         final String date = _parameter.getParameterValue("date");
 
-        final Insert insert = new Insert(Projects.WORKORDER.getUuid());
-        insert.add("Name", _parameter.getParameterValue("name"));
-        insert.add("Salesperson", _parameter.getParameterValue("salesperson"));
-        insert.add("Contact", contactid);
-        insert.add("Date", date);
-        insert.add("Status", Status.find(Projects.WORKORDERSTATUS.getUuid(), "Open").getId());
+        final Insert insert = new Insert(CIProjects.WorkOrder);
+        insert.add(CIProjects.WorkOrder.Name, _parameter.getParameterValue("name"));
+        insert.add(CIProjects.WorkOrder.Salesperson, _parameter.getParameterValue("salesperson"));
+        insert.add(CIProjects.WorkOrder.Contact, contactid);
+        insert.add(CIProjects.WorkOrder.Date, date);
+        insert.add(CIProjects.WorkOrder.Status, Status.find(CIProjects.WorkOrderStatus.uuid, "Open").getId());
         insert.execute();
         return new Return();
     }
 
-
     /**
      * Method returns a javascript to set the values for the contact.
-     * @param _parameter    Parameter as passed from eFaps
+     *
+     * @param _parameter Parameter as passed from eFaps
      * @return Return with javascript
      * @throws EFapsException on error
      */
-    public Return getJavaScriptUIValue(final Parameter _parameter) throws EFapsException
+    @Override
+    public Return getJavaScriptUIValue(final Parameter _parameter)
+        throws EFapsException
     {
         final Instance inst = _parameter.getCallInstance();
 
         final StringBuilder js = new StringBuilder();
         js.append("<script type=\"text/javascript\">");
-        if (inst != null && inst.getType().getUUID().equals(Projects.SERVICE.getUuid())) {
+        if (inst != null && inst.getType().getUUID().equals(CIProjects.ProjectService.uuid)) {
             final PrintQuery print = new PrintQuery(inst);
             print.addSelect("linkto[Contact].oid", "linkto[Contact].attribute[Name]");
             print.execute();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  */
 @EFapsUUID("54029722-bea5-4a03-81ef-31dd92ba49a6")
 @EFapsRevision("$Rev$")
-public class ServiceRequest extends ServiceRequest_Base
+public class ServiceRequest
+    extends ServiceRequest_Base
 {
 
 }
