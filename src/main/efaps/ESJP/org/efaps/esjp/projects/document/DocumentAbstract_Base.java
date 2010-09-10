@@ -98,7 +98,7 @@ public abstract class DocumentAbstract_Base
                 final Map<String, Instance> tax2instances = new TreeMap<String, Instance>();
                 while (multi.next()) {
                     tax2instances.put(multi.<String>getAttribute("TaxNumber"),
-                                      Instance.get(type, (multi.<Long>getAttribute("ContactId")).toString()));
+                                      Instance.get(type, multi.<Long>getAttribute("ContactId").toString()));
                 }
 
                 final QueryBuilder queryBldr2 = new QueryBuilder(CIContacts.ClassPerson);
@@ -108,7 +108,7 @@ public abstract class DocumentAbstract_Base
                 multi2.execute();
                 while (multi2.next()) {
                     tax2instances.put(multi2.<String>getAttribute("IdentityCard"),
-                                      Instance.get(type, (multi2.<Long>getAttribute("ContactId")).toString()));
+                                      Instance.get(type, multi2.<Long>getAttribute("ContactId").toString()));
                 }
 
                 for (final Entry<String, Instance> entry : tax2instances.entrySet()) {
