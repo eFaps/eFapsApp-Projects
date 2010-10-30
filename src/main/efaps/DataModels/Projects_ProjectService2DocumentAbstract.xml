@@ -33,6 +33,7 @@
         <version-expression>(version==latest)</version-expression>
         <name>Projects_ProjectService2DocumentAbstract</name>
         <parent>Projects_Project2DocumentAbstract</parent>
+        <purpose abstract="true"/>
         <attribute>
             <name>FromService</name>
             <type>Link</type>
