@@ -93,7 +93,7 @@
           <typelink>Admin_User_Person</typelink>
           <sqltable>Projects_ProjectSQLTable</sqltable>
           <sqlcolumn>LEADPERS</sqlcolumn>
-          <trigger program="org.efaps.esjp.admin.datamodel.RangesValue"
+          <trigger program="org.efaps.esjp.admin.datamodel.PersonRangeValue"
                    name="Emperador_Products_ClassFloorLaminate.SurfaceRange"
                    event="RANGE_VALUE">
             <property name="Value">Name</property>
