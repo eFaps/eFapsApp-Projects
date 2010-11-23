@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
@@ -249,16 +250,53 @@ public abstract class Project_Base
             final String contactData = getFieldValue4Contact(Instance.get(contactOID));
 
             js.append("Wicket.Event.add(window, \"domready\", function(event) {")
-                .append(" document.getElementsByName('contact')[0].value='").append(contactOID).append("';")
-                .append("document.getElementsByName('contactAutoComplete')[0].value='").append(contactName).append("';")
-                .append("document.getElementsByName('contactData')[0].appendChild(document.createTextNode('")
-                .append(contactData).append("'));")
+                .append(getSetFieldValue(0, "contact", contactOID, true))
+                .append(getSetFieldValue(0, "contactAutoComplete", contactName, true))
+                .append(getSetFieldValue(0, "contactData", contactData, true))
                 .append(" });");
         }
         js.append("</script>");
         final Return retVal = new Return();
         retVal.put(ReturnValues.SNIPLETT, js.toString());
         return retVal;
+    }
+
+    /**
+     * Get a "eFapsSetFieldValue" Javascript line.
+     * @param _idx          index of the field
+     * @param _fieldName    name of the field
+     * @param _value        value
+     * @return StringBuilder
+     */
+    protected StringBuilder getSetFieldValue(final int _idx,
+                                             final String _fieldName,
+                                             final String _value)
+    {
+        return getSetFieldValue(_idx, _fieldName, _value, true);
+    }
+
+    /**
+     * Get a "eFapsSetFieldValue" Javascript line.
+     * @param _idx          index of the field
+     * @param _fieldName    name of the field
+     * @param _value        value
+     * @param _escape       must the value be escaped
+     * @return StringBuilder
+     */
+    protected StringBuilder getSetFieldValue(final int _idx,
+                                             final String _fieldName,
+                                             final String _value,
+                                             final boolean _escape)
+    {
+        final StringBuilder ret = new StringBuilder();
+        ret.append("eFapsSetFieldValue(").append(_idx).append(",'").append(_fieldName).append("',");
+        if (_escape) {
+            ret.append("'").append(StringEscapeUtils.escapeJavaScript(_value)).append("'");
+        } else {
+            ret.append(_value);
+        }
+        ret.append(");");
+        return ret;
     }
 
     /**
