@@ -40,6 +40,7 @@
         <target>
             <search>Projects_ProjectTree_Documents_Menu_Action_AddExisting_Search</search>
             <execute program="org.efaps.esjp.projects.Project" method="connectDocument"/>
+            <validate program="org.efaps.esjp.projects.Project" method="validateConnectDocument"/>
         </target>
 
         <!-- properties -->

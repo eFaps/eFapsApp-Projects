@@ -319,47 +319,33 @@ public abstract class Project_Base
                 final Instance child = Instance.get(childOid);
                 Insert insert = null;
                 if (callInstance.getType().equals(CIProjects.ProjectService.getType())) {
-                    if (child.getType().equals(CIProjects.ServiceRequest.getType())
-                                    && !check4Relation(CIProjects.ProjectService2Request.uuid, child)) {
+                    if (child.getType().equals(CIProjects.ServiceRequest.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Request);
-                    } else if (child.getType().equals(CIProjects.WorkOrder.getType())
-                                    && !check4Relation(CIProjects.ProjectService2WorkOrder.uuid, child)) {
+                    } else if (child.getType().equals(CIProjects.WorkOrder.getType())) {
                         insert = new Insert(CIProjects.ProjectService2WorkOrder);
-                    } else if (child.getType().equals(CIProjects.WorkReport.getType())
-                                    && !check4Relation(CIProjects.ProjectService2WorkReport.uuid, child)) {
+                    } else if (child.getType().equals(CIProjects.WorkReport.getType())) {
                         insert = new Insert(CIProjects.ProjectService2WorkReport);
-                    } else if (child.getType().equals(CISales.CreditNote.getType())
-                                    && !check4Relation(CIProjects.ProjectService2CreditNote.uuid, child)) {
+                    } else if (child.getType().equals(CISales.CreditNote.getType())) {
                         insert = new Insert(CIProjects.ProjectService2CreditNote);
-                    } else if (child.getType().equals(CISales.DeliveryNote.getType())
-                                    && !check4Relation(CIProjects.ProjectService2DeliveryNote.uuid, child)) {
+                    } else if (child.getType().equals(CISales.DeliveryNote.getType())) {
                         insert = new Insert(CIProjects.ProjectService2DeliveryNote);
-                    } else if (child.getType().equals(CISales.GoodsIssueSlip.getType())
-                                    && !check4Relation(CIProjects.ProjectService2GoodsIssueSlip.uuid, child)) {
+                    } else if (child.getType().equals(CISales.GoodsIssueSlip.getType())) {
                         insert = new Insert(CIProjects.ProjectService2GoodsIssueSlip);
-                    } else if (child.getType().equals(CISales.Invoice.getType())
-                                    && !check4Relation(CIProjects.ProjectService2Invoice.uuid, child)) {
+                    } else if (child.getType().equals(CISales.Invoice.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Invoice);
-                    } else if (child.getType().equals(CISales.OrderOutbound.getType())
-                                    && !check4Relation(CIProjects.ProjectService2OrderOutbound.uuid, child)) {
+                    } else if (child.getType().equals(CISales.OrderOutbound.getType())) {
                         insert = new Insert(CIProjects.ProjectService2OrderOutbound);
-                    } else if (child.getType().equals(CISales.Quotation.getType())
-                                    && !check4Relation(CIProjects.ProjectService2Quotation.uuid, child)) {
+                    } else if (child.getType().equals(CISales.Quotation.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Quotation);
-                    } else if (child.getType().equals(CISales.Receipt.getType())
-                                    && !check4Relation(CIProjects.ProjectService2Receipt.uuid, child)) {
+                    } else if (child.getType().equals(CISales.Receipt.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Receipt);
-                    } else if (child.getType().equals(CISales.RecievingTicket.getType())
-                                    && !check4Relation(CIProjects.ProjectService2RecievingTicket.uuid, child)) {
+                    } else if (child.getType().equals(CISales.RecievingTicket.getType())) {
                         insert = new Insert(CIProjects.ProjectService2RecievingTicket);
-                    } else if (child.getType().equals(CISales.ReturnSlip.getType())
-                                    && !check4Relation(CIProjects.ProjectService2ReturnSlip.uuid, child)) {
+                    } else if (child.getType().equals(CISales.ReturnSlip.getType())) {
                         insert = new Insert(CIProjects.ProjectService2ReturnSlip);
-                    } else if (child.getType().equals(CISales.Reminder.getType())
-                                    && !check4Relation(CIProjects.ProjectService2Reminder.uuid, child)) {
+                    } else if (child.getType().equals(CISales.Reminder.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Reminder);
-                    } else if (child.getType().equals(CISales.CostSheet.getType())
-                                    && !check4Relation(CIProjects.ProjectService2CostSheet.uuid, child)) {
+                    } else if (child.getType().equals(CISales.CostSheet.getType())) {
                         insert = new Insert(CIProjects.ProjectService2CostSheet);
                     }
                 }
@@ -383,7 +369,7 @@ public abstract class Project_Base
      *         instance, else false
      * @throws EFapsException on error
      */
-    protected boolean check4Relation(final UUID _typeUUID,
+    protected MultiPrintQuery check4Relation(final UUID _typeUUID,
                                      final Instance _instance)
         throws EFapsException
     {
@@ -392,7 +378,131 @@ public abstract class Project_Base
         final MultiPrintQuery multi = queryBldr.getPrint();
         multi.addAttribute(CIProjects.Project2DocumentAbstract.OID);
         multi.execute();
-        return multi.next();
+        return multi;
+    }
+
+    /**
+     * Method to validate if a document is connected to a project.
+     *
+     * @param _parameter as passed from eFaps API.
+     * @return Return with a DBproperty.
+     * @throws EFapsException on error.
+     */
+    public Return validateConnectDocument(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final Map<?, ?> others = (HashMap<?, ?>) _parameter.get(ParameterValues.OTHERS);
+        final StringBuilder html = new StringBuilder();
+        final String[] childOids = (String[]) others.get("selectedRow");
+        boolean validate = true;
+        if (childOids != null) {
+            final Instance callInstance = _parameter.getCallInstance();
+            for (final String childOid : childOids) {
+                final Instance child = Instance.get(childOid);
+                if (callInstance.getType().equals(CIProjects.ProjectService.getType())) {
+                    if (child.getType().equals(CIProjects.ServiceRequest.getType())
+                                    && check4Relation(CIProjects.ProjectService2Request.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CIProjects.WorkOrder.getType())
+                                    && check4Relation(CIProjects.ProjectService2WorkOrder.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CIProjects.WorkReport.getType())
+                                    && check4Relation(CIProjects.ProjectService2WorkReport.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.CreditNote.getType())
+                                    && check4Relation(CIProjects.ProjectService2CreditNote.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.DeliveryNote.getType())
+                                    && check4Relation(CIProjects.ProjectService2DeliveryNote.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.GoodsIssueSlip.getType())
+                                    && check4Relation(CIProjects.ProjectService2GoodsIssueSlip.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.Invoice.getType())
+                                    && check4Relation(CIProjects.ProjectService2Invoice.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.OrderOutbound.getType())
+                                    && check4Relation(CIProjects.ProjectService2OrderOutbound.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.Quotation.getType())
+                                    && check4Relation(CIProjects.ProjectService2Quotation.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.Receipt.getType())
+                                    && check4Relation(CIProjects.ProjectService2Receipt.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.RecievingTicket.getType())
+                                    && check4Relation(CIProjects.ProjectService2RecievingTicket.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.ReturnSlip.getType())
+                                    && check4Relation(CIProjects.ProjectService2ReturnSlip.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.Reminder.getType())
+                                    && check4Relation(CIProjects.ProjectService2Reminder.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    } else if (child.getType().equals(CISales.CostSheet.getType())
+                                    && check4Relation(CIProjects.ProjectService2CostSheet.uuid, child).next()) {
+                        validate = false;
+                        html.append(getString4ReturnInvalidate(child));
+                        break;
+                    }
+                }
+            }
+            if (validate) {
+                ret.put(ReturnValues.TRUE, true);
+                html.append(DBProperties.getProperty("org.efaps.esjp.projects.Project.validateConnectDoc"));
+                ret.put(ReturnValues.SNIPLETT, html.toString());
+            } else {
+                html.insert(0, DBProperties.getProperty("org.efaps.esjp.projects.Project.invalidateConnectDoc")
+                                                                                                            + "<p>");
+                ret.put(ReturnValues.SNIPLETT, html.toString());
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Method to obtain the name of the document.
+     *
+     * @param _child with the instance of the document.
+     * @return StringBuilder with the name of the document.
+     * @throws EFapsException on error.
+     */
+    protected StringBuilder getString4ReturnInvalidate(final Instance _child)
+        throws EFapsException
+    {
+        final StringBuilder html = new StringBuilder();
+        final PrintQuery print = new PrintQuery(_child);
+        print.addAttribute(CISales.DocumentAbstract.Name);
+        print.execute();
+        return html.append(_child.getType().getLabel()
+                            + " - " + print.<String>getAttribute(CISales.DocumentAbstract.Name));
     }
 
     /**
