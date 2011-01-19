@@ -48,6 +48,7 @@ import org.efaps.esjp.accounting.transaction.Transaction_Base;
 import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
+import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
 /**
@@ -148,10 +149,17 @@ public abstract class Project_Base
         throws EFapsException
     {
         final String input = (String) _parameter.get(ParameterValues.OTHERS);
+        final Map<?, ?> props =  (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
         final Map<String, Map<String, String>> sortMap = new TreeMap<String, Map<String, String>>();
         if (input.length() > 0) {
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
             queryBldr.addWhereAttrMatchValue(CIProjects.ProjectAbstract.Name, input + "*").setIgnoreCase(true);
+            if (props.containsKey("StatusGroup")) {
+                final Status status = Status.find((String) props.get("StatusGroup"), (String) props.get("Status"));
+                if (status != null) {
+                    queryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.StatusAbstract, status.getId());
+                }
+            }
             final MultiPrintQuery print = queryBldr.getPrint();
             print.addAttribute(CIProjects.ProjectAbstract.OID, CIProjects.ProjectAbstract.Name,
                             CIProjects.ProjectAbstract.Description);
@@ -162,9 +170,9 @@ public abstract class Project_Base
                 final String description = print.<String>getAttribute(CIProjects.ProjectAbstract.Description);
                 final String choice = name + " - " + description;
                 final Map<String, String> map = new HashMap<String, String>();
-                map.put("eFapsAutoCompleteKEY", oid);
-                map.put("eFapsAutoCompleteVALUE", name);
-                map.put("eFapsAutoCompleteCHOICE", choice);
+                map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), oid);
+                map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
+                map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), choice);
                 sortMap.put(choice, map);
             }
         }
