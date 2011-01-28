@@ -44,6 +44,7 @@
             <child>Projects_ProjectTree_Accounts</child>
             <child>Projects_ProjectTree_Labels</child>
             <child>Projects_ProjectTree_Issues</child>
+            <child>Projects_ProjectTree_Tasks</child>
         </childs>
         <!-- properties -->
         <property name="Target">content</property>
