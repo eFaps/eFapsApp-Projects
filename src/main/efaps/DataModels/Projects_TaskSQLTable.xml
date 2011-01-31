@@ -39,14 +39,15 @@
             <column name="COMPANYID"       type="INTEGER"         not-null="true"/>
             <column name="TYPEID"          type="INTEGER"         not-null="true"/>
             <column name="PROJECTID"       type="INTEGER"         not-null="true"/>
-            <column name="PARENTID"        type="INTEGER"         not-null="true"/>
+            <column name="PARENTID"        type="INTEGER"/>
             <column name="NAME"            type="STRING_SHORT"    not-null="true" length="128" />
             <column name="DESCR"           type="STRING_SHORT"                    length="255" />
             <column name="NOTE"            type="STRING_SHORT"                    length="1000" />
-            <column name="DATEFROM"        type="DATETIME"        not-null="true"/>
-            <column name="DATEUNTIL"       type="DATETIME"        not-null="true"/>
-            <column name="QUANTITY"        type="DECIMAL"         not-null="true" length="14" scale="4"/>
-            <column name="UOMID"           type="INTEGER"         not-null="true" />
+            <column name="DATEFROM"        type="DATETIME"/>
+            <column name="DATEUNTIL"       type="DATETIME"/>
+            <column name="WEIGHT"          type="DECIMAL"                         length="14" scale="4"/>
+            <column name="QUANTITY"        type="DECIMAL"                         length="14" scale="4"/>
+            <column name="UOMID"           type="INTEGER"/>
             <column name="STATUS"          type="INTEGER"         not-null="true"/>
             <column name="CREATOR"         type="INTEGER"         not-null="true"/>
             <column name="CREATED"         type="DATETIME"        not-null="true"/>

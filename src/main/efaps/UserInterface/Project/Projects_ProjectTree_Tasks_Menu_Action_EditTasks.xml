@@ -39,7 +39,7 @@
         <!-- target definitions -->
         <target>
             <form>Projects_ProjectTasksForm</form>
-            <execute program="org.efaps.esjp.projects.task.Task" method="create" />
+            <execute program="org.efaps.esjp.projects.task.Task" method="edit" />
         </target>
 
         <!-- properties -->

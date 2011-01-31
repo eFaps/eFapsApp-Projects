@@ -101,6 +101,12 @@
             <sqlcolumn>DATEUNTIL</sqlcolumn>
         </attribute>
         <attribute>
+            <name>Weight</name>
+            <type>Decimal</type>
+            <sqltable>Projects_TaskSQLTable</sqltable>
+            <sqlcolumn>WEIGHT</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>Quantity</name>
             <type>Decimal</type>
             <sqltable>Projects_TaskSQLTable</sqltable>

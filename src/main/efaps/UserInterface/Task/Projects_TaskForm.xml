@@ -26,7 +26,7 @@
 <ui-form xmlns="http://www.efaps.org/xsd"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>225d5f34-6585-441f-bc3e-2ff207c61bdb</uuid>
+    <uuid>5e4327f5-e9e1-4909-ad4a-9a62a137ede5</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>

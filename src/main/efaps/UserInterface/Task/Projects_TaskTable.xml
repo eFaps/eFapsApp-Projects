@@ -55,7 +55,7 @@
         <field name="status">
             <property name="Attribute">StatusAbstract</property>
             <property name="Label">Projects_TaskAbstract/StatusAbstract.Label</property>
-            <property name="ModeEdit">EDITABLE</property>
+            <property name="ModeEdit">NONE</property>
         </field>
     </definition>
 </ui-table>
