@@ -21,10 +21,24 @@
 
 package org.efaps.esjp.projects.task;
 
+import java.util.Map;
+import java.util.Stack;
+
+import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.event.Parameter;
+import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.db.Delete;
+import org.efaps.db.Insert;
+import org.efaps.db.Instance;
+import org.efaps.db.InstanceQuery;
+import org.efaps.db.QueryBuilder;
+import org.efaps.db.Update;
+import org.efaps.esjp.ci.CIProjects;
+import org.efaps.ui.wicket.util.EFapsKey;
+import org.efaps.util.EFapsException;
 
 
 /**
@@ -40,10 +54,160 @@ public abstract class Task_Base
     /**
      * @param _parameter Parameter as passed from the eFaps API
      * @return new Return
+     * @throws EFapsException
      */
     public Return create(final Parameter _parameter)
+        throws EFapsException
     {
         final Return ret = new Return();
+        final String[] names = _parameter.getParameterValues("name");
+        final String[] descriptions = _parameter.getParameterValues("description");
+        final Instance projectInst = _parameter.getInstance();
+        final String[] allowChilds = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_ALLOWSCHILDS.getKey());
+        final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
+
+        final Stack<TaskPOs> parents = new Stack<TaskPOs>();
+
+        for (int i = 0; i < allowChilds.length; i++) {
+            final int level = Integer.parseInt(levels[i]);
+            // folders
+            final Insert insert = new Insert(CIProjects.TaskScheduled);
+            boolean parent;
+            if ("true".equalsIgnoreCase(allowChilds[i])) {
+                parent = true;
+                if (level == 1) {
+                } else {
+                    insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
+                }
+            } else {
+                parent =false;
+                insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
+            }
+            insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
+            insert.add(CIProjects.TaskAbstract.Name, names[i]);
+            insert.add(CIProjects.TaskAbstract.Description, descriptions[i]);
+            insert.add(CIProjects.TaskAbstract.StatusAbstract,
+                            Status.find(CIProjects.TaskScheduledStatus.uuid, "Open").getId());
+            insert.execute();
+
+            if (parent) {
+                final TaskPOs posGrp = new TaskPOs(insert.getInstance(), level);
+                if (parents.isEmpty()) {
+                    parents.push(posGrp);
+                } else {
+                    if (parents.peek().level < posGrp.level) {
+                        parents.push(posGrp);
+                    } else {
+                        while (!parents.empty() && parents.peek().level >= posGrp.level) {
+                            parents.pop();
+                        }
+                        parents.push(posGrp);
+                    }
+                }
+            }
+        }
         return ret;
+    }
+
+    /**
+     * @param _parameter Parameter as passed from the eFaps API
+     * @return new Return
+     * @throws EFapsException
+     */
+    public Return edit(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        @SuppressWarnings("unchecked")
+        final Map<String, String> oidMap = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
+        final String[] rowKeys = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
+        final String[] names = _parameter.getParameterValues("name");
+        final String[] descriptions = _parameter.getParameterValues("description");
+        _parameter.getParameterValues("status");
+        final Instance projectInst = _parameter.getInstance();
+        final String[] allowChilds = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_ALLOWSCHILDS.getKey());
+        final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
+
+        final Stack<TaskPOs> parents = new Stack<TaskPOs>();
+        if (rowKeys != null) {
+            for (int i = 0; i < rowKeys.length; i++) {
+                final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+                queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
+                final InstanceQuery query = queryBldr.getQuery();
+                query.execute();
+                while (query.next()) {
+                    if (oidMap.containsKey(query.getCurrentValue().getOid())) {
+                        final Delete del = new Delete(query.getCurrentValue());
+                        del.execute();
+                    }
+                }
+
+                //Update o. insert the GroupPosition
+                boolean parent = true;
+                Update update;
+                final int level = Integer.parseInt(levels[i]);
+                final TaskPOs posGrp = new TaskPOs(null, level);
+
+                if (oidMap.get(rowKeys[i]) != null) {
+                    update = new Update(oidMap.get(rowKeys[i]));
+                    parent = "true".equalsIgnoreCase(allowChilds[i]);
+                } else {
+                    update = new Insert(CIProjects.TaskScheduled);
+                    if (level == 1) {
+                        parent = false;
+                    } else {
+                        while (!parents.empty() && parents.peek().level >= posGrp.level) {
+                            parents.pop();
+                        }
+                        update.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
+                    }
+                    update.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
+                    update.add(CIProjects.TaskAbstract.StatusAbstract,
+                                    Status.find(CIProjects.TaskScheduledStatus.uuid, "Open").getId());
+                }
+                update.add(CIProjects.TaskAbstract.Name, names[i]);
+                update.add(CIProjects.TaskAbstract.Description, descriptions[i]);
+                update.execute();
+
+                if (parent) {
+                    posGrp.instance = update.getInstance();
+                    parents.push(posGrp);
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * @param _parameter Parameter as passed from the eFaps API
+     * @return new Return
+     * @throws EFapsException
+     */
+    public Return deletePreTrigger(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Instance delInst = _parameter.getInstance();
+        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ParentTaskAbstractLink, delInst.getId());
+        final InstanceQuery query = queryBldr.getQuery();
+        query.execute();
+        while (query.next()) {
+            final Delete del = new Delete(query.getCurrentValue());
+            del.execute();
+        }
+        return new Return();
+    }
+
+    private class TaskPOs
+    {
+        private Instance instance;
+        private final int level;
+
+        public TaskPOs(final Instance _instance,
+                       final int _level)
+        {
+            this.instance =_instance;
+            this.level = _level;
+        }
     }
 }

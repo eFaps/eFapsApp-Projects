@@ -21,9 +21,18 @@
 
 package org.efaps.esjp.projects.task;
 
+import java.util.Map;
+
+import org.efaps.admin.event.Parameter;
+import org.efaps.admin.event.Parameter.ParameterValues;
+import org.efaps.admin.event.Return;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.db.Instance;
+import org.efaps.db.QueryBuilder;
+import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ui.structurbrowser.StandartStructurBrowser;
+import org.efaps.util.EFapsException;
 
 
 /**
@@ -38,4 +47,48 @@ public abstract class TaskStructurBrowser_Base
     extends StandartStructurBrowser
 {
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Return checkHideColumn4Row(final Parameter _parameter)
+    {
+        return new Return();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addCriteria(final Parameter _parameter,
+                               final QueryBuilder _queryBldr)
+        throws EFapsException
+    {
+        _queryBldr.addWhereAttrIsNull(CIProjects.TaskAbstract.ParentTaskAbstractLink);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Return allowItem(final Parameter _parameter)
+    {
+        final Return ret = new Return();
+        return ret;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Return onNodeRemove(final Parameter _parameter)
+    {
+        final Instance instance = _parameter.getInstance();
+        if (instance != null && instance.isValid()) {
+            @SuppressWarnings("unchecked")
+            final Map<String, String> oidMap = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
+            oidMap.put(instance.getOid(), "delete");
+        }
+        return super.onNodeRemove(_parameter);
+    }
 }
