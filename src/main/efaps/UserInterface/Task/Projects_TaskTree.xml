@@ -36,6 +36,11 @@
         <target>
             <menu>Projects_TaskTree_Menu</menu>
             <form>Projects_TaskForm</form>
+            <evaluate program="org.efaps.esjp.projects.task.TaskStructurBrowser">
+                <property name="Types">Projects_TaskAbstract</property>
+                <property name="Child_Types">Projects_TaskAbstract</property>
+                <property name="Child_LinkFroms">ParentTaskAbstractLink</property>
+            </evaluate>
         </target>
         <!-- type tree for -->
         <type>Projects_TaskAbstract</type>

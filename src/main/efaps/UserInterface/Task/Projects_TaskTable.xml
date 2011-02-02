@@ -38,6 +38,7 @@
             <property name="Label">Projects_TaskAbstract/Type.Label</property>
             <property name="ShowTypeIcon">true</property>
             <property name="ModeEdit">NONE</property>
+            <property name="Width">1</property>
         </field>
         <field name="name">
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
@@ -45,12 +46,30 @@
             <property name="Label">Projects_TaskAbstract/Name.Label</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
+            <property name="Width">1</property>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
             <property name="Label">Projects_TaskAbstract/Description.Label</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
+            <property name="Width">2</property>
+        </field>
+         <field name="dateFrom">
+            <property name="Attribute">DateFrom</property>
+            <property name="Label">Projects_TaskAbstract/DateFrom.Label</property>
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="ModeCreate">EDITABLE</property>
+            <property name="Width">1</property>
+            <property name="Columns">7</property>
+        </field>
+        <field name="dateUntil">
+            <property name="Attribute">DateUntil</property>
+            <property name="Label">Projects_TaskAbstract/DateUntil.Label</property>
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="ModeCreate">EDITABLE</property>
+            <property name="Width">1</property>
+            <property name="Columns">7</property>
         </field>
         <field name="status">
             <property name="Attribute">StatusAbstract</property>
