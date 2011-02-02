@@ -37,6 +37,7 @@ import org.efaps.db.InstanceQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.ci.CIProjects;
+import org.efaps.ui.wicket.util.DateUtil;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
@@ -123,7 +124,8 @@ public abstract class Task_Base
         final String[] rowKeys = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
         final String[] names = _parameter.getParameterValues("name");
         final String[] descriptions = _parameter.getParameterValues("description");
-        _parameter.getParameterValues("status");
+        final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");
+        final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
         final Instance projectInst = _parameter.getInstance();
         final String[] allowChilds = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_ALLOWSCHILDS.getKey());
         final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
@@ -167,6 +169,8 @@ public abstract class Task_Base
                 }
                 update.add(CIProjects.TaskAbstract.Name, names[i]);
                 update.add(CIProjects.TaskAbstract.Description, descriptions[i]);
+                update.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
+                update.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
                 update.execute();
 
                 if (parent) {
