@@ -44,7 +44,9 @@
         </target>
         <!-- type tree for -->
         <type>Projects_TaskAbstract</type>
-
+        <childs>
+            <child>Projects_TaskTree_Progress</child>
+        </childs>
         <!-- properties -->
         <property name="Target">content</property>
         <property name="TargetMode">view</property>
