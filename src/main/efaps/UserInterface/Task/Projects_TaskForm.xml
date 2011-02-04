@@ -37,8 +37,9 @@
             <property name="ModeEdit">NONE</property>
             <property name="ModePrint">NONE</property>
             <property name="SelectAlternateOID">linkto[ParentTaskAbstractLink].oid</property>
-            <property name="Select">linkto[ParentTaskAbstractLink].attribute[Name]</property>
+            <property name="Phrase">$&lt;linkto[ParentTaskAbstractLink].attribute[Name]&gt; - $&lt;linkto[ParentTaskAbstractLink].attribute[Description]&gt;</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
+            <property name="Label">Projects_TaskForm.parentTaskAbstractLink.Label</property>
         </field>
         <field name="dategroup" character="Group">
             <property name="GroupCount">2</property>
@@ -100,6 +101,10 @@
             <property name="Attribute">UoM</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
+            <trigger program="org.efaps.esjp.common.uiform.Field"
+                method="getDimensionUoMFieldValue"
+                name="Projects_TaskForm.uoM.UI_FIELD_VALUE"
+                event="UI_FIELD_VALUE"/>
         </field>
         <field name="createGroup" character="Group">
             <property name="GroupCount">2</property>
@@ -128,6 +133,18 @@
         <field name="modified">
             <property name="Attribute">Modified</property>
             <property name="ModeSearch">EDITABLE</property>
+        </field>
+        <field name="progressTableHeading" character="Heading">
+            <property name="ModeEdit">NONE</property>
+            <property name="Label">Projects_TaskForm.progressTableHeading.Heading</property>
+        </field>
+        <field name="progressTable" character="Target">
+            <property name="ModeEdit">NONE</property>
+            <table>Projects_ProgressTable</table>
+            <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
+                <property name="Types">Projects_ProgressTaskScheduled</property>
+                <property name="LinkFroms">TaskLink</property>
+            </evaluate>
         </field>
     </definition>
 </ui-form>

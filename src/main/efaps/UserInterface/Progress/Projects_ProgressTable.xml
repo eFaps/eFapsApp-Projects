@@ -52,7 +52,7 @@
             <property name="Label">Projects_ProgressAbstract/Progress.Label</property>
         </field>
          <field name="uoM">
-            <property name="Attribute">UoM</property>
+            <property name="Select">linkto[UoM].attribute[Name]</property>
             <property name="Label">Projects_ProgressAbstract/UoM.Label</property>
         </field>
         <field name="buttonOpenInNewWindow">

@@ -39,11 +39,13 @@
         <!-- target definitions -->
         <target>
             <form>Projects_ProgressForm</form>
-            <execute program="org.efaps.esjp.projects.task.Task" method="edit" />
+            <execute program="org.efaps.esjp.common.uiform.Create" />
         </target>
 
         <!-- properties -->
         <property name="Target">modal</property>
-        <property name="TargetMode">edit</property>
+        <property name="TargetMode">create</property>
+        <property name="TargetCreateType">Projects_ProgressTaskScheduled</property>
+        <property name="TargetConnectAttribute">Projects_ProgressTaskScheduled/TaskLink</property>
     </definition>
 </ui-command>
