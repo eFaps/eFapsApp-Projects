@@ -134,6 +134,12 @@
             <property name="Attribute">Modified</property>
             <property name="ModeSearch">EDITABLE</property>
         </field>
+        <field name="chart" character="Chart">
+            <trigger program="org.efaps.esjp.projects.task.Progress"
+                method="getChartFieldValue"
+                name="Projects_TaskForm.chart.UI_FIELD_VALUE"
+                event="UI_FIELD_VALUE"/>
+        </field>
         <field name="progressTableHeading" character="Heading">
             <property name="ModeEdit">NONE</property>
             <property name="Label">Projects_TaskForm.progressTableHeading.Heading</property>
