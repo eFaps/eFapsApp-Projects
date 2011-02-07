@@ -30,6 +30,7 @@ import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.db.Context;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
@@ -46,6 +47,8 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * TODO comment!
@@ -85,7 +88,7 @@ public abstract class Progress_Base
                             true,
                             true,
                             false
-                            );
+            );
             return chart;
         }
 
@@ -97,7 +100,11 @@ public abstract class Progress_Base
             print.addAttribute(CIProjects.TaskScheduled.UoM);
             print.execute();
             final Long uoMId = print.<Long>getAttribute(CIProjects.TaskScheduled.UoM);
-            return Dimension.getUoM(uoMId).getName();
+            String ret = "";
+            if (uoMId != null) {
+                ret = Dimension.getUoM(uoMId).getName();
+            }
+            return ret;
         }
 
         @Override
@@ -116,21 +123,26 @@ public abstract class Progress_Base
             print.addAttribute(CIProjects.TaskScheduled.Quantity, CIProjects.TaskScheduled.DateFrom,
                             CIProjects.TaskScheduled.DateUntil);
             print.execute();
-            final BigDecimal quantity = print.<BigDecimal>getAttribute(CIProjects.TaskScheduled.Quantity);
+            BigDecimal quantity = print.<BigDecimal>getAttribute(CIProjects.TaskScheduled.Quantity);
+            if (quantity == null) {
+                quantity = BigDecimal.ZERO;
+            }
             final DateTime until = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateUntil);
             final DateTime from = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateFrom);
 
-            final TimeSeries series = new TimeSeries(DBProperties.getProperty("org.efaps.esjp.projects.task.Progress.targetSeries"));
+            final TimeSeries series = new TimeSeries(DBProperties.getProperty(
+                            "org.efaps.esjp.projects.task.Progress.targetSeries"));
             final List<String> toolTips = new ArrayList<String>();
             final RegularTimePeriod t = new Day(from.toDate());
             series.add(t, 0);
-            toolTips.add("0");
-            series.add(new Day(until.toDate()), quantity);
-            toolTips.add(quantity.toPlainString());
-//            while (t.getEnd().before(until.toDate())) {
-//                series.add(t, 55);
-//                t = t.next();
-//            }
+            final DateTimeFormatter formatter = DateTimeFormat.mediumDate();
+            final String fromDate = from.withChronology(Context.getThreadContext().getChronology()).toString(
+                            formatter.withLocale(Context.getThreadContext().getLocale()));
+            final String untilDate = until.withChronology(Context.getThreadContext().getChronology()).toString(
+                            formatter.withLocale(Context.getThreadContext().getLocale()));
+            toolTips.add(fromDate + " - 0");
+            series.addOrUpdate(new Day(until.toDate()), quantity);
+            toolTips.add(untilDate + " - " + quantity.toPlainString());
             ((TimeSeriesCollection) _dataset).addSeries(series);
             _ttg.addToolTipSeries(toolTips);
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProgressTaskAbstract);
@@ -143,7 +155,8 @@ public abstract class Progress_Base
                             CIProjects.ProgressTaskAbstract.UoM,
                             CIProjects.ProgressTaskAbstract.Progress);
             if (multi.execute()) {
-                final TimeSeries series2 = new TimeSeries(DBProperties.getProperty("org.efaps.esjp.projects.task.Progress.progressSeries"));
+                final TimeSeries series2 = new TimeSeries(DBProperties.getProperty(
+                                "org.efaps.esjp.projects.task.Progress.progressSeries"));
                 ((TimeSeriesCollection) _dataset).addSeries(series2);
                 final List<String> toolTips2 = new ArrayList<String>();
                 _ttg.addToolTipSeries(toolTips2);
@@ -151,7 +164,9 @@ public abstract class Progress_Base
                     final DateTime date = multi.<DateTime>getAttribute(CIProjects.ProgressTaskAbstract.Date);
                     final BigDecimal value = multi.<BigDecimal>getAttribute(CIProjects.ProgressTaskAbstract.Progress);
                     series2.addOrUpdate(new Day(date.toDate()), value);
-                    toolTips2.add(value.toPlainString());
+                    final String dateStr = date.withChronology(Context.getThreadContext().getChronology()).toString(
+                                    formatter.withLocale(Context.getThreadContext().getLocale()));
+                    toolTips2.add(dateStr + " - " + value.toPlainString());
                 }
             }
         }

@@ -33,6 +33,11 @@
         <version-expression>(version==latest)</version-expression>
         <name>Projects_TaskForm</name>
         <!-- fields -->
+        <field name="classification" character="Classification">
+            <property name="Classification">Projects_TaskClass</property>
+            <property name="ModeCreate">EDITABLE</property>
+            <property name="ModeEdit">EDITABLE</property>
+        </field>
         <field name="parentTaskAbstractLink">
             <property name="ModeEdit">NONE</property>
             <property name="ModePrint">NONE</property>
@@ -135,6 +140,7 @@
             <property name="ModeSearch">EDITABLE</property>
         </field>
         <field name="chart" character="Chart">
+            <property name="ModeEdit">NONE</property>
             <trigger program="org.efaps.esjp.projects.task.Progress"
                 method="getChartFieldValue"
                 name="Projects_TaskForm.chart.UI_FIELD_VALUE"
