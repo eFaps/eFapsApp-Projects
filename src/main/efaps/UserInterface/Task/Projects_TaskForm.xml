@@ -80,6 +80,7 @@
             <property name="SelectAlternateOID">linkto[ProjectAbstractLink].oid</property>
             <property name="Select">linkto[ProjectAbstractLink].attribute[Name]</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
+            <property name="Label">Projects_TaskForm.project.Label</property>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
@@ -141,6 +142,7 @@
         </field>
         <field name="chart" character="Chart">
             <property name="ModeEdit">NONE</property>
+            <property name="Label">Projects_TaskForm.chart.Label</property>
             <trigger program="org.efaps.esjp.projects.task.Progress"
                 method="getChartFieldValue"
                 name="Projects_TaskForm.chart.UI_FIELD_VALUE"
