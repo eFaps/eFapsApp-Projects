@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.efaps.admin.datamodel.Dimension;
+import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.program.esjp.EFapsRevision;
@@ -119,7 +120,7 @@ public abstract class Progress_Base
             final DateTime until = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateUntil);
             final DateTime from = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateFrom);
 
-            final TimeSeries series = new TimeSeries("First");
+            final TimeSeries series = new TimeSeries(DBProperties.getProperty("org.efaps.esjp.projects.task.Progress.targetSeries"));
             final List<String> toolTips = new ArrayList<String>();
             final RegularTimePeriod t = new Day(from.toDate());
             series.add(t, 0);
@@ -142,7 +143,7 @@ public abstract class Progress_Base
                             CIProjects.ProgressTaskAbstract.UoM,
                             CIProjects.ProgressTaskAbstract.Progress);
             if (multi.execute()) {
-                final TimeSeries series2 = new TimeSeries("Second");
+                final TimeSeries series2 = new TimeSeries(DBProperties.getProperty("org.efaps.esjp.projects.task.Progress.progressSeries"));
                 ((TimeSeriesCollection) _dataset).addSeries(series2);
                 final List<String> toolTips2 = new ArrayList<String>();
                 _ttg.addToolTipSeries(toolTips2);

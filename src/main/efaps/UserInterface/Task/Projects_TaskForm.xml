@@ -138,7 +138,13 @@
             <trigger program="org.efaps.esjp.projects.task.Progress"
                 method="getChartFieldValue"
                 name="Projects_TaskForm.chart.UI_FIELD_VALUE"
-                event="UI_FIELD_VALUE"/>
+                event="UI_FIELD_VALUE">
+                <property name="XAxisLabel">Projects_TaskForm.chart.XAxisLabel</property>
+                <property name="YAxisLabel">Projects_TaskForm.chart.YAxisLabel</property>
+                <property name="Title">Projects_TaskForm.chart.Title</property>
+                <property name="Height">400</property>
+                <property name="Width">600</property>
+            </trigger>
         </field>
         <field name="progressTableHeading" character="Heading">
             <property name="ModeEdit">NONE</property>
