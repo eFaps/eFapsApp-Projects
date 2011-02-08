@@ -46,6 +46,7 @@
         <type>Projects_TaskAbstract</type>
         <childs>
             <child>Projects_TaskTree_Progress</child>
+            <child>Projects_TaskTree_Task</child>
         </childs>
         <!-- properties -->
         <property name="Target">content</property>

@@ -26,28 +26,29 @@
 <ui-command xmlns="http://www.efaps.org/xsd"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>ddf45407-0e77-48cc-a58f-103972c6185e</uuid>
+    <uuid>33489d16-7731-40da-ab9f-4693167ce648</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_ProjectTree_Tasks_Menu_Action_EditTasks</name>
+        <name>Projects_TaskTree_Task_Menu_Action_Create</name>
         <access>
             <role>Projects_Admin</role>
             <role>Projects_Modifier</role>
         </access>
         <!-- target definitions -->
         <target>
-            <form>Projects_ProjectTasksForm</form>
-            <execute program="org.efaps.esjp.projects.task.Task" method="edit" />
+            <form>Projects_TaskForm</form>
+            <execute program="org.efaps.esjp.projects.task.Task" method="createSubTask">
+                <property name="StatusGroup">Projects_TaskScheduledStatus</property>
+                <property name="Status">Open</property>
+            </execute>
         </target>
 
         <!-- properties -->
         <property name="Target">modal</property>
-        <property name="TargetMode">edit</property>
-        <property name="WindowHeight">660</property>
-        <property name="WindowWidth">1200</property>
-        <property name="TargetDefaultMenu">none</property>
-
+        <property name="TargetMode">create</property>
+        <property name="TargetCreateType">Projects_TaskScheduled</property>
+        <property name="TargetConnectAttribute">Projects_TaskScheduled/ParentTaskLink</property>
     </definition>
 </ui-command>

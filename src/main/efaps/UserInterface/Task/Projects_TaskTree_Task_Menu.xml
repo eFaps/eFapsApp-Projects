@@ -23,31 +23,18 @@
 
 -->
 
-<ui-command xmlns="http://www.efaps.org/xsd"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>ddf45407-0e77-48cc-a58f-103972c6185e</uuid>
+<ui-menu xmlns="http://www.efaps.org/xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>a92cfc51-b682-4d18-8843-e2139420b57b</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_ProjectTree_Tasks_Menu_Action_EditTasks</name>
-        <access>
-            <role>Projects_Admin</role>
-            <role>Projects_Modifier</role>
-        </access>
-        <!-- target definitions -->
-        <target>
-            <form>Projects_ProjectTasksForm</form>
-            <execute program="org.efaps.esjp.projects.task.Task" method="edit" />
-        </target>
-
-        <!-- properties -->
-        <property name="Target">modal</property>
-        <property name="TargetMode">edit</property>
-        <property name="WindowHeight">660</property>
-        <property name="WindowWidth">1200</property>
-        <property name="TargetDefaultMenu">none</property>
-
+        <name>Projects_TaskTree_Task_Menu</name>
+        <!-- childs -->
+        <childs>
+            <child>Projects_TaskTree_Task_Menu_Action</child>
+        </childs>
     </definition>
-</ui-command>
+</ui-menu>

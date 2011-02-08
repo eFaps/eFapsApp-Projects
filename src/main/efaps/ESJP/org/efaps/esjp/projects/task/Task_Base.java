@@ -34,9 +34,11 @@ import org.efaps.db.Delete;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.InstanceQuery;
+import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.ci.CIProjects;
+import org.efaps.esjp.common.uiform.Create;
 import org.efaps.ui.wicket.util.DateUtil;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
@@ -53,9 +55,10 @@ import org.efaps.util.EFapsException;
 public abstract class Task_Base
 {
     /**
+     * Create from an StructurBrowser.
      * @param _parameter Parameter as passed from the eFaps API
      * @return new Return
-     * @throws EFapsException
+     * @throws EFapsException on error
      */
     public Return create(final Parameter _parameter)
         throws EFapsException
@@ -76,12 +79,11 @@ public abstract class Task_Base
             boolean parent;
             if ("true".equalsIgnoreCase(allowChilds[i])) {
                 parent = true;
-                if (level == 1) {
-                } else {
+                if (level != 1) {
                     insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
                 }
             } else {
-                parent =false;
+                parent = false;
                 insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
             }
             insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
@@ -111,9 +113,36 @@ public abstract class Task_Base
     }
 
     /**
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @return  Return
+     * @throws EFapsException on error
+     */
+    public Return createSubTask(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Create create = new Create() {
+
+            @Override
+            protected void add2basicInsert(final Parameter _parameter,
+                                           final Insert _insert)
+                throws EFapsException
+            {
+                final PrintQuery print = new PrintQuery(_parameter.getInstance());
+                print.addAttribute(CIProjects.TaskAbstract.ProjectAbstractLink);
+                print.execute();
+                final Long projId = print.<Long>getAttribute(CIProjects.TaskAbstract.ProjectAbstractLink);
+
+                _insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projId);
+            }
+        };
+        return create.execute(_parameter);
+    }
+
+    /**
+     * Edit from an StructurBrowser.
      * @param _parameter Parameter as passed from the eFaps API
      * @return new Return
-     * @throws EFapsException
+     * @throws EFapsException on error
      */
     public Return edit(final Parameter _parameter)
         throws EFapsException
@@ -183,9 +212,10 @@ public abstract class Task_Base
     }
 
     /**
+     * Before deletion the subtask will be deleted.
      * @param _parameter Parameter as passed from the eFaps API
      * @return new Return
-     * @throws EFapsException
+     * @throws EFapsException on error
      */
     public Return deletePreTrigger(final Parameter _parameter)
         throws EFapsException
@@ -202,15 +232,29 @@ public abstract class Task_Base
         return new Return();
     }
 
+    /**
+     * Used as simple chache for Task Objects.
+     */
     private class TaskPOs
     {
+        /**
+         * Instance of this task.
+         */
         private Instance instance;
+
+        /**
+         * Level of this Task.
+         */
         private final int level;
 
+        /**
+         * @param _instance Instance
+         * @param _level    Level
+         */
         public TaskPOs(final Instance _instance,
                        final int _level)
         {
-            this.instance =_instance;
+            this.instance = _instance;
             this.level = _level;
         }
     }

@@ -46,14 +46,14 @@
             <property name="Label">Projects_TaskAbstract/Name.Label</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
-            <property name="Width">1</property>
+            <property name="Width">3</property>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
             <property name="Label">Projects_TaskAbstract/Description.Label</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
-            <property name="Width">2</property>
+            <property name="Width">3</property>
         </field>
          <field name="dateFrom">
             <property name="Attribute">DateFrom</property>
