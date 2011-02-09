@@ -60,8 +60,8 @@
             <property name="Attribute">UoM</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
-            <trigger program="org.efaps.esjp.common.uiform.Field"
-                method="getDimensionUoMFieldValue"
+            <trigger program="org.efaps.esjp.projects.task.Progress"
+                method="getProgressUoMFieldValue"
                 name="Projects_ProgressForm.uoM.UI_FIELD_VALUE"
                 event="UI_FIELD_VALUE"/>
         </field>
