@@ -203,7 +203,7 @@ public abstract class Task_Base
                     if (level == 1) {
                         parent = false;
                     } else {
-                        while (!parents.empty() && parents.peek().level >= posGrp.level) {
+                        while (!parents.empty() && parents.peek().getLevel() >= posGrp.getLevel()) {
                             parents.pop();
                         }
                         update.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
@@ -219,7 +219,7 @@ public abstract class Task_Base
                 update.execute();
 
                 if (parent) {
-                    posGrp.instance = update.getInstance();
+                    posGrp.setInstance(update.getInstance());
                     parents.push(posGrp);
                 }
             }
@@ -268,7 +268,7 @@ public abstract class Task_Base
             @SuppressWarnings("unchecked")
             Map<Instance, String> values = (Map<Instance, String>) Context.getThreadContext()
                             .getRequestAttribute(Task_Base.TASKGANTREUQESTKEY);
-            if (values == null) {
+            if (values == null || (values != null && !values.containsKey(_parameter.getInstance()))) {
                 values = new HashMap<Instance, String>();
                 Context.getThreadContext().setRequestAttribute(Task_Base.TASKGANTREUQESTKEY, values);
                 @SuppressWarnings("unchecked")
@@ -341,7 +341,7 @@ public abstract class Task_Base
     /**
      * Used as simple chache for Task Objects.
      */
-    private class TaskPOs
+    public class TaskPOs
     {
         /**
          * Instance of this task.
@@ -362,6 +362,37 @@ public abstract class Task_Base
         {
             this.instance = _instance;
             this.level = _level;
+        }
+
+        /**
+         * Getter method for the instance variable {@link #level}.
+         *
+         * @return value of instance variable {@link #level}
+         */
+        protected int getLevel()
+        {
+            return this.level;
+        }
+
+        /**
+         * Getter method for the instance variable {@link #instance}.
+         *
+         * @return value of instance variable {@link #instance}
+         */
+        protected Instance getInstance()
+        {
+            return this.instance;
+        }
+
+        /**
+         * Setter method for instance variable {@link #instance}.
+         *
+         * @param _instance value for instance variable {@link #instance}
+         */
+
+        protected void setInstance(final Instance _instance)
+        {
+            this.instance = _instance;
         }
     }
 }
