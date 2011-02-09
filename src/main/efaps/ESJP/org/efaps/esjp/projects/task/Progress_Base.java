@@ -27,11 +27,17 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.efaps.admin.datamodel.Dimension;
+import org.efaps.admin.datamodel.Dimension.UoM;
+import org.efaps.admin.datamodel.ui.FieldValue;
+import org.efaps.admin.datamodel.ui.UIInterface;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
+import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
+import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.db.Context;
 import org.efaps.db.Instance;
 import org.efaps.db.InstanceQuery;
@@ -66,6 +72,64 @@ import org.joda.time.format.DateTimeFormatter;
 public abstract class Progress_Base
 {
 
+    /**
+     * Get the UoM Fieldvalue for a progress that belongs to a task and
+     * therefore only can contain UoM that have the same dimension as the task.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return HTML Snipplet
+     * @throws EFapsException on error
+     */
+    public Return getProgressUoMFieldValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final FieldValue fieldValue = (FieldValue) _parameter.get(ParameterValues.UIOBJECT);
+        final Long uomValue = (Long) fieldValue.getValue();
+        final StringBuilder html = new StringBuilder();
+        if (Display.EDITABLE.equals(fieldValue.getDisplay())) {
+            final Instance instance = _parameter.getInstance();
+            final PrintQuery print = new PrintQuery(_parameter.getInstance());
+            final SelectBuilder sel = new SelectBuilder();
+            if (instance.getType().isKindOf(CIProjects.TaskAbstract.getType())) {
+                sel.attribute(CIProjects.TaskAbstract.UoM);
+            } else {
+                sel.linkto(CIProjects.ProgressTaskAbstract.TaskAbstractLink).attribute(CIProjects.TaskAbstract.UoM);
+            }
+            print.addSelect(sel);
+            print.execute();
+            final Long uoMId = print.<Long>getSelect(sel);
+            if (uoMId == null) {
+                html.append(DBProperties.getProperty("org.efaps.esjp.projects.task.Progress.noUoM4Task"));
+            } else {
+                final Dimension dim = Dimension.getUoM(uoMId).getDimension();
+
+                html.append("<select ").append(UIInterface.EFAPSTMPTAG).append("name=\"")
+                    .append(fieldValue.getField().getName()).append("\" size=\"1\">");
+
+                for (final UoM uom : dim.getUoMs()) {
+                    html.append("<option value=\"").append(uom.getId());
+                    if ((uomValue == null && uom.equals(dim.getBaseUoM()))
+                                    || (uomValue != null && uomValue.equals(uom))) {
+                        html.append("\" selected=\"selected");
+                    }
+                    html.append("\">").append(uom.getName()).append("</option>");
+                }
+                html.append("</select>");
+            }
+        } else {
+            if (uomValue != null) {
+                html.append(Dimension.getUoM(uomValue).getName());
+            } else {
+                html.append(DBProperties.getProperty("org.efaps.esjp.projects.task.Progress.noUoM4Progress"));
+            }
+        }
+        ret.put(ReturnValues.SNIPLETT, html.toString());
+        return ret;
+    }
+
+
+
     public Return getChartFieldValue(final Parameter _parameter)
         throws EFapsException
     {
@@ -93,7 +157,7 @@ public abstract class Progress_Base
                             true,
                             true,
                             false
-            );
+                            );
             return chart;
         }
 
@@ -150,7 +214,7 @@ public abstract class Progress_Base
             toolTips.add(untilDate + " - " + quantity.toPlainString());
             ((TimeSeriesCollection) _dataset).addSeries(series);
             _ttg.addToolTipSeries(toolTips);
-            //get the progress for this task
+            // get the progress for this task
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProgressTaskAbstract);
             queryBldr.addWhereAttrEqValue(CIProjects.ProgressTaskAbstract.TaskAbstractLink,
                             _parameter.getInstance().getId());
@@ -214,9 +278,9 @@ public abstract class Progress_Base
             final MultiPrintQuery multi = prQueryBldr.getPrint();
             multi.setEnforceSorted(true);
             final SelectBuilder selQuan = new SelectBuilder().linkto(CIProjects.ProgressTaskAbstract.TaskAbstractLink)
-                .attribute(CIProjects.TaskAbstract.Quantity);
+                            .attribute(CIProjects.TaskAbstract.Quantity);
             final SelectBuilder selWeight = new SelectBuilder().linkto(CIProjects.ProgressTaskAbstract.TaskAbstractLink)
-                .attribute(CIProjects.TaskAbstract.Weight);
+                            .attribute(CIProjects.TaskAbstract.Weight);
             multi.addSelect(selQuan, selWeight);
             multi.addAttribute(CIProjects.ProgressTaskAbstract.Date,
                             CIProjects.ProgressTaskAbstract.UoM,
@@ -231,7 +295,8 @@ public abstract class Progress_Base
                     series.setWeight(weight);
                     final BigDecimal current;
                     if (quantity != null) {
-                        current = value.multiply(new BigDecimal(100).setScale(8).divide(quantity, BigDecimal.ROUND_HALF_UP));
+                        current = value.multiply(new BigDecimal(100).setScale(8).divide(quantity,
+                                        BigDecimal.ROUND_HALF_UP));
                     } else {
                         current = BigDecimal.ZERO;
                     }
@@ -244,7 +309,6 @@ public abstract class Progress_Base
         }
         return combineProgressSeries(_parameter, seriesCollection, _from, _until);
     }
-
 
     public ProgressSeries combineProgressSeries(final Parameter _parameter,
                                                 final List<ProgressSeries> _seriesCollection,
@@ -279,6 +343,7 @@ public abstract class Progress_Base
     public class ProgressSeries
         extends TreeMap<DateTime, BigDecimal>
     {
+
         private BigDecimal weight = BigDecimal.ONE;
 
         /**
@@ -290,7 +355,6 @@ public abstract class Progress_Base
         {
             return this.weight;
         }
-
 
         /**
          * Setter method for instance variable {@link #weight}.
@@ -312,7 +376,8 @@ public abstract class Progress_Base
 
         private BigDecimal last = BigDecimal.ZERO;
 
-        /* (non-Javadoc)
+        /*
+         * (non-Javadoc)
          * @see java.util.TreeMap#get(java.lang.Object)
          */
         @Override
