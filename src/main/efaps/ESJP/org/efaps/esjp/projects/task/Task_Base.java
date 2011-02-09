@@ -21,27 +21,38 @@
 
 package org.efaps.esjp.projects.task;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import org.efaps.admin.datamodel.Status;
+import org.efaps.admin.datamodel.ui.FieldValue;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
+import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.ui.field.Field.Display;
+import org.efaps.db.Context;
 import org.efaps.db.Delete;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.InstanceQuery;
+import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.ui.wicket.util.DateUtil;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 
 /**
@@ -54,6 +65,11 @@ import org.efaps.util.EFapsException;
 @EFapsRevision("$Rev$")
 public abstract class Task_Base
 {
+    /**
+     * Key for the map to be stored in the request.
+     */
+    public static final String TASKGANTREUQESTKEY = "org.efaps.esjp.projects.task.Task.requestMap4Task";
+
     /**
      * Create from an StructurBrowser.
      * @param _parameter Parameter as passed from the eFaps API
@@ -230,6 +246,96 @@ public abstract class Task_Base
             del.execute();
         }
         return new Return();
+    }
+
+
+    /**
+     * Get the Html Snipplet that shows the gant bars in the table.
+     * @param _parameter Parameter as passed form the eFaps API
+     * @return html Snipplet
+     * @throws EFapsException on error
+     */
+    public Return getGantFieldValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final FieldValue fieldValue = (FieldValue) _parameter.get(ParameterValues.UIOBJECT);
+        final StringBuilder html = new StringBuilder();
+        // title
+        if (Display.NONE.equals(fieldValue.getDisplay())) {
+            html.append("");
+        } else {
+            @SuppressWarnings("unchecked")
+            Map<Instance, String> values = (Map<Instance, String>) Context.getThreadContext()
+                            .getRequestAttribute(Task_Base.TASKGANTREUQESTKEY);
+            if (values == null) {
+                values = new HashMap<Instance, String>();
+                Context.getThreadContext().setRequestAttribute(Task_Base.TASKGANTREUQESTKEY, values);
+                @SuppressWarnings("unchecked")
+                final List<Instance> instances = (List<Instance>) _parameter
+                                .get(ParameterValues.REQUEST_INSTANCES);
+                if (instances != null) {
+                    final MultiPrintQuery multi = new MultiPrintQuery(instances);
+                    final SelectBuilder selDate = new SelectBuilder()
+                        .linkto(CIProjects.TaskAbstract.ProjectAbstractLink)
+                        .attribute(CIProjects.ProjectAbstract.Date);
+                    final SelectBuilder selDue = new SelectBuilder()
+                        .linkto(CIProjects.TaskAbstract.ProjectAbstractLink)
+                        .attribute(CIProjects.ProjectAbstract.DueDate);
+                    multi.addSelect(selDate, selDue);
+                    multi.addAttribute(CIProjects.TaskAbstract.DateFrom, CIProjects.TaskAbstract.DateUntil);
+                    multi.execute();
+                    while (multi.next()) {
+                        final DateTime date = multi.<DateTime>getSelect(selDate);
+                        final DateTime due = multi.<DateTime>getSelect(selDue);
+                        final DateTime from = multi.<DateTime>getAttribute(CIProjects.TaskAbstract.DateFrom);
+                        final DateTime until = multi.<DateTime>getAttribute(CIProjects.TaskAbstract.DateUntil);
+                        final Days d = Days.daysBetween(date, due);
+                        final int days = d.getDays();
+                        final Days d2 = Days.daysBetween(date, from);
+                        final Days d3 = Days.daysBetween(until, due);
+                        final Days d4 = Days.daysBetween(date, until);
+
+                        final BigDecimal left = new BigDecimal(100).setScale(8)
+                                        .divide(new BigDecimal(days), BigDecimal.ROUND_HALF_UP)
+                                        .multiply(new BigDecimal(d2.getDays()))
+                                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        final BigDecimal right = new BigDecimal(100).setScale(8)
+                                        .divide(new BigDecimal(days), BigDecimal.ROUND_HALF_UP)
+                                        .multiply(new BigDecimal(d3.getDays()))
+                                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        final StringBuilder html4value = new StringBuilder();
+                        // the number of days to the left
+                        html4value.append("<span style=\"padding-right:2px; float: left; width:").append(left)
+                            .append("%; text-align: right;\">")
+                            .append("<span style=\"padding-right: 2px;\">").append(d2.getDays()).append("</span>")
+                            .append("</span>");
+                        // the number of days to the right
+                        html4value.append("<span style=\"float: right; width:").append(right).append("%;\">")
+                            .append("<span style=\"padding-left: 2px;\">").append(d4.getDays()).append("</span>")
+                            .append("</span>");
+                        // the gant bar
+                        html4value.append("<div style=\"background-color: grey; margin-left:").append(left)
+                            .append("%; margin-right:").append(right)
+                            .append("%; height: 14px;border: 1px solid black;\">");
+                        // the inner bar for precentage advance
+//                        final BigDecimal percentage = new BigDecimal(50);
+//                        html4value.append("<div style=\"color:white;text-align:right;background-color:black;")
+//                            .append("position:relative; top: 2px; height: 10px;width:").append(percentage)
+//                            .append("%;\">")
+//                            .append("<span style=\"position: relative; top: -3px;\">")
+//                            .append(percentage).append("</span>")
+//                            .append("</div>");
+
+                        html4value.append("</div>");
+                        values.put(multi.getCurrentInstance(), html4value.toString());
+                    }
+                }
+            }
+            html.append(values.get(_parameter.getInstance()));
+        }
+        ret.put(ReturnValues.SNIPLETT, html.toString());
+        return ret;
     }
 
     /**
