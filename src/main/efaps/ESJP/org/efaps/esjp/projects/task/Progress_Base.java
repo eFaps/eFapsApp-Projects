@@ -20,6 +20,8 @@
 
 package org.efaps.esjp.projects.task;
 
+import java.util.Map;
+
 import org.efaps.admin.datamodel.Dimension;
 import org.efaps.admin.datamodel.Dimension.UoM;
 import org.efaps.admin.datamodel.ui.FieldValue;
@@ -32,10 +34,12 @@ import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.ui.field.Field.Display;
+import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIProjects;
+import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
 /**
@@ -102,5 +106,40 @@ public abstract class Progress_Base
         }
         ret.put(ReturnValues.SNIPLETT, html.toString());
         return ret;
+    }
+
+    /**
+     * Called to create porgress for various Tasks at once from an StructurBrowser.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return HTML Snipplet
+     * @throws EFapsException on error
+     */
+    public Return create4Tasks(final Parameter _parameter)
+        throws EFapsException
+    {
+        @SuppressWarnings("unchecked")
+        final Map<String, String> oid4ui = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
+        final String[] rowIds = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
+        final String[] progress = _parameter.getParameterValues("progress");
+        final String date = _parameter.getParameterValue("progressDate");
+
+        for (int i = 0; i < rowIds.length; i++) {
+            final String progr = progress[i];
+            if (progr != null && !progr.isEmpty()) {
+                final Instance taskInst = Instance.get(oid4ui.get(rowIds[i]));
+                final PrintQuery print = new PrintQuery(taskInst);
+                print.addAttribute(CIProjects.TaskAbstract.UoM);
+                print.execute();
+
+                final Insert insert = new Insert(CIProjects.ProgressTaskScheduled);
+                insert.add(CIProjects.ProgressTaskAbstract.TaskAbstractLink, taskInst.getId());
+                insert.add(CIProjects.ProgressTaskAbstract.Progress, progr);
+                insert.add(CIProjects.ProgressTaskAbstract.Date, date);
+                insert.add(CIProjects.ProgressTaskAbstract.UoM, print.getAttribute(CIProjects.TaskAbstract.UoM));
+                insert.execute();
+            }
+        }
+        return new Return();
     }
 }
