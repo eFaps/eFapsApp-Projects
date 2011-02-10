@@ -148,8 +148,7 @@
         <field name="chart" character="Chart">
             <property name="ModeEdit">NONE</property>
             <property name="Label">Projects_TaskForm.chart.Label</property>
-            <trigger program="org.efaps.esjp.projects.task.Progress"
-                method="getChartFieldValue"
+            <trigger program="org.efaps.esjp.projects.task.ProgressChart"
                 name="Projects_TaskForm.chart.UI_FIELD_VALUE"
                 event="UI_FIELD_VALUE">
                 <property name="XAxisLabel">Projects_TaskForm.chart.XAxisLabel</property>
