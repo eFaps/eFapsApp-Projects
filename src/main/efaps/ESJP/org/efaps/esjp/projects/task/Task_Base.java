@@ -295,15 +295,21 @@ public abstract class Task_Base
                         final Days d2 = Days.daysBetween(date, from);
                         final Days d3 = Days.daysBetween(until, due);
                         final Days d4 = Days.daysBetween(date, until);
-
-                        final BigDecimal left = new BigDecimal(100).setScale(8)
-                                        .divide(new BigDecimal(days), BigDecimal.ROUND_HALF_UP)
-                                        .multiply(new BigDecimal(d2.getDays()))
-                                        .setScale(2, BigDecimal.ROUND_HALF_UP);
-                        final BigDecimal right = new BigDecimal(100).setScale(8)
-                                        .divide(new BigDecimal(days), BigDecimal.ROUND_HALF_UP)
-                                        .multiply(new BigDecimal(d3.getDays()))
-                                        .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        final BigDecimal left;
+                        final BigDecimal right;
+                        if (days == 0) {
+                            left = BigDecimal.ZERO;
+                            right = BigDecimal.ZERO;
+                        } else {
+                            left = new BigDecimal(100).setScale(8)
+                                .divide(new BigDecimal(days), BigDecimal.ROUND_HALF_UP)
+                                .multiply(new BigDecimal(d2.getDays()))
+                                .setScale(2, BigDecimal.ROUND_HALF_UP);
+                            right = new BigDecimal(100).setScale(8)
+                                .divide(new BigDecimal(days), BigDecimal.ROUND_HALF_UP)
+                                .multiply(new BigDecimal(d3.getDays()))
+                                .setScale(2, BigDecimal.ROUND_HALF_UP);
+                        }
                         final StringBuilder html4value = new StringBuilder();
                         // the number of days to the left
                         html4value.append("<span style=\"padding-right:2px; float: left; width:").append(left)
