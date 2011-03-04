@@ -85,6 +85,8 @@ public abstract class Task_Base
         final Instance projectInst = _parameter.getInstance();
         final String[] allowChilds = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_ALLOWSCHILDS.getKey());
         final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
+        final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");
+        final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
 
         final Stack<TaskPOs> parents = new Stack<TaskPOs>();
 
@@ -105,6 +107,8 @@ public abstract class Task_Base
             insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
             insert.add(CIProjects.TaskAbstract.Name, names[i]);
             insert.add(CIProjects.TaskAbstract.Description, descriptions[i]);
+            insert.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
+            insert.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
             insert.add(CIProjects.TaskAbstract.StatusAbstract,
                             Status.find(CIProjects.TaskScheduledStatus.uuid, "Open").getId());
             insert.execute();
