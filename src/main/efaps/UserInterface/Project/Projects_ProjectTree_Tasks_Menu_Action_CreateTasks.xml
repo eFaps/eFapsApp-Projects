@@ -40,6 +40,10 @@
         <target>
             <form>Projects_ProjectTasksForm</form>
             <execute program="org.efaps.esjp.projects.task.Task" method="create" />
+            <trigger program="org.efaps.esjp.projects.task.Task"
+                method="accessCheck4TaskEditCreate"
+                name="Projects_ProjectTree_Tasks_Menu_Action_CreateTasks.UI_ACCESSCHECK"
+                event="UI_ACCESSCHECK"/>
         </target>
 
         <!-- properties -->

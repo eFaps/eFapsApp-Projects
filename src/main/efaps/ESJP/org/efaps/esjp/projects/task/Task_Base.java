@@ -35,6 +35,8 @@ import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.ui.AbstractCommand;
+import org.efaps.admin.ui.AbstractUserInterfaceObject.TargetMode;
 import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.db.Context;
 import org.efaps.db.Delete;
@@ -69,6 +71,30 @@ public abstract class Task_Base
      * Key for the map to be stored in the request.
      */
     public static final String TASKGANTREUQESTKEY = "org.efaps.esjp.projects.task.Task.requestMap4Task";
+
+    /**
+     * @param _parameter Parameter as passed by the eFasp API
+     * @return Return contaiung true if access is granted
+     * @throws EFapsException on error
+     */
+    public Return accessCheck4TaskEditCreate(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+
+        final AbstractCommand cmd = (AbstractCommand) _parameter.get(ParameterValues.UIOBJECT);
+        final TargetMode mode = cmd.getTargetMode();
+
+        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _parameter.getInstance().getId());
+        final InstanceQuery query = queryBldr.getQuery();
+        query.setLimit(1);
+        if ((query.execute().isEmpty() && TargetMode.CREATE.equals(mode))
+                        || (!query.execute().isEmpty() && TargetMode.EDIT.equals(mode))) {
+            ret.put(ReturnValues.TRUE, true);
+        }
+        return ret;
+    }
 
     /**
      * Create from an StructurBrowser.
