@@ -23,12 +23,14 @@ package org.efaps.esjp.projects.task;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.efaps.admin.datamodel.Dimension;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
+import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Context;
@@ -110,7 +112,6 @@ public abstract class ProgressChart_Base
                             final CustomXYToolTipGenerator _ttg)
         throws EFapsException
     {
-
         final boolean isProject = _parameter.getInstance().getType().isKindOf(CIProjects.ProjectAbstract.getType());
         final DateTime until;
         final DateTime from;
@@ -135,7 +136,7 @@ public abstract class ProgressChart_Base
             until = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateUntil);
             from = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateFrom);
         }
-        // add the target craph
+        // add the target graph
         final TimeSeries series = new TimeSeries(DBProperties.getProperty(
                         "org.efaps.esjp.projects.task.Progress.targetSeries"));
         final List<String> toolTips = new ArrayList<String>();
@@ -151,6 +152,10 @@ public abstract class ProgressChart_Base
         toolTips.add(untilDate + " - " + quantity.toPlainString());
         ((TimeSeriesCollection) _dataset).addSeries(series);
         _ttg.addToolTipSeries(toolTips);
+
+        //analyze the max and min date
+
+
 
         if (!isProject) {
             // get the progress for this task and add the graph
@@ -214,6 +219,12 @@ public abstract class ProgressChart_Base
                                                       final DateTime _until)
         throws EFapsException
     {
+        final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
+        final boolean evMaxDate = "true".equalsIgnoreCase((String) props.get("EvaluateMaxDate"));
+        final boolean evMinDate = "true".equalsIgnoreCase((String) props.get("EvaluateMinDate"));
+        DateTime from = _from;
+        DateTime until = _until;
+
         final List<ProgressSeries> seriesCollection = new ArrayList<ProgressSeries>();
         final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
         if (_taskInstance.getType().isKindOf(CIProjects.ProjectAbstract.getType())) {
@@ -243,6 +254,12 @@ public abstract class ProgressChart_Base
                 series = getProgressSeries();
                 while (multi.next()) {
                     final DateTime date = multi.<DateTime>getAttribute(CIProjects.ProgressTaskAbstract.Date);
+                    if (evMaxDate && date.isAfter(until)) {
+                        until = date;
+                    }
+                    if (evMinDate && date.isBefore(from)) {
+                        from = date;
+                    }
                     final BigDecimal value = multi.<BigDecimal>getAttribute(CIProjects.ProgressTaskAbstract.Progress);
                     final BigDecimal quantity = multi.<BigDecimal>getSelect(selQuan);
                     final BigDecimal weight = multi.<BigDecimal>getSelect(selWeight);
@@ -257,11 +274,11 @@ public abstract class ProgressChart_Base
                     series.put(date, current);
                 }
             } else {
-                series = getSubTaskProgressSeries(_parameter, query.getCurrentValue(), _from, _until);
+                series = getSubTaskProgressSeries(_parameter, query.getCurrentValue(), from, until);
             }
             seriesCollection.add(series);
         }
-        return combineProgressSeries(_parameter, seriesCollection, _from, _until);
+        return combineProgressSeries(_parameter, seriesCollection, from, until);
     }
 
     /**
