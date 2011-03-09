@@ -181,6 +181,8 @@ public abstract class ProgressChart_Base
     }
 
     /**
+     * Recursive Method to get the values from the SubTasks.
+     *
      * @param _parameter    Parameter as passed by the eFaps API
      * @param _taskInstance instance of a tsak
      * @param _from         from date
