@@ -110,17 +110,32 @@ public abstract class ProgressChart_Base
                             final CustomXYToolTipGenerator _ttg)
         throws EFapsException
     {
-        final PrintQuery print = new PrintQuery(_parameter.getInstance());
-        print.addAttribute(CIProjects.TaskScheduled.Quantity, CIProjects.TaskScheduled.DateFrom,
-                        CIProjects.TaskScheduled.DateUntil);
-        print.execute();
-        BigDecimal quantity = print.<BigDecimal>getAttribute(CIProjects.TaskScheduled.Quantity);
-        if (quantity == null) {
-            quantity = BigDecimal.ZERO;
-        }
-        final DateTime until = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateUntil);
-        final DateTime from = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateFrom);
 
+        final boolean isProject = _parameter.getInstance().getType().isKindOf(CIProjects.ProjectAbstract.getType());
+        final DateTime until;
+        final DateTime from;
+        BigDecimal quantity;
+
+        if (isProject) {
+            final PrintQuery print = new PrintQuery(_parameter.getInstance());
+            print.addAttribute(CIProjects.ProjectAbstract.Date, CIProjects.ProjectAbstract.DueDate);
+            print.execute();
+            until = print.<DateTime>getAttribute(CIProjects.ProjectAbstract.DueDate);
+            from = print.<DateTime>getAttribute(CIProjects.ProjectAbstract.Date);
+            quantity = new BigDecimal(100);
+        } else {
+            final PrintQuery print = new PrintQuery(_parameter.getInstance());
+            print.addAttribute(CIProjects.TaskScheduled.Quantity, CIProjects.TaskScheduled.DateFrom,
+                            CIProjects.TaskScheduled.DateUntil);
+            print.execute();
+            quantity = print.<BigDecimal>getAttribute(CIProjects.TaskScheduled.Quantity);
+            if (quantity == null) {
+                quantity = BigDecimal.ZERO;
+            }
+            until = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateUntil);
+            from = print.<DateTime>getAttribute(CIProjects.TaskScheduled.DateFrom);
+        }
+        // add the target craph
         final TimeSeries series = new TimeSeries(DBProperties.getProperty(
                         "org.efaps.esjp.projects.task.Progress.targetSeries"));
         final List<String> toolTips = new ArrayList<String>();
@@ -136,34 +151,36 @@ public abstract class ProgressChart_Base
         toolTips.add(untilDate + " - " + quantity.toPlainString());
         ((TimeSeriesCollection) _dataset).addSeries(series);
         _ttg.addToolTipSeries(toolTips);
-        // get the progress for this task
-        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProgressTaskAbstract);
-        queryBldr.addWhereAttrEqValue(CIProjects.ProgressTaskAbstract.TaskAbstractLink,
-                        _parameter.getInstance().getId());
-        queryBldr.addOrderByAttributeAsc(CIProjects.ProgressTaskAbstract.Date);
-        final MultiPrintQuery multi = queryBldr.getPrint();
-        multi.setEnforceSorted(true);
-        multi.addAttribute(CIProjects.ProgressTaskAbstract.Date,
-                        CIProjects.ProgressTaskAbstract.UoM,
-                        CIProjects.ProgressTaskAbstract.Progress);
-        if (multi.execute()) {
-            final TimeSeries series2 = new TimeSeries(DBProperties.getProperty(
-                            "org.efaps.esjp.projects.task.Progress.progressSeries"));
-            ((TimeSeriesCollection) _dataset).addSeries(series2);
-            final List<String> toolTips2 = new ArrayList<String>();
-            _ttg.addToolTipSeries(toolTips2);
-            while (multi.next()) {
-                final DateTime date = multi.<DateTime>getAttribute(CIProjects.ProgressTaskAbstract.Date);
-                final BigDecimal value = multi.<BigDecimal>getAttribute(CIProjects.ProgressTaskAbstract.Progress);
-                series2.addOrUpdate(new Day(date.toDate()), value);
-                final String dateStr = date.withChronology(Context.getThreadContext().getChronology()).toString(
-                                formatter.withLocale(Context.getThreadContext().getLocale()));
-                toolTips2.add(dateStr + " - " + value.toPlainString());
-            }
 
+        if (!isProject) {
+            // get the progress for this task and add the graph
+            final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProgressTaskAbstract);
+            queryBldr.addWhereAttrEqValue(CIProjects.ProgressTaskAbstract.TaskAbstractLink,
+                            _parameter.getInstance().getId());
+            queryBldr.addOrderByAttributeAsc(CIProjects.ProgressTaskAbstract.Date);
+            final MultiPrintQuery multi = queryBldr.getPrint();
+            multi.setEnforceSorted(true);
+            multi.addAttribute(CIProjects.ProgressTaskAbstract.Date,
+                            CIProjects.ProgressTaskAbstract.UoM,
+                            CIProjects.ProgressTaskAbstract.Progress);
+            if (multi.execute()) {
+                final TimeSeries series2 = new TimeSeries(DBProperties.getProperty(
+                                "org.efaps.esjp.projects.task.Progress.progressSeries"));
+                ((TimeSeriesCollection) _dataset).addSeries(series2);
+                final List<String> toolTips2 = new ArrayList<String>();
+                _ttg.addToolTipSeries(toolTips2);
+                while (multi.next()) {
+                    final DateTime date = multi.<DateTime>getAttribute(CIProjects.ProgressTaskAbstract.Date);
+                    final BigDecimal value = multi.<BigDecimal>getAttribute(CIProjects.ProgressTaskAbstract.Progress);
+                    series2.addOrUpdate(new Day(date.toDate()), value);
+                    final String dateStr = date.withChronology(Context.getThreadContext().getChronology()).toString(
+                                    formatter.withLocale(Context.getThreadContext().getLocale()));
+                    toolTips2.add(dateStr + " - " + value.toPlainString());
+                }
+            }
         }
-        final ProgressSeries progSeries = getSubTaskProgressSeries(_parameter, _parameter.getInstance(), from,
-                        until);
+        final ProgressSeries progSeries = getSubTaskProgressSeries(_parameter, _parameter.getInstance(), from, until);
+
         if (!progSeries.isEmpty()) {
             final TimeSeries series3 = new TimeSeries(DBProperties.getProperty(
                             "org.efaps.esjp.projects.task.Progress.subSeries"));
@@ -184,7 +201,8 @@ public abstract class ProgressChart_Base
      * Recursive Method to get the values from the SubTasks.
      *
      * @param _parameter    Parameter as passed by the eFaps API
-     * @param _taskInstance instance of a tsak
+     * @param _taskInstance instance of a task, or for initialize
+     *                      the recursive the instance of a project
      * @param _from         from date
      * @param _until        until date
      * @return ProgressSeries
@@ -198,7 +216,12 @@ public abstract class ProgressChart_Base
     {
         final List<ProgressSeries> seriesCollection = new ArrayList<ProgressSeries>();
         final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
-        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ParentTaskAbstractLink, _taskInstance.getId());
+        if (_taskInstance.getType().isKindOf(CIProjects.ProjectAbstract.getType())) {
+            queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _taskInstance.getId());
+            queryBldr.addWhereAttrIsNull(CIProjects.TaskAbstract.ParentTaskAbstractLink);
+        } else {
+            queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ParentTaskAbstractLink, _taskInstance.getId());
+        }
         final InstanceQuery query = queryBldr.getQuery();
         query.execute();
         while (query.next()) {
