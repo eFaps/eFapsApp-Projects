@@ -23,21 +23,29 @@
 
 -->
 
-<ui-menu xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>c191a5b4-4176-4563-a39d-13455d38b774</uuid>
+<ui-command xmlns="http://www.efaps.org/xsd"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>928f5768-a774-4445-9709-c8e6df027db7</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_ProjectTree_Tasks_Menu_Action</name>
-        <!-- childs -->
-        <childs>
-            <child>Projects_ProjectTree_Tasks_Menu_Action_EditTasks</child>
-            <child>Projects_ProjectTree_Tasks_Menu_Action_CreateTasks</child>
-            <child>Projects_ProjectTree_Tasks_Menu_Action_ValidateTasks</child>
-            <child>Projects_ProjectTree_Tasks_Menu_Action_CreateProgress</child>
-        </childs>
+        <name>Projects_ProjectTree_Tasks_Menu_Action_ValidateTasks</name>
+        <access>
+            <role>Projects_Admin</role>
+            <role>Projects_Modifier</role>
+        </access>
+        <!-- target definitions -->
+        <target>
+            <form>Projects_ProjectTasksValidateForm</form>
+        </target>
+
+        <!-- properties -->
+        <property name="Target">modal</property>
+        <property name="TargetMode">view</property>
+        <property name="WindowHeight">660</property>
+        <property name="WindowWidth">1200</property>
+        <property name="TargetDefaultMenu">none</property>
     </definition>
-</ui-menu>
+</ui-command>

@@ -22,13 +22,16 @@
 package org.efaps.esjp.projects.task;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.ui.FieldValue;
+import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
@@ -74,7 +77,166 @@ public abstract class Task_Base
 
     /**
      * @param _parameter Parameter as passed by the eFasp API
-     * @return Return contaiung true if access is granted
+     * @return Return containing a snipplet
+     * @throws EFapsException on error
+     */
+    public Return getValidateFieldValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final StringBuilder html = new StringBuilder();
+        final List<TaskPOs> tasks = getTaskTree(_parameter);
+        validate4ProjectDates(_parameter, tasks, html);
+        validate4TaskHierarchy(_parameter, tasks, html);
+        ret.put(ReturnValues.SNIPLETT, html.toString());
+        return ret;
+    }
+
+    protected void validate4ProjectDates(final Parameter _parameter,
+                                         final List<TaskPOs> _tasks,
+                                         final StringBuilder _html)
+        throws EFapsException
+    {
+        final PrintQuery print = new PrintQuery(_parameter.getInstance());
+        print.addAttribute(CIProjects.ProjectAbstract.Date, CIProjects.ProjectAbstract.DueDate);
+        print.execute();
+
+        final DateTime date = print.<DateTime>getAttribute(CIProjects.ProjectAbstract.Date);
+        final DateTime dueDate = print.<DateTime>getAttribute(CIProjects.ProjectAbstract.DueDate);
+        for (final TaskPOs task : _tasks) {
+            _html.append(validate4ProjectDates(_parameter, task, date, dueDate));
+        }
+    }
+
+    protected StringBuilder validate4ProjectDates(final Parameter _parameter,
+                                                  final TaskPOs _task,
+                                                  final DateTime _date,
+                                                  final DateTime _dueDate)
+        throws EFapsException
+    {
+        final StringBuilder ret = new StringBuilder();
+        final DateTime dateFrom = _task.<DateTime>getAttrValue(CIProjects.TaskAbstract.DateFrom.name);
+        final DateTime dateUntil = _task.<DateTime>getAttrValue(CIProjects.TaskAbstract.DateUntil.name);
+        if (dateFrom.isBefore(_date)) {
+            ret.append(DBProperties.getFormatedDBProperty(
+                            "org.efaps.esjp.projects.task.Task.validate4ProjectDates.before",
+                            _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
+                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+        }
+        if (dateUntil.isAfter(_dueDate)) {
+            ret.append(DBProperties.getFormatedDBProperty(
+                            "org.efaps.esjp.projects.task.Task.validate4ProjectDates.after",
+                            _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
+                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+        }
+        for (final TaskPOs task : _task.getChildren()) {
+            ret.append(validate4ProjectDates(_parameter, task, _date, _dueDate));
+        }
+        return ret;
+    }
+
+
+    protected void validate4TaskHierarchy(final Parameter _parameter,
+                                          final List<TaskPOs> _tasks,
+                                          final StringBuilder _html)
+        throws EFapsException
+    {
+        for (final TaskPOs task : _tasks) {
+            for (final TaskPOs child : task.getChildren()) {
+                _html.append(validate4TaskHierarchy(_parameter, task, child));
+            }
+        }
+    }
+
+    protected StringBuilder validate4TaskHierarchy(final Parameter _parameter,
+                                                   final TaskPOs _parentTask,
+                                                   final TaskPOs _task)
+        throws EFapsException
+    {
+        final StringBuilder ret = new StringBuilder();
+        final DateTime dateFrom = _task.<DateTime>getAttrValue(CIProjects.TaskAbstract.DateFrom.name);
+        final DateTime dateUntil = _task.<DateTime>getAttrValue(CIProjects.TaskAbstract.DateUntil.name);
+        final DateTime parentDateFrom = _parentTask.<DateTime>getAttrValue(CIProjects.TaskAbstract.DateFrom.name);
+        final DateTime parentDateUntil = _parentTask.<DateTime>getAttrValue(CIProjects.TaskAbstract.DateUntil.name);
+        if (dateFrom.isBefore(parentDateFrom)) {
+            ret.append(DBProperties.getFormatedDBProperty(
+                            "org.efaps.esjp.projects.task.Task.validate4TaskHierarchy.datebefore",
+                            _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
+                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name),
+                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Name.name),
+                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+        }
+        if (dateUntil.isAfter(parentDateUntil)) {
+            ret.append(DBProperties.getFormatedDBProperty(
+                            "org.efaps.esjp.projects.task.Task.validate4TaskHierarchy.dateafter",
+                            _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
+                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name),
+                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Name.name),
+                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+        }
+        for (final TaskPOs task : _task.getChildren()) {
+            ret.append(validate4TaskHierarchy(_parameter, _task, task));
+        }
+        return ret;
+    }
+
+
+    /**
+     * @param _parameter Parameter as passed by the eFasp API
+     * @return list of root task
+     * @throws EFapsException on error
+     */
+    protected List<TaskPOs> getTaskTree(final Parameter _parameter)
+        throws EFapsException
+    {
+        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _parameter.getInstance().getId());
+        final MultiPrintQuery multi = queryBldr.getPrint();
+        final SelectBuilder sel = new SelectBuilder().linkto(CIProjects.TaskAbstract.ParentTaskAbstractLink).oid();
+        multi.addSelect(sel);
+        multi.addAttribute(CIProjects.TaskAbstract.DateFrom, CIProjects.TaskAbstract.DateUntil,
+                        CIProjects.TaskAbstract.Description, CIProjects.TaskAbstract.Name,
+                        CIProjects.TaskAbstract.Note, CIProjects.TaskAbstract.Quantity,
+                        CIProjects.TaskAbstract.Weight, CIProjects.TaskAbstract.UoM);
+        multi.execute();
+        final Map<Instance, TaskPOs> tmp = new HashMap<Instance, TaskPOs>();
+
+        while (multi.next()) {
+            final TaskPOs task = new TaskPOs(multi.getCurrentInstance(), 0);
+            tmp.put(task.getInstance(), task);
+            task.addAttribute(CIProjects.TaskAbstract.DateFrom.name,
+                              multi.getAttribute(CIProjects.TaskAbstract.DateFrom));
+            task.addAttribute(CIProjects.TaskAbstract.DateUntil.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.DateUntil));
+            task.addAttribute(CIProjects.TaskAbstract.Description.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Description));
+            task.addAttribute(CIProjects.TaskAbstract.Name.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Name));
+            task.addAttribute(CIProjects.TaskAbstract.Note.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Note));
+            task.addAttribute(CIProjects.TaskAbstract.Quantity.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Quantity));
+            task.addAttribute(CIProjects.TaskAbstract.Weight.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Weight));
+            task.addAttribute(CIProjects.TaskAbstract.Weight.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Weight));
+            task.setParentInstance(Instance.get(multi.<String>getSelect(sel)));
+        }
+
+        final List<TaskPOs> roots = new ArrayList<TaskPOs>();
+        for (final Entry<Instance, TaskPOs> entry : tmp.entrySet()) {
+            if (entry.getValue().isChild()) {
+                entry.getValue().setParent(tmp.get(entry.getValue().getParentInstance()));
+            } else {
+                roots.add(entry.getValue());
+            }
+        }
+        return roots;
+    }
+
+    /**
+     * @param _parameter Parameter as passed by the eFasp API
+     * @return Return containing true if access is granted
      * @throws EFapsException on error
      */
     public Return accessCheck4TaskEditCreate(final Parameter _parameter)
@@ -390,6 +552,28 @@ public abstract class Task_Base
         private final int level;
 
         /**
+         * Parent for this task.
+         */
+        private Instance parentInst = null;
+
+        /**
+         * Mapping of attributes to values.
+         */
+        private final Map<String, Object> attr2value = new HashMap<String, Object>();
+
+        /**
+         * The parent task.
+         */
+        private TaskPOs parent;
+
+
+        /**
+         * Children of this Task.
+         */
+        private final List<TaskPOs> children  = new ArrayList<TaskPOs>();
+
+
+        /**
          * @param _instance Instance
          * @param _level    Level
          */
@@ -398,6 +582,92 @@ public abstract class Task_Base
         {
             this.instance = _instance;
             this.level = _level;
+        }
+
+        /**
+         * @param _taskPOs task to set as parent
+         */
+        protected void setParent(final TaskPOs _taskPOs)
+        {
+            this.parent = _taskPOs;
+            _taskPOs.addChild(this);
+        }
+
+        /**
+         * @param _taskPOs task to add to the children
+         */
+        protected void addChild(final TaskPOs _taskPOs)
+        {
+            this.children.add(_taskPOs);
+        }
+
+        /**
+         * Getter method for the instance variable {@link #children}.
+         *
+         * @return value of instance variable {@link #children}
+         */
+        protected List<TaskPOs> getChildren()
+        {
+            return this.children;
+        }
+
+        /**
+         * @param _instance parent instance
+         */
+        protected void setParentInstance(final Instance _instance)
+        {
+            if (_instance.isValid()) {
+                this.parentInst = _instance;
+            }
+        }
+
+        /**
+         * @param _attrName Name of the attribute
+         * @param _value    value for the attribute
+         */
+        protected void addAttribute(final String _attrName,
+                                    final Object _value)
+        {
+            this.attr2value.put(_attrName, _value);
+        }
+
+        /**
+         * @param <T> type to cast to
+         * @param _attrName name of the attribute
+         * @return value casted to <T>
+         */
+        @SuppressWarnings("unchecked")
+        protected <T> T getAttrValue(final String _attrName)
+        {
+            return (T) this.attr2value.get(_attrName);
+        }
+
+        /**
+         * @return true if Task has parent
+         */
+        protected boolean isChild()
+        {
+            return this.parentInst != null;
+        }
+
+        /**
+         * Getter method for the instance variable {@link #parent}.
+         *
+         * @return value of instance variable {@link #parent}
+         */
+        protected TaskPOs getParent()
+        {
+            return this.parent;
+        }
+
+        /**
+         * Getter method for the instance variable {@link #parent}.
+         *
+         * @return value of instance variable {@link #parent}
+         */
+        protected Instance getParentInstance()
+        {
+            return this.parentInst;
         }
 
         /**
