@@ -121,13 +121,15 @@ public abstract class Task_Base
             ret.append(DBProperties.getFormatedDBProperty(
                             "org.efaps.esjp.projects.task.Task.validate4ProjectDates.before",
                             _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
-                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)))
+                .append("<br/>");
         }
         if (dateUntil.isAfter(_dueDate)) {
             ret.append(DBProperties.getFormatedDBProperty(
                             "org.efaps.esjp.projects.task.Task.validate4ProjectDates.after",
                             _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
-                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+                            _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)))
+                .append("<br/>");
         }
         for (final TaskPOs task : _task.getChildren()) {
             ret.append(validate4ProjectDates(_parameter, task, _date, _dueDate));
@@ -164,7 +166,8 @@ public abstract class Task_Base
                             _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
                             _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name),
                             _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Name.name),
-                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)))
+                .append("<br/>");
         }
         if (dateUntil.isAfter(parentDateUntil)) {
             ret.append(DBProperties.getFormatedDBProperty(
@@ -172,7 +175,8 @@ public abstract class Task_Base
                             _task.<Object>getAttrValue(CIProjects.TaskAbstract.Name.name),
                             _task.<String>getAttrValue(CIProjects.TaskAbstract.Description.name),
                             _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Name.name),
-                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)));
+                            _parentTask.<String>getAttrValue(CIProjects.TaskAbstract.Description.name)))
+                .append("<br/>");
         }
         for (final TaskPOs task : _task.getChildren()) {
             ret.append(validate4TaskHierarchy(_parameter, _task, task));
