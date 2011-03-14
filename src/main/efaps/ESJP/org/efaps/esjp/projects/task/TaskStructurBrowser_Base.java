@@ -71,16 +71,6 @@ public abstract class TaskStructurBrowser_Base
      * {@inheritDoc}
      */
     @Override
-    protected Return allowItem(final Parameter _parameter)
-    {
-        final Return ret = new Return();
-        return ret;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected Return onNodeRemove(final Parameter _parameter)
     {
         final Instance instance = _parameter.getInstance();
