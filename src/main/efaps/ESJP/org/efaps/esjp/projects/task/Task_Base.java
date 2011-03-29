@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Stack;
+import java.util.UUID;
 
+import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.ui.FieldValue;
 import org.efaps.admin.dbproperty.DBProperties;
@@ -77,6 +79,32 @@ public abstract class Task_Base
 
     /**
      * @param _parameter Parameter as passed by the eFasp API
+     * @return Return with true if access is granted
+     * @throws EFapsException on error
+     */
+    public Return accessCheck4AutomaticNumbering(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+
+        final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
+        //Projects-Configuration
+        final SystemConfiguration config = SystemConfiguration.get(
+                        UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a"));
+        if (config != null) {
+            if ("true".equalsIgnoreCase(config.getAttributeValue("Tasks_AutomaticNumbering"))
+                            && "true".equalsIgnoreCase((String) props.get("Automatic"))) {
+                ret.put(ReturnValues.TRUE, true);
+            } else if (!"true".equalsIgnoreCase(config.getAttributeValue("Tasks_AutomaticNumbering"))
+                            && "false".equalsIgnoreCase((String) props.get("Automatic"))) {
+                ret.put(ReturnValues.TRUE, true);
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * @param _parameter Parameter as passed by the eFasp API
      * @return Return containing a snipplet
      * @throws EFapsException on error
      */
@@ -92,6 +120,12 @@ public abstract class Task_Base
         return ret;
     }
 
+    /**
+     * @param _parameter    Parameter as passed by the eFasp API
+     * @param _tasks        List of Task
+     * @param _html         StringBuilder to append to
+     * @throws EFapsException on error
+     */
     protected void validate4ProjectDates(final Parameter _parameter,
                                          final List<TaskPOs> _tasks,
                                          final StringBuilder _html)
@@ -108,6 +142,14 @@ public abstract class Task_Base
         }
     }
 
+    /**
+     * @param _parameter    Parameter as passed by the eFasp API
+     * @param _task         Task
+     * @param _date         From date
+     * @param _dueDate      until date
+     * @return StringBuilder
+     * @throws EFapsException on error
+     */
     protected StringBuilder validate4ProjectDates(final Parameter _parameter,
                                                   final TaskPOs _task,
                                                   final DateTime _date,
@@ -137,7 +179,12 @@ public abstract class Task_Base
         return ret;
     }
 
-
+    /**
+     * @param _parameter    Parameter as passed by the eFasp API
+     * @param _tasks        List of Task
+     * @param _html         StringBuilder to append to
+     * @throws EFapsException on error
+     */
     protected void validate4TaskHierarchy(final Parameter _parameter,
                                           final List<TaskPOs> _tasks,
                                           final StringBuilder _html)
@@ -150,6 +197,13 @@ public abstract class Task_Base
         }
     }
 
+    /**
+     * @param _parameter    Parameter as passed by the eFasp API
+     * @param _parentTask   parent Task
+     * @param _task         task
+     * @return StringBuilder
+     * @throws EFapsException on error
+     */
     protected StringBuilder validate4TaskHierarchy(final Parameter _parameter,
                                                    final TaskPOs _parentTask,
                                                    final TaskPOs _task)
@@ -183,7 +237,6 @@ public abstract class Task_Base
         }
         return ret;
     }
-
 
     /**
      * @param _parameter Parameter as passed by the eFasp API
@@ -324,6 +377,17 @@ public abstract class Task_Base
         return ret;
     }
 
+    protected void update4AutomaticNumbering(final Parameter _parameter)
+        throws EFapsException
+    {
+        final List<TaskPOs> taskTree = getTaskTree(_parameter);
+        for (final TaskPOs task : taskTree) {
+            task.getChildren();
+        }
+    }
+
+
+
     /**
      * @param _parameter    Parameter as passed by the eFaps API
      * @return  Return
@@ -372,6 +436,7 @@ public abstract class Task_Base
         final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
 
         final Stack<TaskPOs> parents = new Stack<TaskPOs>();
+        boolean updateName = false;
         if (rowKeys != null) {
             for (int i = 0; i < rowKeys.length; i++) {
                 final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
@@ -395,6 +460,7 @@ public abstract class Task_Base
                     update = new Update(oidMap.get(rowKeys[i]));
                     parent = "true".equalsIgnoreCase(allowChilds[i]);
                 } else {
+                    updateName = true;
                     update = new Insert(CIProjects.TaskScheduled);
                     if (level == 1) {
                         parent = false;
@@ -417,8 +483,12 @@ public abstract class Task_Base
                 if (parent) {
                     posGrp.setInstance(update.getInstance());
                     parents.push(posGrp);
+
                 }
             }
+        }
+        if (updateName) {
+            update4AutomaticNumbering(_parameter);
         }
         return ret;
     }
@@ -443,7 +513,6 @@ public abstract class Task_Base
         }
         return new Return();
     }
-
 
     /**
      * Get the Html Snipplet that shows the gant bars in the table.
@@ -570,12 +639,10 @@ public abstract class Task_Base
          */
         private TaskPOs parent;
 
-
         /**
          * Children of this Task.
          */
-        private final List<TaskPOs> children  = new ArrayList<TaskPOs>();
-
+        private final List<Task_Base.TaskPOs> children  = new ArrayList<Task_Base.TaskPOs>();
 
         /**
          * @param _instance Instance
@@ -610,7 +677,7 @@ public abstract class Task_Base
          *
          * @return value of instance variable {@link #children}
          */
-        protected List<TaskPOs> getChildren()
+        protected List<Task_Base.TaskPOs> getChildren()
         {
             return this.children;
         }

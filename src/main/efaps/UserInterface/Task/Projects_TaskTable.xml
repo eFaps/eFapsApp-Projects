@@ -47,6 +47,26 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="Width">3</property>
+            <trigger program="org.efaps.esjp.projects.task.Task"
+                method="accessCheck4AutomaticNumbering"
+                name="Projects_TaskTable.name.UI_ACCESSCHECK"
+                event="UI_ACCESSCHECK">
+                <property name="Automatic">false</property>
+             </trigger>
+        </field>
+         <field name="name">
+            <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
+            <property name="Attribute">Name</property>
+            <property name="Label">Projects_TaskAbstract/Name.Label</property>
+            <property name="ModeEdit">READONLY</property>
+            <property name="ModeCreate">READONLY</property>
+            <property name="Width">1</property>
+            <trigger program="org.efaps.esjp.projects.task.Task"
+                method="accessCheck4AutomaticNumbering"
+                name="Projects_TaskTable.name.UI_ACCESSCHECK"
+                event="UI_ACCESSCHECK">
+                <property name="Automatic">true</property>
+            </trigger>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
