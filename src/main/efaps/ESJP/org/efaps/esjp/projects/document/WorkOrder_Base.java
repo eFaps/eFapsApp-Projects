@@ -40,7 +40,7 @@ import org.efaps.util.EFapsException;
  */
 @EFapsUUID("8d8ef20d-8e38-4e39-b2d3-a555959dcaff")
 @EFapsRevision("$Rev$")
-public class WorkOrder_Base
+public abstract class WorkOrder_Base
     extends DocumentAbstract
 {
     /**
@@ -61,6 +61,7 @@ public class WorkOrder_Base
         insert.add(CIProjects.WorkOrder.Salesperson, _parameter.getParameterValue("salesperson"));
         insert.add(CIProjects.WorkOrder.Contact, contactid);
         insert.add(CIProjects.WorkOrder.Date, date);
+        insert.add(CIProjects.WorkOrder.Note, _parameter.getParameterValue("note"));
         insert.add(CIProjects.WorkOrder.Status, Status.find(CIProjects.WorkOrderStatus.uuid, "Open").getId());
         insert.execute();
         return new Return();

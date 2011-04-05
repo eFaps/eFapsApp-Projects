@@ -38,7 +38,7 @@ import org.efaps.util.EFapsException;
  */
 @EFapsUUID("d77c0a30-4414-422a-8a8d-6426a8c3014e")
 @EFapsRevision("$Rev$")
-public class ServiceRequest_Base
+public abstract class ServiceRequest_Base
     extends DocumentAbstract
 {
     /**
