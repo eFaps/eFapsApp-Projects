@@ -37,6 +37,7 @@
             <property name="Attribute">Type</property>
             <property name="Label">Projects_Project2DocumentAbstract/Type.Label</property>
             <property name="ShowTypeIcon">true</property>
+            <property name="FilterType">PickList</property>
         </field>
         <field name="name">
             <property name="SelectAlternateOID">linkto[ToAbstract].oid</property>
