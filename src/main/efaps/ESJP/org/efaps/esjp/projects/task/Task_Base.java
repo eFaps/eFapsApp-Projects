@@ -325,7 +325,6 @@ public abstract class Task_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final String[] names = _parameter.getParameterValues("name");
         final String[] descriptions = _parameter.getParameterValues("description");
         final Instance projectInst = _parameter.getInstance();
         final String[] allowChilds = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_ALLOWSCHILDS.getKey());
@@ -334,9 +333,28 @@ public abstract class Task_Base
         final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
 
         final Stack<TaskPOs> parents = new Stack<TaskPOs>();
+        Integer maxlevel = 0;
+        for (final String levelStr : levels) {
+            final int level = Integer.parseInt(levelStr);
+            if (level > maxlevel) {
+                maxlevel = level;
+            }
+        }
 
+        final Integer[] numbering = new Integer[maxlevel];
+        for (int i = 0; i < numbering.length; i++) {
+            numbering[i] = 0;
+        }
+        int currentLevel = 0;
         for (int i = 0; i < allowChilds.length; i++) {
             final int level = Integer.parseInt(levels[i]);
+            if (currentLevel > level) {
+                for (int y = currentLevel; y > level; y--) {
+                    numbering[y - 1] = 0;
+                }
+            }
+            numbering[level - 1] = numbering[level - 1] + 1;
+            currentLevel = level;
             // folders
             final Insert insert = new Insert(CIProjects.TaskScheduled);
             boolean parent;
@@ -350,7 +368,7 @@ public abstract class Task_Base
                 insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
             }
             insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
-            insert.add(CIProjects.TaskAbstract.Name, names[i]);
+            insert.add(CIProjects.TaskAbstract.Name, getName(_parameter, i, null));
             insert.add(CIProjects.TaskAbstract.Description, descriptions[i]);
             insert.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
             insert.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
@@ -377,16 +395,38 @@ public abstract class Task_Base
         return ret;
     }
 
-    protected void update4AutomaticNumbering(final Parameter _parameter)
+    /**
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @param _idx          current index
+     * @param _numbering    numbering array
+     * @return name
+     * @throws EFapsException on error
+     */
+    protected String getName(final Parameter _parameter,
+                             final int _idx,
+                             final Integer[] _numbering)
         throws EFapsException
     {
-        final List<TaskPOs> taskTree = getTaskTree(_parameter);
-        for (final TaskPOs task : taskTree) {
-            task.getChildren();
+        //Projects-Configuration
+        final SystemConfiguration config = SystemConfiguration.get(
+                        UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a"));
+        String ret = "";
+        if (config != null && config.getAttributeValueAsBoolean("Tasks_AutomaticNumbering")) {
+            final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
+            final int level = Integer.parseInt(levels[_idx]);
+            for (int i = 0; i < level; i++) {
+                if (i > 0) {
+                    ret = ret + "." +  _numbering[i];
+                } else {
+                    ret = _numbering[i].toString();
+                }
+            }
+        } else {
+            final String[] names = _parameter.getParameterValues("name");
+            ret = names[_idx];
         }
+        return ret;
     }
-
-
 
     /**
      * @param _parameter    Parameter as passed by the eFaps API
@@ -427,7 +467,6 @@ public abstract class Task_Base
         @SuppressWarnings("unchecked")
         final Map<String, String> oidMap = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
         final String[] rowKeys = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
-        final String[] names = _parameter.getParameterValues("name");
         final String[] descriptions = _parameter.getParameterValues("description");
         final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");
         final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
@@ -436,7 +475,19 @@ public abstract class Task_Base
         final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
 
         final Stack<TaskPOs> parents = new Stack<TaskPOs>();
-        boolean updateName = false;
+        Integer maxlevel = 0;
+        for (final String levelStr : levels) {
+            final int level = Integer.parseInt(levelStr);
+            if (level > maxlevel) {
+                maxlevel = level;
+            }
+        }
+
+        final Integer[] numbering = new Integer[maxlevel];
+        for (int i = 0; i < numbering.length; i++) {
+            numbering[i] = 0;
+        }
+        int currentLevel = 0;
         if (rowKeys != null) {
             for (int i = 0; i < rowKeys.length; i++) {
                 final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
@@ -454,13 +505,20 @@ public abstract class Task_Base
                 boolean parent = true;
                 Update update;
                 final int level = Integer.parseInt(levels[i]);
+                if (currentLevel > level) {
+                    for (int y = currentLevel; y > level; y--) {
+                        numbering[y - 1] = 0;
+                    }
+                }
+                numbering[level - 1] = numbering[level - 1] + 1;
+                currentLevel = level;
                 final TaskPOs posGrp = new TaskPOs(null, level);
 
                 if (oidMap.get(rowKeys[i]) != null) {
                     update = new Update(oidMap.get(rowKeys[i]));
                     parent = "true".equalsIgnoreCase(allowChilds[i]);
                 } else {
-                    updateName = true;
+
                     update = new Insert(CIProjects.TaskScheduled);
                     if (level == 1) {
                         parent = false;
@@ -474,7 +532,7 @@ public abstract class Task_Base
                     update.add(CIProjects.TaskAbstract.StatusAbstract,
                                     Status.find(CIProjects.TaskScheduledStatus.uuid, "Open").getId());
                 }
-                update.add(CIProjects.TaskAbstract.Name, names[i]);
+                update.add(CIProjects.TaskAbstract.Name, getName(_parameter, i, numbering));
                 update.add(CIProjects.TaskAbstract.Description, descriptions[i]);
                 update.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
                 update.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
@@ -486,9 +544,6 @@ public abstract class Task_Base
 
                 }
             }
-        }
-        if (updateName) {
-            update4AutomaticNumbering(_parameter);
         }
         return ret;
     }
