@@ -28,6 +28,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.efaps.admin.datamodel.Classification;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
@@ -46,6 +47,7 @@ import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.accounting.transaction.Transaction_Base;
 import org.efaps.esjp.ci.CIAccounting;
+import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.ui.wicket.util.EFapsKey;
@@ -116,16 +118,21 @@ public abstract class Project_Base
         final String input = (String) _parameter.get(ParameterValues.OTHERS);
         final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final String type = properties.containsKey("Type") ? (String) properties.get("Type") : "Contacts_Contact";
+        final String type = (String) properties.get("Type");
         if (input.length() > 0) {
-            final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
-            queryBldr.addWhereAttrMatchValue("Name", input + "*").setIgnoreCase(true);
+            final QueryBuilder queryBldr = new QueryBuilder(CIContacts.Contact);
+            if (type != null && type.length() > 0) {
+                final Classification classType = (Classification) Type.get(type);
+                queryBldr.addWhereClassification(classType);
+            }
+
+            queryBldr.addWhereAttrMatchValue(CIContacts.Contact.Name, input + "*").setIgnoreCase(true);
             final MultiPrintQuery multi = queryBldr.getPrint();
-            multi.addAttribute("OID", "Name");
+            multi.addAttribute(CIContacts.Contact.OID, CIContacts.Contact.Name);
             multi.execute();
             while (multi.next()) {
-                final String name = multi.<String>getAttribute("Name");
-                final String oid = multi.<String>getAttribute("OID");
+                final String name = multi.<String>getAttribute(CIContacts.Contact.Name);
+                final String oid = multi.<String>getAttribute(CIContacts.Contact.OID);
                 final Map<String, String> map = new HashMap<String, String>();
                 map.put("eFapsAutoCompleteKEY", oid);
                 map.put("eFapsAutoCompleteVALUE", name);
