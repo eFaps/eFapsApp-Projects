@@ -101,7 +101,7 @@
             <property name="ModeEdit">NONE</property>
             <property name="Width">3</property>
             <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
-            <trigger program="org.efaps.esjp.projects.task.Task"
+            <trigger program="org.efaps.esjp.projects.task.Gant"
                 method="getGantFieldValue"
                 name="Projects_TaskTable.gant.UI_FIELD_VALUE"
                 event="UI_FIELD_VALUE"/>

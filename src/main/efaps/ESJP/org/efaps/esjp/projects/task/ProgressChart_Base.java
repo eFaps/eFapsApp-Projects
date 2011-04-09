@@ -154,9 +154,6 @@ public abstract class ProgressChart_Base
         _ttg.addToolTipSeries(toolTips);
 
         //analyze the max and min date
-
-
-
         if (!isProject) {
             // get the progress for this task and add the graph
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProgressTaskAbstract);
@@ -213,10 +210,10 @@ public abstract class ProgressChart_Base
      * @return ProgressSeries
      * @throws EFapsException on error
      */
-    protected ProgressSeries getSubTaskProgressSeries(final Parameter _parameter,
-                                                      final Instance _taskInstance,
-                                                      final DateTime _from,
-                                                      final DateTime _until)
+    public ProgressSeries getSubTaskProgressSeries(final Parameter _parameter,
+                                                   final Instance _taskInstance,
+                                                   final DateTime _from,
+                                                   final DateTime _until)
         throws EFapsException
     {
         final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
@@ -275,6 +272,12 @@ public abstract class ProgressChart_Base
                 }
             } else {
                 series = getSubTaskProgressSeries(_parameter, query.getCurrentValue(), from, until);
+                if (evMaxDate && !series.isEmpty() && series.lastKey().isAfter(until)) {
+                    until = series.lastKey();
+                }
+                if (evMinDate && !series.isEmpty() && series.firstKey().isBefore(from)) {
+                    from = series.firstKey();
+                }
             }
             seriesCollection.add(series);
         }
@@ -288,10 +291,10 @@ public abstract class ProgressChart_Base
      * @param _until            until
      * @return ProgressSeries
      */
-    public ProgressSeries combineProgressSeries(final Parameter _parameter,
-                                                final List<ProgressSeries> _seriesCollection,
-                                                final DateTime _from,
-                                                final DateTime _until)
+    protected ProgressSeries combineProgressSeries(final Parameter _parameter,
+                                                   final List<ProgressSeries> _seriesCollection,
+                                                   final DateTime _from,
+                                                   final DateTime _until)
     {
         final ProgressSeries ret = getProgressSeries();
         DateTime current = _from;
