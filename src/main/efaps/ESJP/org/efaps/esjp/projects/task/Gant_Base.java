@@ -165,7 +165,7 @@ public abstract class Gant_Base
     {
         _html.append("<style type=\"text/css\">")
             .append(".").append(Gant_Base.CSSLEFT).append("{")
-            .append("padding-right:2px;float:left;text-align:right;")
+            .append("float:left;text-align:right;")
             .append("}")
             .append(".").append(Gant_Base.CSSLEFT).append(" span{")
             .append("padding-right: 2px;")
@@ -276,10 +276,7 @@ public abstract class Gant_Base
                               final BigDecimal _right)
         throws EFapsException
     {
-        _html.append("<div style=\" margin-left:").append(_left.abs().setScale(1, BigDecimal.ROUND_HALF_UP))
-            .append("%; margin-right:").append(_right.abs().setScale(1, BigDecimal.ROUND_HALF_UP))
-            .append("%;\" class=\"")
-            .append(Gant_Base.CSSGANTBAR).append("\">");
+        _html.append("<div class=\"").append(Gant_Base.CSSGANTBAR).append("\">");
     }
 
     /**
