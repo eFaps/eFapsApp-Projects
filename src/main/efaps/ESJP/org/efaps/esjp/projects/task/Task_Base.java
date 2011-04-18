@@ -358,7 +358,7 @@ public abstract class Task_Base
                 insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, parents.peek().instance.getId());
             }
             insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
-            insert.add(CIProjects.TaskAbstract.Name, getName(_parameter, i, null));
+            insert.add(CIProjects.TaskAbstract.Name, getName(_parameter, i, numbering));
             insert.add(CIProjects.TaskAbstract.Description, descriptions[i]);
             insert.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
             insert.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
