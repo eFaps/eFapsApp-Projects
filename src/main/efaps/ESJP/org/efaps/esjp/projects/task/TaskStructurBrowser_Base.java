@@ -72,6 +72,7 @@ public abstract class TaskStructurBrowser_Base
      */
     @Override
     protected Return onNodeRemove(final Parameter _parameter)
+        throws EFapsException
     {
         final Instance instance = _parameter.getInstance();
         if (instance != null && instance.isValid()) {
