@@ -35,14 +35,18 @@
         <!-- fields -->
         <field name="type">
             <property name="Attribute">Type</property>
-            <property name="Label">Projects_Project2IssuesTable/Type.Label</property>
+            <property name="Label">Projects_Project2IssuesTable.type.Label</property>
             <property name="ShowTypeIcon">true</property>
         </field>
         <field name="issues">
             <property name="SelectAlternateOID">linkto[FromLink].oid</property>
             <property name="Select">linkto[FromLink].attribute[Name]</property>
-            <property name="Label">Projects_Project2IssuesTable/Issues.Label</property>
+            <property name="Label">Projects_Project2IssuesTable.issues.Label</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
+        </field>
+        <field name="description">
+            <property name="Select">linkto[FromLink].attribute[Description]</property>
+            <property name="Label">Projects_Project2IssuesTable.description.Label</property>
         </field>
         <field name="buttonOpenInNewWindow">
             <icon>eFapsActionNewWindow</icon>
