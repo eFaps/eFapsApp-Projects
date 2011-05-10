@@ -48,6 +48,11 @@
             <property name="Select">linkto[FromLink].attribute[Description]</property>
             <property name="Label">Projects_Project2IssuesTable.description.Label</property>
         </field>
+        <field name="statusAbstract">
+            <property name="FilterType">PICKER</property>
+            <property name="Select">linkto[FromLink].attribute[StatusAbstract]</property>
+            <property name="Label">Projects_Project2IssuesTable.statusAbstract.Label</property>
+        </field>
         <field name="buttonOpenInNewWindow">
             <icon>eFapsActionNewWindow</icon>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
