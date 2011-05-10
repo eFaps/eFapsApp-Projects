@@ -154,6 +154,10 @@ public abstract class GantHtmlTable_Base
                 i = 0;
             }
         }
+        if (i > 0) {
+            html.th(DBProperties.getFormatedDBProperty("org.efaps.esjp.projects.task.GantHtmlTable.Week", j + 1),
+                            "border: 1px solid grey;", i, 0);
+        }
         html.trC().tr();
         for (final DateTime date : dates) {
             html.td(date.toString("dd-MMM"));
