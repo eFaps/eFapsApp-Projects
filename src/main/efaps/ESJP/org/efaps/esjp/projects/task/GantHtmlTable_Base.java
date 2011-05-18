@@ -166,8 +166,38 @@ public abstract class GantHtmlTable_Base
         addRows(_parameter, html, roots, dates, 0);
         add2Table(_parameter, html, roots, dates);
         html.tableC();
-        ret.put(ReturnValues.SNIPLETT, html.toString());
+        ret.put(ReturnValues.SNIPLETT, getStyleSheet(_parameter) + html.toString());
         return ret;
+    }
+
+    /**
+     * @param _parameter    Parameter as passed by the eFasp API
+     * * @return  String
+     * @throws EFapsException on error
+     */
+    protected String getStyleSheet(final Parameter _parameter)
+        throws EFapsException
+    {
+        final StringBuilder css = new StringBuilder();
+        css.append("<style type=\"text/css\">")
+            .append(" .contained {")
+            .append("background-color:grey;")
+            .append("display:block;")
+            .append("height:10px")
+            .append("}")
+            .append(" .contained div {")
+            .append("display:none;")
+            .append("background-color: #D8D8D8;")
+            .append("border: 1px solid;")
+            .append("display: none;")
+            .append("padding: 2px;")
+            .append("position: absolute;")
+            .append("}")
+            .append(".contained:hover div {")
+            .append("display:block;")
+            .append("}")
+            .append("</style>");
+        return css.toString();
     }
 
     /**
@@ -178,9 +208,9 @@ public abstract class GantHtmlTable_Base
      * @throws EFapsException on error
      */
     protected void add2Table(final Parameter _parameter,
-                           final HtmlTable _html,
-                           final List<ATask> _tasks,
-                           final List<DateTime> _dates)
+                             final HtmlTable _html,
+                             final List<ATask> _tasks,
+                             final List<DateTime> _dates)
         throws EFapsException
     {
         // to be implemented
@@ -233,10 +263,12 @@ public abstract class GantHtmlTable_Base
         for (final ATask task : _tasks) {
             final String color = i % 2 == 0 ? "lightGray" : "lightBlue";
             _html.tr();
-            _html.td(task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name), "background-color:" + color);
+            _html.td(task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name) + " "
+                            + task.<String>getAttributeValue(CIProjects.TaskAbstract.Description.name),
+                            "background-color:" + color);
             final DateTime dateFrom = task.getAttributeValue(CIProjects.TaskAbstract.DateFrom.name);
             final DateTime dateUntil = task.getAttributeValue(CIProjects.TaskAbstract.DateUntil.name);
-            final Interval intervale = new Interval(dateFrom, dateUntil);
+            final Interval intervale = new Interval(dateFrom, dateUntil.isAfter(dateFrom) ? dateUntil : dateFrom);
             for (final DateTime date : _dates) {
                 _html.td(getCellValue(_parameter, task, intervale.contains(date)), intervale.contains(date)
                                 ? "padding-right:0;padding-left:0;background-color:" + color
@@ -262,10 +294,30 @@ public abstract class GantHtmlTable_Base
     {
         final StringBuilder html = new StringBuilder();
         if (_contained) {
-            html.append("<span style=\"background-color:grey;display:block;height:10px\"/>");
+            html.append("<span class=\"contained\">").append(getToolTip(_parameter, _task)).append("</span)");
         }
         return html.toString();
     }
+
+    /**
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @param _task         current task
+     * @return  String
+     * @throws EFapsException on error
+     */
+    protected String getToolTip(final Parameter _parameter,
+                                final ATask _task)
+        throws EFapsException
+    {
+        final StringBuilder html = new StringBuilder();
+        html.append("<div>")
+            .append(_task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name))
+            .append(" ")
+            .append(_task.<String>getAttributeValue(CIProjects.TaskAbstract.Description.name))
+            .append("</div>");
+        return html.toString();
+    }
+
     /**
      * @return new Comparator
      * @throws EFapsException on error
