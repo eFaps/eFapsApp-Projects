@@ -109,8 +109,8 @@
             <!-- connect the Projects_Accounting_LabelTree_Projects Menu to the Accounting_LabelTree -->
             update.add2Menu("4c47213c-8339-43c7-a103-8b477deaf05e", "f67a39ed-8cd3-4551-9351-7bae6cf6447a", -1);
 
-            <!-- connect the Projects_Contacts_ContactTree_Projects to the Contacts_ContactTree -->
-            update.add2Menu("b50f8c15-2b1e-4c15-b493-4eb1e669d1db", "6de1b9bb-6a03-4c3b-82dd-363fde0aea0a", -1);
+            <!-- Project_Projects, Admin_Help_MainMenu -->
+            update.add2Menu("046b2b19-0008-4965-a8ca-d7d15587e9da", "dead549e-5cc6-49f9-9a79-8e33aa139f6d", -1);
         </script>
     </version>
 </install>

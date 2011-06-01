@@ -1,0 +1,39 @@
+<wiki:comment>
+@eFapsPackage  org.efaps.wiki.projects
+@eFapsUUID     a921bf97-dbcb-4544-b335-fb5a26960f9e
+@eFapsRevision $Rev: 6420 $
+</wiki:comment>
+
+
+
+
+#summary Reportes de trabajo
+<wiki:toc max_depth="3"/>
+
+----
+
+Veremos los siguientes puntos en este menú:
+
+  * 6.1 Crear nuevo
+  * 6.2 Borrar
+  * 6.3 Exportar
+
+===6.1 Crear nuevo===
+Para crear un nuevo reporte usted debe dirigirse a acción y seleccionar crear nuevo, inmediatamente le aparecerá la ventana crear nuevo reporte de trabajo en donde ingresará la información correspondiente en cada campo obligatorio y secundario:
+
+Obligatorio:
+Fecha: es la fecha de creación del documento, se puede modificar con el mismo formato mostrado o seleccionar la fecha del calendario.
+Nombre: es el nombre identificativo del reporte.
+Lead: es el encargado de la creación del documento.
+Contacto: llamar al contacto colocando su nombre o solo {{{*}}}.
+
+Secundario:
+Información: es la información del contacto seleccionado.
+
+===6.2 Borrar===
+Seleccionar uno o varios reportes haciendo un check en su correspondiente casillero, dirigirse a la opción acción y
+elegir borrar seleccionado.
+
+===6.3 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de
+formatos PDF o XLS.

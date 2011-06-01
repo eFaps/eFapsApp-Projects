@@ -1,0 +1,46 @@
+<wiki:comment>
+@eFapsPackage  org.efaps.wiki.projects
+@eFapsUUID     99b78251-1a9d-4309-ac3d-a585eaf26522
+@eFapsRevision $Rev: 6420 $
+</wiki:comment>
+
+
+
+
+#summary Solicitud de proyecto
+<wiki:toc max_depth="3"/>
+
+----
+
+En este menú veremos los siguientes puntos:
+
+  * 4.1 Crear nuevo
+  * 4.2 Copiar
+  * 4.3 Borrar
+  * 4.4 Exportar
+
+===4.1 Crear nuevo===
+Para crear una solicitud de proyecto usted se dirige a acción y selecciona crear nuevo, inmediatamente le aparecerá la
+ventana crear nueva solicitud de proyecto en donde ingresará la información correspondiente en los campos obligatorios y
+secundarios.
+
+Obligatorio:
+  * Fecha: es la fecha de creación del documento, puede ser modificada con el mismo formato mostrado o seleccionar la fecha del calendario.
+  * Nombre: es el nombre identificativo de la solicitud.
+  * Lead: el encargado de crear ese documento.
+  * Contacto: se llama al contacto colocando su nombre o solo {{{*}}}.
+
+Secundario:
+  * Información: es la información del contacto seleccionado.
+
+===4.2 Copiar===
+Para copiar un documento usted debe seleccionar el documento haciendo un check en su casillero correspondiente, dirigirse
+ a acción y seleccionar copiar..
+
+===4.3 Borrar===
+Seleccionar una o varias solicitudes, dirigirse a la opción acción y eligir borrar seleccionado.
+
+===4.4 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de
+formatos PDF o XLS.
+

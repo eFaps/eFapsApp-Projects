@@ -1,0 +1,52 @@
+<wiki:comment>
+@eFapsPackage  org.efaps.wiki.projects
+@eFapsUUID     61a86577-7461-4e2c-a9a4-1cf7257865a4
+@eFapsRevision $Rev: 6420 $
+</wiki:comment>
+
+
+
+
+#summary Proyectos
+<wiki:toc max_depth="3"/>
+
+----
+
+En este Manual de Usuario usted encontrará toda la información necesaria referente a la inicialización y uso del menú
+proyecto, de manera que usted esté informado de todas las funcionalidades de este menú para que pueda trabajar en toda
+su potencialidad.
+
+Este documento explica:
+
+  # Crear proyecto de servicio
+  # Borrar
+  # Exportar
+  # Solicitud de proyecto
+  # Ordenes de trabajo
+  # Reportes de trabajo
+  # Tareas
+
+==1. Crear proyecto de servicio==
+Crear proyecto de servicio
+Para poder crear un proyecto usted debe dirigirse a acción y seleccionar crear proyecto de servicio, inmediatamente le
+aparecerá la ventana crear proyecto en donde ingresara la información correspondiente a cada campo obligatorio y secundario:
+
+Obligatorio:
+  * Fecha: es la fecha de creación del proyecto.
+  * Fecha de entrega: cuando se va entregar el proyecto terminado.
+  * Lead: el encargado de crear este proyecto.
+  * Nº: es el número correlativo que corresponde a este documento.
+  * Cliente: para llamar a un cliente colocar el nombre o solo {{{*}}}.
+
+Secundario:
+  * Nombre: es el nombre identificativo del proyecto.
+  * Información: es la información principal del proyecto.
+  * Persona de contacto: colocar el nombre del contacto.
+  * Nota: escribir información detallada del proyecto.
+
+==2. Borrar==
+Debe de escoger uno o mas solicitudes haciendo un check en las casillas, dirigirse a acción y seleccionar borrar.
+
+==3. Exportar==
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
