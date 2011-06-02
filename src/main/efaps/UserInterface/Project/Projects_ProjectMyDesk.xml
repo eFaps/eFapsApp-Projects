@@ -44,6 +44,7 @@
                 <property name="Types">Projects_ProjectAbstract</property>
                 <property name="ExpandChildTypes">true</property>
             </evaluate>
+            <help>org.efaps.wiki.projects.Project.wiki</help>
         </target>
 
         <!-- properties -->
