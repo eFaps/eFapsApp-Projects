@@ -25,6 +25,8 @@ Este documento explica:
   # Ordenes de trabajo
   # Reportes de trabajo
   # Tareas
+  # Acceso a un proyecto
+
 
 ==1. Crear proyecto de servicio==
 Crear proyecto de servicio

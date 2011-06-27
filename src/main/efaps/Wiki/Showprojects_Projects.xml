@@ -22,15 +22,15 @@
 --><help-menu xmlns="http://www.efaps.org/xsd"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>73a87111-2bd1-47ac-8a60-5a10ff204e64</uuid>
+    <uuid>34600d9d-4180-45f0-b793-67d7d6f3e258</uuid>
     <file-application>eFaps-Projects</file-application>
     <file-revision>$Rev: 6408 $</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Workorders_Projects</name>
+        <name>Showprojects_Projects</name>
         <!-- targets -->
         <target>
-            <wiki>org.efaps.wiki.projects.Workorders.wiki</wiki>
+            <wiki>org.efaps.wiki.projects.Showprojects.wiki</wiki>
         </target>
     </definition>
 </help-menu>

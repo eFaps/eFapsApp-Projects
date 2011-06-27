@@ -1,0 +1,281 @@
+<wiki:comment>
+@eFapsPackage  org.efaps.wiki.projects
+@eFapsUUID     61701d8b-ea20-4be3-a617-dfc8b373db56
+@eFapsRevision $Rev: 6420 $
+</wiki:comment>
+
+
+
+
+#summary Acceso a un proyecto
+<wiki:toc max_depth="3"/>
+
+----
+
+Cuando ingresa a un proyecto podrá ver su contenido y además podrá visualizar las diferentes opciones:
+
+  # Editar
+  # Exportar
+  # Documentos
+  # Categorías
+  # Cuentas
+  # Etiquetas
+  # Solicitudes
+  # Tareas
+
+
+==1. Editar==
+Para editar se dirige a acción y selecciona editar, inmediatamente le aparecerá la ventana editar proyecto de servicio xxx en donde usted podrá editar los siguientes campos,
+
+  * Fecha:  se puede modificar la fecha con el mismo formato mostrado o se puede seleccionar la fecha del calendario.
+  * Fecha de entrega: se puede modificar la fecha con el mismo formato mostrado o se puede seleccionar la fecha del calendario.
+  * Nº: es el número del proyecto.
+  * Nombre: es el nombre identificativo del proyecto.
+  * Persona de contacto: volver a escribir el nombre del contacto.
+  * Nota: es la información detallada del proyecto.
+
+==2. Exportar==
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+
+==3. Documentos==
+Veremos los siguiente puntos en este menú:
+
+  * 3.1 Agregar existente
+  * 3.2 Desconectar
+  * 3.3 Exportar
+
+===3.1 Agregar existente===
+Para agregar un documento usted debe dirigirse a acción y seleccionar agregar existente, inmediatamente le aparecerá la ventana buscar documentos en donde vera dos campos:
+
+  * Tipo: usted escogerá que tipo de documento sera buscado o dejarlo con {{{*}}}, para que busque en todos los tipos.
+  * Nombre: puede colocar parte del nombre del documento(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+
+Con el botón buscar se iniciara la búsqueda y le mostrara un listado de documentos, seleccionará el documento que buscaba haciendo un check en su casillero e interconecta.
+
+===3.2 Desconectar===
+Para desconectar documentos deberá hacer un check en sus casillero, dirigirse a acción y seleccionar desconectar.
+
+===3.3 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+
+==4. Categorías==
+Veremos los siguientes puntos,
+
+  * 4.1 Crear nuevo
+  * 4.2 Borrar
+  * 4.3 Exportar
+
+===4.1 Crear nuevo===
+Para poder crear una categoría de empleado podrá hacerlo dirigiéndose a acción y seleccionando crear nuevo, inmediatamente le aparecerá la ventana crear nueva categoría en donde ingresará la información correspondiente.
+
+===4.2 Borrar===
+Seleccionar una o varias categorías haciendo un check en sus casilleros, dirigirse a acción y seleccionar borrar.
+
+===4.3 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+
+==5. Cuentas==
+Veremos los siguientes puntos,
+
+  * 5.1 Agregar existente
+  * 5.2 Desconectar
+  * 5.3 Exportar
+
+===5.1 Agregar existente===
+Para agregar una cuenta usted debe dirigirse a acción y seleccionar agregar existente, inmediatamente le aparecerá la ventana buscar cuentas en donde vera dos campos:
+
+  * Número: puede colocar parte del numero de la cuenta(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+  * Descripción: puede colocar parte de la descripción de la cuenta(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+
+Con el botón buscar se iniciara la búsqueda y le mostrara un listado de cuentas, seleccionará la cuenta que buscaba haciendo un check en su casillero e interconecta.
+
+===5.2 Desconectar===
+Para desconectar las cuentas deberá hacer un check en sus casillero, dirigirse a acción y seleccionar desconectar.
+
+===5.3 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+
+==6. Etiquetas==
+Veremos los siguientes puntos,
+
+  * 6.1 Agregar existente
+  * 6.2 Desconectar
+  * 6.3 Exportar
+
+===6.1 Agregar existente===
+Para agregar una etiqueta usted debe dirigirse a acción y seleccionar agregar existente, inmediatamente le aparecerá la ventana buscar etiqueta en donde vera dos campos:
+
+  * Nombre: puede colocar parte del nombre de la etiqueta(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+  * Descripción: puede colocar parte de la descripción de la etiqueta(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+
+Con el botón buscar se iniciara la búsqueda y le mostrara un listado de etiquetas, seleccionará la etiqueta que buscaba haciendo un check en su casillero e interconecta.
+
+===6.2 Desconectar===
+Para desconectar las etiquetas deberá hacer un check en sus casillero, dirigirse a acción y seleccionar desconectar.
+
+===6.3 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+
+==7. Solicitudes==
+Veremos los siguientes puntos:
+
+  * 7.1 Agregar solicitud existente
+  * 7.2 Desconectar
+  * 7.3 Exportar
+
+===7.1 Agregar solicitud existente===
+Para agregar una solicitud usted debe dirigirse a acción y seleccionar agregar solicitud existente, inmediatamente le aparecerá la ventana búsqueda de solicitudes en donde vera dos campos:
+
+  * Nombre: puede colocar parte del nombre de la solicitud(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+  * Descripción: puede colocar parte de la descripción de la solicitud(colocar {{{*}}} al final)  o dejarlo con  {{{*}}}.
+
+Con el botón buscar se iniciara la búsqueda y le mostrara un listado de solicitudes, seleccionará la solicitud que buscaba haciendo un check en su casillero e interconecta.
+
+===7.2 Desconectar===
+Para desconectar las solicitudes deberá hacer un check en sus casillero, dirigirse a acción y seleccionar desconectar.
+
+===7.3 Exportar===
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+
+==8. Tareas==
+En este menú se clasifican y ordenan las tareas de un determinado proyecto, como por ejemplo:
+
+Carpeta: Obras civiles
+
+Tarea: Habilitación del local Miraflores.
+
+A continuación veremos los siguientes puntos:
+
+  * 8.1 Crear
+  * 8.2 Editar
+  * 8.3 Validar
+  * 8.4 Registrar avance
+  * 8.5 Gant Tabla
+  * 8.6 Acceso a tarea
+
+===8.1 Crear===
+Cuando usted crea una tarea puede crearlo desde la carpeta raíz o desde una carpeta secundaria, a continuación se le explicará como crear  y borrar,
+
+Crear carpetas:  haciendo click en el lápiz le aparecerán tres imágenes una de ellas es una carpeta, si usted hace click en la imagen de la carpeta creará una carpeta y podrá colocarle un nombre además de descripción. Al inicio es distinto si hace click en el lápiz solo le aparecerá la imagen de la carpeta.
+
+Crear tareas:
+para crear una tarea debe hacer click en el lápiz le aparecerá tres imágenes una de ellas es el signo +,  haga click en el signo + y podrá crear una tarea, en ella colocará su nombre además de descripción.
+
+Borrar carpetas y tareas:
+para borrar capetas y tareas hacer click en el lápiz le aparecerá tres imágenes una de ellas es el signo -, hace click en el signo – y habrá eliminado una carpeta o tarea.
+
+===8.2 Editar===
+Para editar una tarea deberá de dirigirse a acción y seleccionar editar, verá el esquema de tareas existente el cual usted podrá realizar diferentes cambios.
+
+===8.3 Validar===
+
+
+===8.4 Registrar avance===
+Cuando entre a esta opción podrá  realizar el registro de todos los avances realizados, cuando usted registra un avance tiene que revisar la fecha y colocar la cantidad avanzada en el casillero correspondiente.
+La fecha se puede modificar con el mismo formato mostrado o seleccionando la fecha del calendario.
+
+===8.5 Gant Tabla===
+Le muestra un esquema del avance en base al tiempo.
+
+===8.6 Acceso a tarea===
+Cuando usted ingresa a un proyecto podra ver las diferentes tareas por realizarse o ya realizadas y  cada una de ellas contiene subtareas, además se controla las tareas por medio de avances.
+Se detallaran los siguientes puntos,
+
+  * 8.6.1 Ingreso a tarea
+  * 8.6.2 Ingreso a subtareas
+
+====8.6.1 Ingreso a tarea====
+Veremos los siguientes puntos,
+
+  * a. Editar
+  * b. Avances
+  * c. Subtareas
+
+Seleccionamos cualquiera de las tareas y hacemos click en el nombre, ejemplo:
+
+|| *Tipo* || *Nombre* || *Descripción* || *De* || *Hasta* || *Estado* || *Gant* ||
+|| Tarea || *Tarea* || Habili... || Jun 2, 2011 || Jun 2, 2012 || Abierto || muestra del avance ||
+
+Usted ingresa por el nombre que seria en este ejemplo *Tarea*. Podra visualizar la información correspondiente a esta tarea, además se podrá ver un gráfico el cual ira modificándose según los avances y sub tareas.
+
+=====a. Editar=====
+Cuando ingrese a la información debe editar lo siguiente:
+
+  * De: es el tiempo en que va comenzar el periodo de la tarea.
+  * Hasta: es el tiempo en que va finalizar el periodo de la tarea.
+  * Nombre: es el nombre identificativo de la tarea.
+  * Descripción: es la información principal de la tarea.
+  * Nota: información agregada a la tarea.
+  * Objetivo: se considera un monto el objetivo.
+  * Unidad: escoger el tipo de unidad que se va utilizar para esta tarea.
+  * Magnitud/peso: colocar la cantidad adecuada.
+
+=====b. Avances=====
+Veremos los siguientes puntos:
+
+  * Crear
+  * Eliminar
+  * Exportar
+
+======Crear======
+Para crear debe dirigirse a acción y seleccionar crear, inmediatamente le aparecerá la ventana crear avance en donde ingresará la información correspondiente por cada campo obligatorio y secundario:
+
+Obligatorio:
+  * Fecha: es la fecha en que se realizo este avance, puede cambiar la fecha con el mismo formato mostrado o seleccionar del calendario.
+
+Secundario:
+  * Descripción:  es la información principal de la tarea.
+  * Avance: colocar la cantidad del avance.
+  * Unidad: escoger el tipo de medida.
+
+======Eliminar======
+Debe de escoger la tarea haciendo un check en su respectivo casillero, luego dirigirse a acción y escoger eliminar.
+
+======Exportar======
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+=====c. Subtareas=====
+Veremos los siguientes puntos:
+
+  * Crear
+  * Eliminar
+  * Exportar
+
+======Crear======
+Para crear una subtarea debe dirigirse a acción y seleccionar crear, inmediatamente le aparecerá la ventana crear subtarea en donde deberá de ingresar la información correspondiente en cada campo obligatorio y secundario:
+
+Obligatorio:
+  * De: es el tiempo en que va comenzar el periodo de la subtarea.
+  * Nombre: es el nombre identificativo de la subtarea.
+  * Hasta: es el tiempo en que va finalizar el periodo de la subtarea.
+
+Secundario:
+  * Descripción: es la información principal de la subtarea.
+  * Nota: información detallada de la subtarea.
+  * Objetivo: se considera un monto el objetivo.
+  * Unidad: escoger el tipo de medida.
+  * Magnitud/peso: colocar la cantidad adecuada.
+
+======Eliminar======
+Debe de escoger la sub tarea haciendo un check en su respectivo casillero, luego dirigirse a acción y escoger eliminar.
+
+======Exportar======
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
+
+====8.6.2 Ingreso a Sub tareas====
+Seleccionamos cualquiera de las subtareas y hacemos click en el nombre, ejemplo:
+
+|| *Tipo* || *Nombre* || *Descripción* || *De* || *Hasta* || *Estado* || *Gant* ||
+|| Tarea || *Nomsubtarea* || Habili... || Jun 2, 2011 || Dec 2, 2011 || Abierto || muestra del avance ||
+
+Usted ingresa por el nombre que seria en este ejemplo *Nomsubtarea* verá su información correspondiente, además se podrá ver un gráfico el cual ira modificándose según los avances y sub tareas.
+
+Importante: Las subtareas deben estar dentro del periodo creado en la tarea principal, el desarrollo de las subtareas es
+similar al desarrollo de las tareas(véase ingreso a tarea).
+
