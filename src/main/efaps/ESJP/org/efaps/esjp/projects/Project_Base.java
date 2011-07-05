@@ -317,7 +317,11 @@ public abstract class Project_Base
     /**
      * Method to connect a document to a service. the type of the ralation is
      * evaluated and set automatically.
-     *
+     * Can be extended passing properties:
+     * connect[N] = UUID of Type;UUID of Connection Type
+     * e.g.
+     * <property name="connect0">3d81d32d-71ab-47d7-a25c-379a2af214be;53ec5f98-dcff-4277-8952-f552101ae121</property>
+     * <property name="connect1">4b041e2c-04db-46c6-bcbf-af4100ad5075;68e4823f-0dac-4d87-b54e-7acb02c1e460</property>
      * @param _parameter Parameter as passed from eFaps
      * @return empty Return
      * @throws EFapsException on error
@@ -326,7 +330,7 @@ public abstract class Project_Base
         throws EFapsException
     {
         final Map<?, ?> others = (HashMap<?, ?>) _parameter.get(ParameterValues.OTHERS);
-
+        final Map<?, ?> props = (HashMap<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
         final String[] childOids = (String[]) others.get("selectedRow");
         if (childOids != null) {
             final Instance callInstance = _parameter.getCallInstance();
@@ -334,6 +338,7 @@ public abstract class Project_Base
                 final Instance child = Instance.get(childOid);
                 Insert insert = null;
                 if (callInstance.getType().equals(CIProjects.ProjectService.getType())) {
+                    //defaults
                     if (child.getType().equals(CIProjects.ServiceRequest.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Request);
                     } else if (child.getType().equals(CIProjects.WorkOrder.getType())) {
@@ -362,6 +367,15 @@ public abstract class Project_Base
                         insert = new Insert(CIProjects.ProjectService2Reminder);
                     } else if (child.getType().equals(CISales.CostSheet.getType())) {
                         insert = new Insert(CIProjects.ProjectService2CostSheet);
+                    }
+                    int i = 0;
+                    while (insert == null && props.containsKey("connect" + i)) {
+                        final String connectUUIDStr = (String) props.get("connect" + i);
+                        final String[] connectUUIDs = connectUUIDStr.split(";");
+                        if (child.getType().getUUID().equals(UUID.fromString(connectUUIDs[0]))) {
+                            insert = new Insert(UUID.fromString(connectUUIDs[1]));
+                        }
+                        i++;
                     }
                 }
                 if (insert != null) {
