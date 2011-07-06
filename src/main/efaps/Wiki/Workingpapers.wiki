@@ -43,7 +43,7 @@ elegir borrar seleccionado.
 Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de
 formatos PDF o XLS.
 
-==6.2 Acceso a reportes de trabajo==
+===6.2 Acceso a reportes de trabajo===
 Veremos los siguientes puntos:
 
   * 6.2.1 Editar

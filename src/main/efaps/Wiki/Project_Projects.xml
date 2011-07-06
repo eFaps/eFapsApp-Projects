@@ -22,7 +22,7 @@
 --><help-menu xmlns="http://www.efaps.org/xsd"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid> 046b2b19-0008-4965-a8ca-d7d15587e9da</uuid>
+    <uuid>046b2b19-0008-4965-a8ca-d7d15587e9da</uuid>
     <file-application>eFaps-Projects</file-application>
     <file-revision>$Rev: 6408 $</file-revision>
     <definition>
@@ -36,7 +36,7 @@
             <child>Projectissues_Projects</child>
             <child>Tasks_Projects</child>
             <child>Workingpapers_Projects</child>
-            <child>Workorders_Projects</child>
+            <child>Workorder_Projects</child>
             <child>Showprojects_Projects</child>
         </childs>
     </definition>

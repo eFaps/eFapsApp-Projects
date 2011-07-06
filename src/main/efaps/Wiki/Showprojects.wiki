@@ -204,7 +204,7 @@ Seleccionamos cualquiera de las tareas y hacemos click en el nombre, ejemplo:
 
 Usted ingresa por el nombre que seria en este ejemplo *Tarea*. Podra visualizar la información correspondiente a esta tarea, además se podrá ver un gráfico el cual ira modificándose según los avances y sub tareas.
 
-=====a. Editar=====
+====a. Editar====
 Cuando ingrese a la información debe editar lo siguiente:
 
   * De: es el tiempo en que va comenzar el periodo de la tarea.
@@ -216,14 +216,14 @@ Cuando ingrese a la información debe editar lo siguiente:
   * Unidad: escoger el tipo de unidad que se va utilizar para esta tarea.
   * Magnitud/peso: colocar la cantidad adecuada.
 
-=====b. Avances=====
+====b. Avances====
 Veremos los siguientes puntos:
 
   * Crear
   * Eliminar
   * Exportar
 
-======Crear======
+====Crear====
 Para crear debe dirigirse a acción y seleccionar crear, inmediatamente le aparecerá la ventana crear avance en donde ingresará la información correspondiente por cada campo obligatorio y secundario:
 
 Obligatorio:
@@ -234,20 +234,20 @@ Secundario:
   * Avance: colocar la cantidad del avance.
   * Unidad: escoger el tipo de medida.
 
-======Eliminar======
+====Eliminar====
 Debe de escoger la tarea haciendo un check en su respectivo casillero, luego dirigirse a acción y escoger eliminar.
 
-======Exportar======
+====Exportar====
 Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
 
-=====c. Subtareas=====
+====c. Subtareas====
 Veremos los siguientes puntos:
 
   * Crear
   * Eliminar
   * Exportar
 
-======Crear======
+====Crear====
 Para crear una subtarea debe dirigirse a acción y seleccionar crear, inmediatamente le aparecerá la ventana crear subtarea en donde deberá de ingresar la información correspondiente en cada campo obligatorio y secundario:
 
 Obligatorio:
@@ -262,10 +262,10 @@ Secundario:
   * Unidad: escoger el tipo de medida.
   * Magnitud/peso: colocar la cantidad adecuada.
 
-======Eliminar======
+====Eliminar====
 Debe de escoger la sub tarea haciendo un check en su respectivo casillero, luego dirigirse a acción y escoger eliminar.
 
-======Exportar======
+====Exportar====
 Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formatos PDF o XLS.
 
 ====8.6.2 Ingreso a Sub tareas====
