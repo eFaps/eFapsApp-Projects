@@ -36,6 +36,7 @@
         <target>
             <menu>Projects_ProjectTree_Menu</menu>
             <form>Projects_ProjectForm</form>
+            <help>org.efaps.wiki.projects.Showprojects.wiki</help>
         </target>
         <!-- type tree for -->
         <type>Projects_ProjectAbstract</type>

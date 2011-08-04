@@ -41,6 +41,7 @@
                 <property name="Child_Types">Projects_TaskAbstract</property>
                 <property name="Child_LinkFroms">ParentTaskAbstractLink</property>
             </evaluate>
+            <help>org.efaps.wiki.projects.Tasks.wiki</help>
         </target>
         <!-- properties -->
         <property name="Target">content</property>

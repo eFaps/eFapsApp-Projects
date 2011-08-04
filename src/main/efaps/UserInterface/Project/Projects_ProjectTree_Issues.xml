@@ -44,6 +44,7 @@
                 <property name="Types">Projects_Issues_Ticket2ProjectService</property>
                 <property name="LinkFroms">ToLink</property>
             </evaluate>
+            <help>org.efaps.wiki.projects.Projectissues.wiki</help>
         </target>
         <!-- properties -->
         <property name="Target">content</property>

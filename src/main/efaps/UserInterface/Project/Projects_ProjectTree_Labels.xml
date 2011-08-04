@@ -48,6 +48,7 @@
                 method="accessCheck4Label"
                 name="Projects_ProjectTree_Labels.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK"/>
+            <help>org.efaps.wiki.projects.Showprojects.wiki</help>
         </target>
         <!-- properties -->
         <property name="Target">content</property>

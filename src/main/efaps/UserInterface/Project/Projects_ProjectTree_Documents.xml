@@ -39,6 +39,7 @@
                 <property name="Types">Projects_Project2DocumentAbstract</property>
                 <property name="LinkFroms">FromAbstract</property>
             </evaluate>
+            <help>org.efaps.wiki.projects.Showprojects.wiki</help>
         </target>
         <!-- properties -->
         <property name="Target">content</property>
