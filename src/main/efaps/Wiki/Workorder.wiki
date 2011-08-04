@@ -11,27 +11,27 @@
 <wiki:toc max_depth="3"/>
 
 ----
-Veremos la siguiente información en este menú:
+Mostraremos los siguientes puntos:
 
   * 5.1 Orden de trabajo
   * 5.2 Acceso a orden de trabajo
 
 ===5.1 Orden de trabajo===
-En este menú veremos los siguientes puntos:
+En este menú verá los siguientes puntos:
 
   * 5.1.1 Crear nuevo
   * 5.1.2 Borrar
   * 5.1.3 Exportar
 
 ====5.1.1 Crear nuevo====
-Para crear una orden de trabajo usted se dirige a acción y selecciona crear nuevo, inmediatamente le aparecerá la
-ventana crear nueva orden de trabajo en donde ingresará la información correspondiente en los campos obligatorios y
+Para crear una orden de trabajo deberá dirigirse a la opción acción y seleccionar crear nuevo, inmediatamente le aparecerá la
+ventana *crear nueva orden de trabajo* en donde ingresará la información correspondiente en los campos obligatorios y
 secundarios.
 
 Obligatorio:
-  * Fecha: es la fecha de creación del documento, puede ser modificada con el mismo formato mostrado o seleccionar la fecha del calendario.
+  * Fecha: es la fecha de creación del documento, se puede modificar la fecha con el mismo formato mostrado o se puede seleccionar la fecha del calendario.
   * Nombre: es el nombre identificativo del documento.
-  * Lead: el encargado de crear ese documento.
+  * Lead: el encargado de crear este documento.
   * Contacto: se llama al contacto colocando su nombre o {{{*}}}.
 
 Secundario:
@@ -42,16 +42,16 @@ Seleccionar una o varias ordenes de trabajo, dirigirse a la opción acción y el
 
 ====5.1.3 Exportar====
 Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de
-formatos PDF o XLS.
+formato PDF o XLS.
 
 ===5.2 Acceso a orden de trabajo===
-Veremos los siguientes puntos:
+Mostraremos los siguientes puntos:
 
   * 5.2.1 Editar
   * 5.2.2 Exportar
 
 ====5.2.1 Editar====
-Para poder editar usted debe dirigirse a acción y seleccionar editar, inmediatamente le aparecerá la ventana editar orden de trabajo en donde podrá cambiar los datos ingresados anteriormente en los siguientes campos:
+Para poder editar deberá dirigirse a la opción acción y seleccionar editar, inmediatamente le aparecerá la ventana *editar orden de trabajo* en donde podrá cambiar los datos ingresados anteriormente en los siguientes campos:
 
   * Fecha
   * Nombre
@@ -59,4 +59,4 @@ Para poder editar usted debe dirigirse a acción y seleccionar editar, inmediata
   * Nota
 
 ====5.2.2 Exportar====
-Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de  formatos PDF o XLS.
+Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de  formato PDF o XLS.

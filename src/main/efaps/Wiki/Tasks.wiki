@@ -12,8 +12,9 @@
 
 ----
 
-Podrá visualizar las tareas de cada proyecto y además tendrá la opción eliminar, que le dará la facilidad de borrar
-las tareas existentes, para poder eliminar deberá seleccionar cada una de las tareas haciendo un check en sus casillas,
- dirigirse a acción y seleccionar eliminar.
+Podrá visualizar las tareas de cada proyecto y además contará con la opción eliminar, la cual le dará la facilidad de borrar
+las tareas existentes.
+Para poder eliminar deberá seleccionar cada una de las tareas haciendo un check en sus casillas,
+ dirigirse a la opción acción y elegir eliminar.
 
- Para poder ingresar a la información de cada tarea solo ingrese por el nombre(véase Acceso a un proyecto, tareas)
+ Para poder ingresar a la información de cada tarea solo ingrese por el nombre(véase [./org.efaps.wiki.projects.Showprojects.wiki#8._Tareas Acceso a un proyecto, tareas])
