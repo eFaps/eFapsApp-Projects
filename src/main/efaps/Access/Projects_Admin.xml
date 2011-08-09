@@ -40,6 +40,7 @@
         <type>Projects_ServiceRequest</type>
         <type>Projects_WorkOrder</type>
         <type>Projects_WorkReport</type>
+        <type>Projects_PayRequest</type>
 
         <status group="Projects_ProjectServiceStatus">
             <key>Open</key>
@@ -54,7 +55,7 @@
             <key>Canceled</key>
         </status>
 
-         <status group="Projects_WorkOrderStatus">
+        <status group="Projects_WorkOrderStatus">
             <key>Open</key>
             <key>Closed</key>
             <key>Canceled</key>
@@ -62,6 +63,13 @@
 
         <status group="Projects_WorkReportStatus">
             <key>Open</key>
+            <key>Closed</key>
+            <key>Canceled</key>
+        </status>
+
+        <status group="Projects_PayRequestStatus">
+            <key>Open</key>
+            <key>Accepted</key>
             <key>Closed</key>
             <key>Canceled</key>
         </status>
