@@ -109,6 +109,9 @@
             <!-- connect the Projects_Accounting_LabelTree_Projects Menu to the Accounting_LabelTree -->
             update.add2Menu("4c47213c-8339-43c7-a103-8b477deaf05e", "f67a39ed-8cd3-4551-9351-7bae6cf6447a", -1);
 
+            <!-- connect the Projects_AbstractAttrMyDesk_Menu_Action_Create_PayRequestType  to ERP_AttributeDefinitionMyDesk_Menu_Action -->
+            update.add2Menu("06250205-9586-43d6-922f-530a8f57a0a8", "cc4a3bc2-26a7-4b51-b8e5-fabfef5ce2fa", -1);
+
             <!-- Project_Projects, Admin_Help_MainMenu -->
             update.add2Help("046b2b19-0008-4965-a8ca-d7d15587e9da", "dead549e-5cc6-49f9-9a79-8e33aa139f6d", -1);
         </script>

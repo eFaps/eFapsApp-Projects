@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ Copyright 2003 - 2011 The eFaps Team
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author:          The eFaps Team
+ Revision:        $Rev: 5899 $
+ Last Changed:    $Date: 2010-12-01 13:16:56 -0500 (mié, 01 dic 2010) $
+ Last Changed By: $Author: jan@moxter.net $
+
+-->
+
+<datamodel-type  xmlns="http://www.efaps.org/xsd"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>22bd9d60-d464-4c58-85e6-f806154abd12</uuid>
+    <file-application>eFapsApp-Projects</file-application>
+    <file-revision>$Rev: 70 $</file-revision>
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+        <name>Projects_PayRequest_TypeAttr</name>
+        <parent>Sales_AbstractAttr</parent>
+    </definition>
+</datamodel-type>

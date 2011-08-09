@@ -33,8 +33,15 @@
         <version-expression>(version==latest)</version-expression>
         <name>Projects_PayRequestPositionTable</name>
         <!-- fields -->
+        <field name="payType">
+            <property name="Columns">30</property>
+            <property name="ModeCreate">EDITABLE</property>
+            <property name="Attribute">PayTypeId</property>
+            <property name="Label">Projects_PayRequestPosition/PayTypeId.Label</property>
+            <property name="Width">10</property>
+        </field>
         <field name="description">
-            <property name="Columns">90</property>
+            <property name="Columns">80</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="Attribute">Description</property>
             <property name="Label">Projects_PayRequestPosition/ProductDesc.Label</property>
