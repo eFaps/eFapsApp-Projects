@@ -161,7 +161,7 @@
             <property name="ModeCreate">HIDDEN</property>
             <property name="ModeEdit">NONE</property>
             <property name="ModeView">NONE</property>
-            <trigger program="org.efaps.esjp.projects.document.ServiceRequest"
+            <trigger program="org.efaps.esjp.projects.document.PayRequest"
                     method="getJavaScriptUIValue"
                     name="Projects_ServiceRequestForm.javaScript.UI_Field_Value"
                     event="UI_FIELD_VALUE"/>

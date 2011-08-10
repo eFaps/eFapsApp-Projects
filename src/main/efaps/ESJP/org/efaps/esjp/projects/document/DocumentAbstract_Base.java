@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -195,6 +196,44 @@ public abstract class DocumentAbstract_Base
     {
         final Return ret = new Return();
 
+        return ret;
+    }
+
+    /**
+     * Get a "eFapsSetFieldValue" Javascript line.
+     * @param _idx          index of the field
+     * @param _fieldName    name of the field
+     * @param _value        value
+     * @return StringBuilder
+     */
+    protected StringBuilder getSetFieldValue(final int _idx,
+                                             final String _fieldName,
+                                             final String _value)
+    {
+        return getSetFieldValue(_idx, _fieldName, _value, true);
+    }
+
+    /**
+     * Get a "eFapsSetFieldValue" Javascript line.
+     * @param _idx          index of the field
+     * @param _fieldName    name of the field
+     * @param _value        value
+     * @param _escape       must the value be escaped
+     * @return StringBuilder
+     */
+    protected StringBuilder getSetFieldValue(final int _idx,
+                                             final String _fieldName,
+                                             final String _value,
+                                             final boolean _escape)
+    {
+        final StringBuilder ret = new StringBuilder();
+        ret.append("eFapsSetFieldValue(").append(_idx).append(",'").append(_fieldName).append("',");
+        if (_escape) {
+            ret.append("'").append(StringEscapeUtils.escapeJavaScript(_value)).append("'");
+        } else {
+            ret.append(_value);
+        }
+        ret.append(");");
         return ret;
     }
 
