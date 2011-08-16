@@ -33,12 +33,22 @@
         <version-expression>(version==latest)</version-expression>
         <name>Projects_PayRequestPositionTable</name>
         <!-- fields -->
-        <field name="payType">
-            <property name="Columns">30</property>
+        <field name="actionDefinitionLink">
+            <property name="Columns">25</property>
+            <property name="Width">8</property>
+            <property name="Attribute">ActionDefinitionLink</property>
             <property name="ModeCreate">EDITABLE</property>
-            <property name="Attribute">PayTypeId</property>
-            <property name="Label">Projects_PayRequestPosition/PayTypeId.Label</property>
-            <property name="Width">10</property>
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="ModeView">NONE</property>
+            <property name="Label">Projects_PayRequestPosition/ActionDefinitionLink.Label</property>
+            <trigger program="org.efaps.esjp.common.uiform.Field"
+                method="dropDownFieldValue"
+                name="Projects_PayRequestPositionTable.actionDefinitionLink.UI_FIELD_VALUE"
+                event="UI_FIELD_VALUE">
+                <property name="Type">Projects_Accounting_ActionDefinitionPayRequest</property>
+                <property name="WhereAttrEqValue">Active|true</property>
+                <property name="Phrase">$&lt;attribute[Name]&gt; - $&lt;attribute[Description]&gt;</property>
+            </trigger>
         </field>
         <field name="description">
             <property name="Columns">80</property>

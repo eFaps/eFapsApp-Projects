@@ -31,7 +31,7 @@
     <file-revision>$Rev: 70 $</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_PayRequest_TypeAttr</name>
-        <parent>Sales_AbstractAttr</parent>
+        <name>Projects_Accounting_ActionDefinitionPayRequest</name>
+        <parent>Accounting_ActionDefinitionAbstract</parent>
     </definition>
 </datamodel-type>

@@ -112,7 +112,8 @@ public abstract class PayRequest_Base
             final Insert posIns = new Insert(CIProjects.PayRequestPosition);
             posIns.add(CIProjects.PayRequestPosition.PayRequest, _createdDoc.getInstance().getId());
             posIns.add(CIProjects.PayRequestPosition.PositionNumber, i);
-            posIns.add(CIProjects.PayRequestPosition.PayTypeId, _parameter.getParameterValues("payType")[i]);
+            posIns.add(CIProjects.PayRequestPosition.ActionDefinitionLink,
+                                                    _parameter.getParameterValues("actionDefinitionLink")[i]);
             posIns.add(CIProjects.PayRequestPosition.Description, desc);
             posIns.add(CIProjects.PayRequestPosition.Quantity, _parameter.getParameterValues("quantity")[i]);
             posIns.execute();
