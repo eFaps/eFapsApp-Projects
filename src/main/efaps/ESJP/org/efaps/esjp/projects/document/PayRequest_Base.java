@@ -20,19 +20,25 @@
 
 package org.efaps.esjp.projects.document;
 
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.db.Context;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
-import org.efaps.esjp.ci.CIERP;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.util.DateTimeUtil;
 import org.efaps.util.EFapsException;
@@ -68,11 +74,7 @@ public abstract class PayRequest_Base
     {
         final String date = _parameter.getParameterValue("date");
         final Long contactid = Instance.get(_parameter.getParameterValue("contact")).getId();
-        // Sales-Configuration
-        final Instance baseCurrInst = SystemConfiguration.get(
-                        UUID.fromString("c9a1cbc3-fd35-4463-80d2-412422a3802f")).getLink("CurrencyBase");
-        final Instance rateCurrInst = Instance.get(CIERP.Currency.getType(),
-                        _parameter.getParameterValue("rateCurrencyId"));
+        final BigDecimal netTotal = analizeTable(_parameter);
 
         final Insert insert = new Insert(CIProjects.PayRequest);
         insert.add(CIProjects.PayRequest.Contact, contactid);
@@ -83,6 +85,7 @@ public abstract class PayRequest_Base
         insert.add(CIProjects.PayRequest.Status, ((Long) Status.find(CIProjects.PayRequestStatus.uuid, "Open")
                                                         .getId()).toString());
         insert.add(CIProjects.PayRequest.Note, _parameter.getParameterValue("note"));
+        insert.add(CIProjects.PayRequest.NetTotal, netTotal);
         insert.execute();
 
         final CreatedDoc createdDoc = new CreatedDoc(insert.getInstance());
@@ -93,7 +96,6 @@ public abstract class PayRequest_Base
     /**
      * Internal Method to create the positions for this Document.
      * @param _parameter    Parameter as passed from eFaps API.
-     * @param _calcList     List of Calculators
      * @param _createdDoc   cretaed Document
      * @throws EFapsException on error
      */
@@ -101,12 +103,6 @@ public abstract class PayRequest_Base
                                    final CreatedDoc _createdDoc)
         throws EFapsException
     {
-     // Sales-Configuration
-        final Instance baseCurrInst = SystemConfiguration.get(
-                        UUID.fromString("c9a1cbc3-fd35-4463-80d2-412422a3802f")).getLink("CurrencyBase");
-        final Instance rateCurrInst = Instance.get(CIERP.Currency.getType(),
-                        _parameter.getParameterValue("rateCurrencyId"));
-
         Integer i = 0;
         for (final String desc : _parameter.getParameterValues("description")) {
             final Insert posIns = new Insert(CIProjects.PayRequestPosition);
@@ -155,6 +151,59 @@ public abstract class PayRequest_Base
         final Return retVal = new Return();
         retVal.put(ReturnValues.SNIPLETT, js.toString());
         return retVal;
+    }
+
+    /**
+     * @param _parameter as passed from eFaps API.
+     * @return Return with the current total.
+     * @throws EFapsException on error.
+     */
+    public Return updateFields4Quantity(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return retVal = new Return();
+        final BigDecimal total = analizeTable(_parameter);
+
+        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        final Map<String, String> map = new HashMap<String, String>();
+
+        map.put("netTotal", getTwoDigitsformater().format(total));
+        list.add(map);
+        retVal.put(ReturnValues.VALUES, list);
+
+        return retVal;
+    }
+
+    protected BigDecimal analizeTable (final Parameter _parameter) {
+        BigDecimal total = BigDecimal.ZERO;
+
+        final String[] quantities = _parameter.getParameterValues("quantity");
+        if (quantities != null) {
+            for (int i = 0; i < quantities.length; i++) {
+                if (quantities[i].length() > 0) {
+                    final BigDecimal quantity = new BigDecimal(quantities[i]);
+                    total = total.add(quantity);
+                }
+            }
+        }
+        return total;
+    }
+
+    /**
+     * Method to get a formater.
+     *
+     * @return a formater
+     * @throws EFapsException on error
+     */
+    protected DecimalFormat getTwoDigitsformater()
+        throws EFapsException
+    {
+        final DecimalFormat formater = (DecimalFormat) NumberFormat.getInstance(Context.getThreadContext().getLocale());
+        formater.setMaximumFractionDigits(2);
+        formater.setMinimumFractionDigits(2);
+        formater.setRoundingMode(RoundingMode.HALF_UP);
+        formater.setParseBigDecimal(true);
+        return formater;
     }
 
 }

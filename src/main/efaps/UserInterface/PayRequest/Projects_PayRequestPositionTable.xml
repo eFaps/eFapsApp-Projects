@@ -70,6 +70,10 @@
             <property name="Attribute">Quantity</property>
             <property name="Label">Projects_PayRequestPosition/Quantity.Label</property>
             <property name="ModeCreate">EDITABLE</property>
+            <trigger program="org.efaps.esjp.projects.document.PayRequest"
+                method="updateFields4Quantity"
+                name="Projects_PayRequestPositionTable.quantity.UI_FIELD_UPDATE"
+                event="UI_FIELD_UPDATE" />
         </field>
     </definition>
 </ui-table>

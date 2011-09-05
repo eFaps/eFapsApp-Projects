@@ -30,7 +30,7 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Projects_PayRequest</name>
-        <parent>Projects_DocumentAbstract</parent>
+        <parent>Projects_DocumentSumAbstract</parent>
         <attribute>
             <name>Status</name>
             <type>Status</type>
