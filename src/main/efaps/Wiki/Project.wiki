@@ -27,7 +27,6 @@ Este documento explica:
   # Tareas
   # Acceso a un proyecto
 
-
 ==1. Crear proyecto de servicio==
 Para poder crear un proyecto usted debe dirigirse a acción y seleccionar crear proyecto de servicio, inmediatamente le
 aparecerá la ventana *crear proyecto* en donde ingresará la información correspondiente a cada campo obligatorio y secundario:

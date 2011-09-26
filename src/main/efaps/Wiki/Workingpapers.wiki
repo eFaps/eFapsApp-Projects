@@ -11,6 +11,7 @@
 <wiki:toc max_depth="3"/>
 
 ----
+
 Este menú contiene lo siguiente:
 
   * 6.1 Reportes de trabajo
