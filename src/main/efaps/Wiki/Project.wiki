@@ -50,3 +50,18 @@ Seleccionar uno o mas proyectos haciendo un check en sus casillas, dirigirse a l
 ==3. Exportar==
 Le sirve para poder imprimir una o varias hojas con todos los datos que se encuentran en el menú, en dos tipos de formato PDF o XLS.
 
+==4. Solicitud de proyecto==
+Véase [./org.efaps.wiki.projects.Projectissues.wiki Solicitud de proyecto].
+
+==5. Ordenes de trabajo==
+Véase [./org.efaps.wiki.projects.Workorder.wiki Ordenes de trabajo].
+
+==6. Reportes de trabajo==
+Véase [./org.efaps.wiki.projects.Workingpapers.wiki Reportes de trabajo].
+
+==7. Tareas ==
+Véase [./org.efaps.wiki.projects.Tasks.wiki Tareas].
+
+==8. Acceso a un proyecto==
+Véase [./org.efaps.wiki.projects.Showprojects.wiki Acceso a un proyecto].
+

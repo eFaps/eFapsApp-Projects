@@ -25,7 +25,7 @@ Cuando ingrese a un proyecto podrá ver su contenido y también podrá visualiza
 
 
 ==1. Editar==
-Para editar se dirige a la opción acción y selecciona editar, inmediatamente le aparecerá la ventana *editar proyecto de servicio xxx* en donde usted podrá editar los siguientes campos,
+Para editar se dirige a la opción acción y selecciona editar, inmediatamente le aparecerá la ventana *editar proyecto de servicio* en donde usted podrá editar los siguientes campos,
 
   * Fecha: se puede modificar la fecha con el mismo formato mostrado o se puede seleccionar la fecha del calendario.
   * Fecha de entrega: se puede modificar la fecha con el mismo formato mostrado o se puede seleccionar la fecha del calendario.
