@@ -47,7 +47,7 @@
                 <property name="Automatic">false</property>
              </trigger>
         </field>
-         <field name="name">
+         <field name="nameAutomatic">
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="Attribute">Name</property>
             <property name="Label">Projects_TaskAbstract/Name.Label</property>
