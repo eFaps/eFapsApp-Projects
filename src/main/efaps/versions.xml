@@ -112,6 +112,9 @@
             <!-- connect the Projects_Accounting_ActionDefinitionMyDesk_Menu_Action_CreatePayRequest  to Accounting_ActionDefinitionMyDesk_Menu_Action -->
             update.add2Menu("60fd4c55-eb3f-45bb-a274-e147c366fd95", "20030920-87fb-4ec8-bc35-bed9389e1fd1", -1);
 
+            <!-- connect the Projects_Contacts_ContactTree_Projects command to the tree menu from contacts -->
+            update.add2Menu("b50f8c15-2b1e-4c15-b493-4eb1e669d1db", "6de1b9bb-6a03-4c3b-82dd-363fde0aea0a", -1);
+
             <!-- Project_Projects, Admin_Help_MainMenu -->
             update.add2Help("046b2b19-0008-4965-a8ca-d7d15587e9da", "dead549e-5cc6-49f9-9a79-8e33aa139f6d", -1);
         </script>
