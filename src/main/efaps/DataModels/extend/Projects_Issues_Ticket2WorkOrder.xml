@@ -25,7 +25,7 @@
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_Issue_Ticket2WorkOrder</name>
+        <name>Projects_Issues_Ticket2WorkOrder</name>
         <parent>Issues_Ticket2DocumentAbstract</parent>
         <attribute>
             <name>FromLink</name>
