@@ -321,13 +321,13 @@ public abstract class Project_Base
     }
 
     /**
-     * Method to connect a document to a service. the type of the ralation is
+     * Method to connect a document to a service. the type of the relation is
      * evaluated and set automatically.
      * Can be extended passing properties:
-     * connect[N] = UUID of Type;UUID of Connection Type
-     * e.g.
-     * <property name="connect0">3d81d32d-71ab-47d7-a25c-379a2af214be;53ec5f98-dcff-4277-8952-f552101ae121</property>
-     * <property name="connect1">4b041e2c-04db-46c6-bcbf-af4100ad5075;68e4823f-0dac-4d87-b54e-7acb02c1e460</property>
+     * connect[N] = UUID of Type; UUID of Connection Type
+     * e.g.<br/>
+     * &lt;property name=&quot;connect0&quot;&gt;3d81d32d-71ab-47d7-a25c-379a2af214be;53ec5f98-dcff-4277-8952-f552101ae121&lt;/property&gt;<br/>
+     * &lt;property name=&quot;connect1&quot;&gt;4b041e2c-04db-46c6-bcbf-af4100ad5075;68e4823f-0dac-4d87-b54e-7acb02c1e460&lt;/property&gt;<br/>
      * @param _parameter Parameter as passed from eFaps
      * @return empty Return
      * @throws EFapsException on error
