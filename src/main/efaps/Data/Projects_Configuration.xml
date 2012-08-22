@@ -37,5 +37,15 @@
             <value>false</value>
             <description>Boolean(true/false). Activate the automatic numbering for tasks.</description>
         </attribute>
+        <attribute>
+            <key>WorkOrder_AutomaticNumbering</key>
+            <value>false</value>
+            <description>Boolean(true/false). Activate the automatic numbering for WorkOrders.</description>
+        </attribute>
+        <attribute>
+            <key>WorkOrder_CreateWithProject</key>
+            <value>false</value>
+            <description>Show the fields to create the workorder by project ofr by client.</description>
+        </attribute>
     </definition>
 </common-systemconfiguration>

@@ -42,6 +42,7 @@ import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.erp.CommonDocument;
+import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
 /**
@@ -75,21 +76,22 @@ public abstract class DocumentAbstract_Base
         final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
         final String type = properties.containsKey("Type") ? (String) properties.get("Type") : "Contacts_Contact";
+        final String keyStr = properties.containsKey("Key") ? (String) properties.get("Key") : "OID";
         if (input.length() > 0) {
             final boolean nameSearch = !Character.isDigit(input.charAt(0));
             if (nameSearch) {
                 final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
                 queryBldr.addWhereAttrMatchValue("Name", input + "*").setIgnoreCase(true);
                 final MultiPrintQuery multi = queryBldr.getPrint();
-                multi.addAttribute("OID", "Name");
+                multi.addAttribute(keyStr, "Name");
                 multi.execute();
                 while (multi.next()) {
                     final String name = multi.<String>getAttribute("Name");
-                    final String oid = multi.<String>getAttribute("OID");
+                    final String key = multi.<String>getAttribute(keyStr);
                     final Map<String, String> map = new HashMap<String, String>();
-                    map.put("eFapsAutoCompleteKEY", oid);
-                    map.put("eFapsAutoCompleteVALUE", name);
-                    map.put("eFapsAutoCompleteCHOICE", name);
+                    map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), key);
+                    map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
+                    map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), name);
                     list.add(map);
                 }
             } else {
@@ -101,7 +103,7 @@ public abstract class DocumentAbstract_Base
                 final Map<String, Instance> tax2instances = new TreeMap<String, Instance>();
                 while (multi.next()) {
                     tax2instances.put(multi.<String>getAttribute("TaxNumber"),
-                                      Instance.get(type, multi.<Long>getAttribute("ContactId").toString()));
+                                    Instance.get(type, multi.<Long>getAttribute("ContactId").toString()));
                 }
 
                 final QueryBuilder queryBldr2 = new QueryBuilder(CIContacts.ClassPerson);
@@ -111,17 +113,19 @@ public abstract class DocumentAbstract_Base
                 multi2.execute();
                 while (multi2.next()) {
                     tax2instances.put(multi2.<String>getAttribute("IdentityCard"),
-                                      Instance.get(type, multi2.<Long>getAttribute("ContactId").toString()));
+                                    Instance.get(type, multi2.<Long>getAttribute("ContactId").toString()));
                 }
 
                 for (final Entry<String, Instance> entry : tax2instances.entrySet()) {
                     final PrintQuery print = new PrintQuery(entry.getValue());
-                    print.addAttribute("OID", "Name");
+                    print.addAttribute(keyStr, "Name");
                     if (print.execute()) {
+                        final String key = multi.<String>getAttribute(keyStr);
+                        final String name = multi.<String>getAttribute("Name");
                         final Map<String, String> map = new HashMap<String, String>();
-                        map.put("eFapsAutoCompleteKEY", (String) print.getAttribute("OID"));
-                        map.put("eFapsAutoCompleteVALUE", (String) print.getAttribute("Name"));
-                        map.put("eFapsAutoCompleteCHOICE", entry.getKey() + " - " + print.getAttribute("Name"));
+                        map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), key);
+                        map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
+                        map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), entry.getKey() + " - " + name);
                         list.add(map);
                     }
                 }
@@ -206,6 +210,7 @@ public abstract class DocumentAbstract_Base
      * @param _value        value
      * @return StringBuilder
      */
+    @Override
     protected StringBuilder getSetFieldValue(final int _idx,
                                              final String _fieldName,
                                              final String _value)
@@ -221,6 +226,7 @@ public abstract class DocumentAbstract_Base
      * @param _escape       must the value be escaped
      * @return StringBuilder
      */
+    @Override
     protected StringBuilder getSetFieldValue(final int _idx,
                                              final String _fieldName,
                                              final String _value,

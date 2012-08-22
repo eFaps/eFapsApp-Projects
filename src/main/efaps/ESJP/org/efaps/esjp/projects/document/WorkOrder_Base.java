@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2012 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,10 @@
 
 package org.efaps.esjp.projects.document;
 
-import org.efaps.admin.datamodel.Status;
+import java.util.UUID;
+
+import org.efaps.admin.common.NumberGenerator;
+import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
@@ -29,7 +32,9 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
+import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
+import org.efaps.esjp.common.uiform.Create;
 import org.efaps.util.EFapsException;
 
 /**
@@ -44,7 +49,7 @@ public abstract class WorkOrder_Base
     extends DocumentAbstract
 {
     /**
-     * Method used to create a new ServiceRequest.
+     * Method used to create a new WorkOrder.
      *
      * @param _parameter Parameter as passed from the eFasp API
      * @return new Return
@@ -53,19 +58,81 @@ public abstract class WorkOrder_Base
     public Return create(final Parameter _parameter)
         throws EFapsException
     {
-        final Long contactid = Instance.get(_parameter.getParameterValue("contact")).getId();
-        final String date = _parameter.getParameterValue("date");
+        final Create create = new Create()
+        {
 
-        final Insert insert = new Insert(CIProjects.WorkOrder);
-        insert.add(CIProjects.WorkOrder.Name, _parameter.getParameterValue("name"));
-        insert.add(CIProjects.WorkOrder.Salesperson, _parameter.getParameterValue("salesperson"));
-        insert.add(CIProjects.WorkOrder.Contact, contactid);
-        insert.add(CIProjects.WorkOrder.Date, date);
-        insert.add(CIProjects.WorkOrder.Note, _parameter.getParameterValue("note"));
-        insert.add(CIProjects.WorkOrder.Status, Status.find(CIProjects.WorkOrderStatus.uuid, "Open").getId());
-        insert.execute();
-        return new Return();
+            @Override
+            protected void add2basicInsert(final Parameter _parameter,
+                                           final Insert _insert)
+                throws EFapsException
+            {
+                add2basicInsert4create(_parameter, _insert);
+            }
+
+            @Override
+            public void connect(final Parameter _parameter,
+                                final Instance _instance)
+                throws EFapsException
+            {
+                connect4create(_parameter, _instance);
+            }
+        };
+        return create.execute(_parameter);
     }
+
+
+    /**
+     * To allow easy override.
+     *
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @param _insert       Insert the values can be added to
+     * @throws EFapsException on error
+     */
+    protected void connect4create(final Parameter _parameter,
+                                  final Instance _instance)
+        throws EFapsException
+    {
+        final Instance projectInst = Instance.get(_parameter
+                        .getParameterValue(CIFormProjects.Projects_WorkOrderForm.project.name));
+        if (projectInst.isValid()) {
+            final Insert insert = new Insert(CIProjects.ProjectService2WorkOrder);
+            insert.add(CIProjects.ProjectService2WorkOrder.FromLink, projectInst.getId());
+            insert.add(CIProjects.ProjectService2WorkOrder.ToLink, _instance.getId());
+            insert.execute();
+        }
+    }
+
+    /**
+     * Add additional values to the basic insert, prior to execution.
+     * To allow easy override.
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @param _insert       Insert the values can be added to
+     * @throws EFapsException on error
+     */
+    protected void add2basicInsert4create(final Parameter _parameter,
+                                          final Insert _insert)
+        throws EFapsException
+    {
+        final Instance projectInst = Instance.get(_parameter
+                        .getParameterValue(CIFormProjects.Projects_WorkOrderForm.project.name));
+
+        if (projectInst.isValid()) {
+            final PrintQuery print = new PrintQuery(projectInst);
+            print.addAttribute(CIProjects.ProjectAbstract.Contact);
+            print.execute();
+
+            _insert.add(CIProjects.WorkOrder.Contact, print.getAttribute(CIProjects.ProjectAbstract.Contact));
+        }
+        // Projects-Configuration
+        if (SystemConfiguration.get(UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a"))
+                        .getAttributeValueAsBoolean("WorkOrder_AutomaticNumbering")) {
+            // Projects_WorkOrderSequence
+            final NumberGenerator numGen = NumberGenerator.get(
+                            UUID.fromString("e56c2b01-4f60-411b-9d36-3291aa736b93"));
+            _insert.add(CIProjects.WorkOrder.Name, numGen.getNextVal());
+        }
+    }
+
 
     /**
      * Method returns a javascript to set the values for the contact.
