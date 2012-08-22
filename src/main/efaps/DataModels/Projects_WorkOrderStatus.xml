@@ -36,6 +36,9 @@
         <status key="Open">
             <description>Work Order is emitted.</description>
         </status>
+        <status key="Assigned">
+            <description>Work Order is assigned to a Human Resource.</description>
+        </status>
         <status key="Closed">
             <description>Work order was finished.</description>
         </status>

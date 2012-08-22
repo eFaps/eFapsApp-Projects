@@ -40,7 +40,7 @@
         <target>
             <form>Projects_WorkOrderForm</form>
             <execute program="org.efaps.esjp.projects.document.WorkOrder" method="create" >
-                <property name="StatusGroup">Projects_WorkReportStatus</property>
+                <property name="StatusGroup">Projects_WorkOrderStatus</property>
                 <property name="Status">Open</property>
             </execute>
         </target>
