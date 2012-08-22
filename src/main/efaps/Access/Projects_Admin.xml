@@ -56,6 +56,7 @@
         </status>
 
         <status group="Projects_WorkOrderStatus">
+            <key>Assigned</key>
             <key>Open</key>
             <key>Closed</key>
             <key>Canceled</key>
