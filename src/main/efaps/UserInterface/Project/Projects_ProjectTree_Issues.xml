@@ -29,8 +29,20 @@
     <uuid>aed6438d-9a99-48e6-b174-7c478f17c191</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev$</file-revision>
+
     <definition>
         <version-expression>(version==latest)</version-expression>
+        <profiles>
+            <profile name="eFaps"/>
+        </profiles>
+        <name>Projects_ProjectTree_Issues</name>
+    </definition>
+
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+         <profiles>
+            <profile name="issues"/>
+        </profiles>
         <name>Projects_ProjectTree_Issues</name>
         <access>
             <role>Issues_Admin</role>

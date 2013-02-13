@@ -30,7 +30,18 @@
     <file-application>eFapsApp-Issues</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
+        <version-expression>(version==NONE)</version-expression>
+        <profiles>
+            <profile name="eFaps"/>
+        </profiles>
+        <name>Projects_Issues_Ticket2ProjectService</name>
+    </definition>
+
+    <definition>
         <version-expression>(version==latest)</version-expression>
+        <profiles>
+            <profile name="issues"/>
+        </profiles>
         <name>Projects_Issues_Ticket2ProjectService</name>
         <parent>Projects_Issues_Ticket2ProjectAbstract</parent>
         <attribute>

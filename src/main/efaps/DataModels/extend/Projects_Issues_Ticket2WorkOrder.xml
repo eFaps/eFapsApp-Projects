@@ -24,7 +24,18 @@
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>
+        <version-expression>(version==NONE)</version-expression>
+        <profiles>
+            <profile name="eFaps"/>
+        </profiles>
+        <name>Projects_Issues_Ticket2WorkOrder</name>
+    </definition>
+
+    <definition>
         <version-expression>(version==latest)</version-expression>
+        <profiles>
+            <profile name="issues"/>
+        </profiles>
         <name>Projects_Issues_Ticket2WorkOrder</name>
         <parent>Issues_Ticket2DocumentAbstract</parent>
         <attribute>
