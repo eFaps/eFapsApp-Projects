@@ -2,7 +2,7 @@
 
 <!--
 
-  Copyright 2003 - 2010 The eFaps Team
+  Copyright 2003 - 2013 The eFaps Team
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -29,74 +29,70 @@
         <dependency order="0">
             <groupId>org.efaps</groupId>
             <artifactId>efaps-kernel-install</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="1">
             <groupId>org.efaps</groupId>
             <artifactId>efaps-webapp-install</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="2">
             <groupId>org.efaps.apps</groupId>
             <artifactId>contacts</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="3">
             <groupId>org.efaps.apps</groupId>
             <artifactId>commons</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="4">
             <groupId>org.efaps.apps</groupId>
             <artifactId>products</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="5">
             <groupId>org.efaps.apps</groupId>
             <artifactId>sales</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="6">
             <groupId>org.efaps.apps</groupId>
             <artifactId>issues</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency order="7">
             <groupId>org.efaps.apps</groupId>
             <artifactId>accounting</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <version number="1" reloadCache="false" login="true" compile="true">
         <description>Install ERP-Projects Basic Modul.</description>
         <script type="groovy">
+            import java.io.File;
+            import java.util.UUID;
             import org.efaps.admin.runlevel.RunLevel;
+            import org.efaps.admin.user.JAASSystem;
+            import org.efaps.admin.user.Role;
             import org.efaps.db.Context;
-            import org.efaps.db.Insert;
-            import org.efaps.db.SearchQuery;
+            import org.efaps.db.QueryBuilder;
+            import org.efaps.db.InstanceQuery;
             import org.efaps.esjp.admin.ui.UIUpdate;
             import org.efaps.importer.DataImport;
-            import org.efaps.db.Instance;
 
-            import java.net.URL
-            import java.io.File;
+            EFAPS_LOGGER.info("Importing Data for eFapsApp-Projects");
 
-            EFAPS_LOGGER.info("Checking for import of JaasKeys for eFapsApp-Projects");
+            RunLevel.init("shell");
+            RunLevel.execute();
 
-            SearchQuery query = new SearchQuery();
-            query.setQueryTypes("Admin_User_JAASKey");
-            query.addWhereExprEqValue("Key", "Projects_Admin");
-            query.addSelect("OID");
-            query.execute();
+            // Admin_User_JAASKey
+            QueryBuilder queryBldr = new QueryBuilder(UUID.fromString("0e7650c6-8ec3-4c63-b377-f3eb5fb85f16"));
+            queryBldr.addWhereAttrEqValue("Key", "Projects_Admin");
+            InstanceQuery query = queryBldr.getQuery();
+            query.executeWithoutAccessCheck();
             if (!query.next()) {
-
-                RunLevel.init("shell");
-                RunLevel.execute();
-
-                EFAPS_LOGGER.info("    Importing JaasKeys for eFapsApp-Projects");
-                URL url = new URL(EFAPS_ROOTURL, "Data/IMPORT_UserJAASKey.xml");
-                DataImport imp = DataImport.readFile(url);
-                imp.updateInDB();
+                DataImport.readFile(new URL(EFAPS_ROOTURL, "Data/IMPORT_UserJAASKey.xml")).updateInDB();
             }
 
             UIUpdate update = new UIUpdate();
