@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.efaps.admin.datamodel.Classification;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
@@ -312,7 +312,7 @@ public abstract class Project_Base
         final StringBuilder ret = new StringBuilder();
         ret.append("eFapsSetFieldValue(").append(_idx).append(",'").append(_fieldName).append("',");
         if (_escape) {
-            ret.append("'").append(StringEscapeUtils.escapeJavaScript(_value)).append("'");
+            ret.append("'").append(StringEscapeUtils.escapeEcmaScript(_value)).append("'");
         } else {
             ret.append(_value);
         }

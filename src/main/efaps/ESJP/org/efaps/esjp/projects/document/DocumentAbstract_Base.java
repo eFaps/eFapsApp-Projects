@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -235,7 +235,7 @@ public abstract class DocumentAbstract_Base
         final StringBuilder ret = new StringBuilder();
         ret.append("eFapsSetFieldValue(").append(_idx).append(",'").append(_fieldName).append("',");
         if (_escape) {
-            ret.append("'").append(StringEscapeUtils.escapeJavaScript(_value)).append("'");
+            ret.append("'").append(StringEscapeUtils.escapeEcmaScript(_value)).append("'");
         } else {
             ret.append(_value);
         }
