@@ -42,6 +42,7 @@
             <column name="PARENTID"        type="INTEGER"/>
             <column name="NAME"            type="STRING_SHORT"    not-null="true" length="128" />
             <column name="DESCR"           type="STRING_SHORT"                    length="255" />
+            <column name="ORDERSEQ"        type="INTEGER"         not-null="true"/>
             <column name="NOTE"            type="STRING_SHORT"                    length="1000" />
             <column name="DATEFROM"        type="DATETIME"/>
             <column name="DATEUNTIL"       type="DATETIME"/>

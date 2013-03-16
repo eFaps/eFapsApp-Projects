@@ -22,6 +22,8 @@
 package org.efaps.esjp.projects.task;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,7 @@ import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.ui.AbstractCommand;
 import org.efaps.admin.ui.AbstractUserInterfaceObject.TargetMode;
+import org.efaps.db.Context;
 import org.efaps.db.Delete;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
@@ -49,6 +52,7 @@ import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
+import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.ui.wicket.util.DateUtil;
@@ -244,7 +248,8 @@ public abstract class Task_Base
         multi.addAttribute(CIProjects.TaskAbstract.DateFrom, CIProjects.TaskAbstract.DateUntil,
                         CIProjects.TaskAbstract.Description, CIProjects.TaskAbstract.Name,
                         CIProjects.TaskAbstract.Note, CIProjects.TaskAbstract.Quantity,
-                        CIProjects.TaskAbstract.Weight, CIProjects.TaskAbstract.UoM);
+                        CIProjects.TaskAbstract.Weight, CIProjects.TaskAbstract.UoM,
+                        CIProjects.TaskAbstract.Order);
         multi.execute();
         final Map<Instance, TaskPOs> tmp = new HashMap<Instance, TaskPOs>();
 
@@ -267,6 +272,8 @@ public abstract class Task_Base
                             multi.getAttribute(CIProjects.TaskAbstract.Weight));
             task.addAttribute(CIProjects.TaskAbstract.Weight.name,
                             multi.getAttribute(CIProjects.TaskAbstract.Weight));
+            task.addAttribute(CIProjects.TaskAbstract.Order.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Order));
             task.setParentInstance(Instance.get(multi.<String>getSelect(sel)));
         }
 
@@ -278,6 +285,17 @@ public abstract class Task_Base
                 roots.add(entry.getValue());
             }
         }
+        Collections.sort(roots, new Comparator<TaskPOs>()
+        {
+            @Override
+            public int compare(final TaskPOs _arg0,
+                               final TaskPOs _arg1)
+            {
+                return ((Integer) _arg0.getAttrValue(CIProjects.TaskAbstract.Order.name)).compareTo((Integer) _arg1
+                                .getAttrValue(CIProjects.TaskAbstract.Order.name));
+            }
+        });
+
         return roots;
     }
 
@@ -386,6 +404,61 @@ public abstract class Task_Base
     }
 
     /**
+     * Create root Task.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return empty Return
+     * @throws EFapsException on error
+     */
+    public Return createRootTask(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Instance projectInst = _parameter.getInstance();
+        final Insert insert = new Insert(CIProjects.TaskScheduled);
+        insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
+        insert.add(CIProjects.TaskAbstract.Order, getOrder4Task(_parameter, projectInst));
+        insert.add(CIProjects.TaskAbstract.Name,
+                        _parameter.getParameterValue(CIFormProjects.Projects_TaskForm.name.name));
+        insert.add(CIProjects.TaskAbstract.Description,
+                        _parameter.getParameterValue(CIFormProjects.Projects_TaskForm.description.name));
+        insert.add(CIProjects.TaskAbstract.DateFrom,
+                        _parameter.getParameterValue(CIFormProjects.Projects_TaskForm.dateFrom.name));
+        insert.add(CIProjects.TaskAbstract.DateUntil,
+                        _parameter.getParameterValue(CIFormProjects.Projects_TaskForm.dateUntil.name));
+        insert.add(CIProjects.TaskAbstract.Note,
+                        _parameter.getParameterValue(CIFormProjects.Projects_TaskForm.note.name));
+        insert.add(CIProjects.TaskAbstract.StatusAbstract,
+                        Status.find(CIProjects.TaskScheduledStatus.uuid, "Open").getId());
+        insert.execute();
+        return new Return();
+    }
+
+    /**
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @param _projectInst  Instance of teh Porject the tasks belong to
+     * @return the new order number
+     * @throws EFapsException on error
+     */
+    protected Integer getOrder4Task(final Parameter _parameter,
+                                    final Instance _projectInst)
+        throws EFapsException
+    {
+        Integer ret = 0;
+        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _projectInst.getId());
+        queryBldr.addOrderByAttributeDesc(CIProjects.TaskAbstract.Order);
+        final MultiPrintQuery multi = queryBldr.getPrint();
+        multi.addAttribute(CIProjects.TaskAbstract.Order);
+        multi.setEnforceSorted(true);
+        multi.executeWithoutAccessCheck();
+        if (multi.next()) {
+            ret = multi.<Integer>getAttribute(CIProjects.TaskAbstract.Order);
+            ret = ret + 1;
+        }
+        return ret;
+    }
+
+    /**
      * @param _parameter    Parameter as passed by the eFaps API
      * @param _idx          current index
      * @param _numbering    numbering array
@@ -426,23 +499,85 @@ public abstract class Task_Base
     public Return createSubTask(final Parameter _parameter)
         throws EFapsException
     {
-        final Create create = new Create() {
-
+        final Create create = new Create()
+        {
             @Override
             protected void add2basicInsert(final Parameter _parameter,
                                            final Insert _insert)
                 throws EFapsException
             {
-                final PrintQuery print = new PrintQuery(_parameter.getInstance());
-                print.addAttribute(CIProjects.TaskAbstract.ProjectAbstractLink);
+                Instance instance = _parameter.getInstance();
+                if (!instance.getType().isKindOf(CIProjects.TaskAbstract.getType())) {
+                    final String[] oids = (String[]) Context.getThreadContext().getSessionAttribute(
+                                    CIFormProjects.Projects_TaskForm.storeOIDs.name);
+                    if (oids != null && oids.length > 0) {
+                        instance = Instance.get(oids[0]);
+                    }
+                }
+                final PrintQuery print = new PrintQuery(instance);
+                final SelectBuilder sel = new SelectBuilder().linkto(CIProjects.TaskAbstract.ProjectAbstractLink)
+                                .instance();
+                print.addSelect(sel);
+                print.addAttribute(CIProjects.TaskAbstract.Order);
                 print.execute();
-                final Long projId = print.<Long>getAttribute(CIProjects.TaskAbstract.ProjectAbstractLink);
+                final Instance projInst = print.<Instance>getSelect(sel);
+                final Integer order = print.<Integer>getAttribute(CIProjects.TaskAbstract.Order);
 
-                _insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projId);
+                updateTaskPos(_parameter, projInst, order);
+
+                _insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projInst.getId());
+                _insert.add(CIProjects.TaskAbstract.ParentTaskAbstractLink, instance.getId());
+                _insert.add(CIProjects.TaskAbstract.Order, order + 1);
             }
         };
         return create.execute(_parameter);
     }
+
+
+    protected void updateTaskPos(final Parameter _parameter,
+                                 final Instance _projectInst,
+                                 final Integer _order)
+        throws EFapsException
+    {
+        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _projectInst.getId());
+        queryBldr.addWhereAttrGreaterValue(CIProjects.TaskAbstract.Order, _order);
+        final InstanceQuery query = queryBldr.getQuery();
+        query.executeWithoutAccessCheck();
+        int i = _order + 2;
+        while (query.next()) {
+            final Update update = new Update(query.getCurrentValue());
+            update.add(CIProjects.TaskAbstract.Order, i);
+            update.execute();
+            i++;
+        }
+    }
+
+    /**
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @param _projectInst  Instance of teh Porject the tasks belong to
+     * @return the new order number
+     * @throws EFapsException on error
+     */
+    protected Integer getOrder4SubTask(final Parameter _parameter,
+                                       final Instance _projectInst)
+        throws EFapsException
+    {
+        Integer ret = 0;
+        final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+        queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _projectInst.getId());
+        queryBldr.addOrderByAttributeDesc(CIProjects.TaskAbstract.Order);
+        final MultiPrintQuery multi = queryBldr.getPrint();
+        multi.addAttribute(CIProjects.TaskAbstract.Order);
+        multi.setEnforceSorted(true);
+        multi.executeWithoutAccessCheck();
+        if (multi.next()) {
+            ret = multi.<Integer>getAttribute(CIProjects.TaskAbstract.Order);
+            ret = ret + 1;
+        }
+        return ret;
+    }
+
 
     /**
      * Edit from an StructurBrowser.
@@ -548,10 +683,16 @@ public abstract class Task_Base
         throws EFapsException
     {
         final Instance delInst = _parameter.getInstance();
+        final PrintQuery print = new PrintQuery(delInst);
+        final SelectBuilder sel = new SelectBuilder().linkto(CIProjects.TaskAbstract.ProjectAbstractLink).instance();
+        print.addSelect(sel);
+        print.executeWithoutAccessCheck();
+        final Instance projectinst = print.<Instance>getSelect(sel);
+        Context.getThreadContext().setRequestAttribute("ProjectInstance", projectinst);
         final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
         queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ParentTaskAbstractLink, delInst.getId());
         final InstanceQuery query = queryBldr.getQuery();
-        query.execute();
+        query.executeWithoutAccessCheck();
         while (query.next()) {
             final Delete del = new Delete(query.getCurrentValue());
             del.execute();
@@ -559,10 +700,42 @@ public abstract class Task_Base
         return new Return();
     }
 
+    public Return deletePostTrigger(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Instance projectinst = (Instance) Context.getThreadContext().getRequestAttribute("ProjectInstance");
+        if (projectinst != null && projectinst.isValid()) {
+            final Parameter parameter = new Parameter();
+            parameter.put(ParameterValues.INSTANCE, projectinst);
+            updateTaskTree(parameter);
+        }
+        return new Return();
+    }
 
+    protected void updateTaskTree(final Parameter _parameter)
+        throws EFapsException
+    {
+        final List<TaskPOs> tasktree = getTaskTree(_parameter);
+        int i = -1;
+        for (final TaskPOs taskPO : tasktree) {
+            i = updateTaskPos(_parameter, taskPO, i);
+        }
+    }
 
-
-
+    protected int updateTaskPos(final Parameter _parameter,
+                                final TaskPOs _taskPO,
+                                final int _idx)
+        throws EFapsException
+    {
+        int i = _idx + 1;
+        final Update update = new Update(_taskPO.getInstance());
+        update.add(CIProjects.TaskAbstract.Order, i);
+        update.executeWithoutTrigger();
+        for (final TaskPOs taskPO : _taskPO.getChildren()) {
+            i = updateTaskPos(_parameter, taskPO, i);
+        }
+        return i;
+    }
 
     /**
      * Used as simple chache for Task Objects.
@@ -625,6 +798,16 @@ public abstract class Task_Base
         protected void addChild(final TaskPOs _taskPOs)
         {
             this.children.add(_taskPOs);
+            Collections.sort(this.children, new Comparator<TaskPOs>()
+            {
+                @Override
+                public int compare(final TaskPOs _arg0,
+                                   final TaskPOs _arg1)
+                {
+                    return ((Integer) _arg0.getAttrValue(CIProjects.TaskAbstract.Order.name)).compareTo((Integer) _arg1
+                                    .getAttrValue(CIProjects.TaskAbstract.Order.name));
+                }
+            });
         }
 
         /**

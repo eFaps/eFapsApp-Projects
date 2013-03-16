@@ -83,6 +83,12 @@
             <sqlcolumn>DESCR</sqlcolumn>
         </attribute>
         <attribute>
+            <name>Order</name>
+            <type>Integer</type>
+            <sqltable>Projects_TaskSQLTable</sqltable>
+            <sqlcolumn>ORDERSEQ</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>Note</name>
             <type>String</type>
             <sqltable>Projects_TaskSQLTable</sqltable>

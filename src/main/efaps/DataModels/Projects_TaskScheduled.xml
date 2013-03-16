@@ -62,5 +62,9 @@
             method="deletePreTrigger"
             name="Projects_TaskScheduled.DELETE_PRE"
             event="DELETE_PRE"/>
+        <trigger program="org.efaps.esjp.projects.task.Task"
+            method="deletePostTrigger"
+            name="Projects_TaskScheduled.DELETE_POST"
+            event="DELETE_POST"/>
     </definition>
 </datamodel-type>

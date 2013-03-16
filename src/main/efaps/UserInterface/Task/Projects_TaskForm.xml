@@ -23,9 +23,8 @@
 
 -->
 
-<ui-form xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+<ui-form xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>5e4327f5-e9e1-4909-ad4a-9a62a137ede5</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
@@ -37,6 +36,14 @@
             <property name="Classification">Projects_TaskClass</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">EDITABLE</property>
+        </field>
+        <field name="storeOIDs">
+            <property name="ModeCreate">HIDDEN</property>
+            <property name="ModeEdit">NONE</property>
+            <property name="ModeView">NONE</property>
+             <trigger program="org.efaps.esjp.common.uiform.Field" method="getStoreOIDsFieldValue"
+                name="Projects_TaskForm.storeOIDs.UI_FIELD_VALUE" event="UI_FIELD_VALUE">
+             </trigger>
         </field>
         <field name="parentTaskAbstractLink">
             <property name="ModeEdit">NONE</property>
@@ -95,7 +102,7 @@
         </field>
         <field name="quantityGroup" character="Group">
             <property name="ModeEdit">EDITABLE</property>
-             <property name="ModeCreate">EDITABLE</property>
+            <property name="ModeCreate">EDITABLE</property>
             <property name="GroupCount">3</property>
         </field>
         <field name="quantity">
@@ -110,7 +117,9 @@
             <trigger program="org.efaps.esjp.common.uiform.Field"
                 method="getDimensionUoMFieldValue"
                 name="Projects_TaskForm.uoM.UI_FIELD_VALUE"
-                event="UI_FIELD_VALUE"/>
+                event="UI_FIELD_VALUE" >
+                <property name="DimensionUUIDs">bf9c3466-4b56-42e1-80d5-2ed02715ae61</property>
+            </trigger>
         </field>
         <field name="weight">
             <property name="Attribute">Weight</property>
@@ -149,8 +158,7 @@
             <property name="ModeEdit">NONE</property>
             <property name="Label">Projects_TaskForm.chart.Label</property>
             <trigger program="org.efaps.esjp.projects.task.ProgressChart"
-                name="Projects_TaskForm.chart.UI_FIELD_VALUE"
-                event="UI_FIELD_VALUE">
+                name="Projects_TaskForm.chart.UI_FIELD_VALUE" event="UI_FIELD_VALUE">
                 <property name="XAxisLabel">Projects_TaskForm.chart.XAxisLabel</property>
                 <property name="YAxisLabel">Projects_TaskForm.chart.YAxisLabel</property>
                 <property name="Title">Projects_TaskForm.chart.Title</property>

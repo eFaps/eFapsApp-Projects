@@ -212,7 +212,7 @@ public abstract class Gant_Base
         if (projectPeriod.getDays() == 0) {
             left = BigDecimal.ZERO;
         } else {
-            left = new BigDecimal(100).setScale(8)
+            left = new BigDecimal(95).setScale(8)
                 .divide(new BigDecimal(projectPeriod.getDays()), BigDecimal.ROUND_HALF_UP)
                 .multiply(new BigDecimal(startPeriod.getDays()))
                 .setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -250,7 +250,7 @@ public abstract class Gant_Base
         if (projectPeriod.getDays() == 0) {
             right = BigDecimal.ZERO;
         } else {
-            right = new BigDecimal(100).setScale(8)
+            right = new BigDecimal(95).setScale(8)
                 .divide(new BigDecimal(projectPeriod.getDays()), BigDecimal.ROUND_HALF_UP)
                 .multiply(new BigDecimal(d3.getDays()))
                 .setScale(2, BigDecimal.ROUND_HALF_UP);

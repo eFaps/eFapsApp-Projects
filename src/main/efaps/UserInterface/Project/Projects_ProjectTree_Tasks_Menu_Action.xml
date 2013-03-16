@@ -34,6 +34,8 @@
         <name>Projects_ProjectTree_Tasks_Menu_Action</name>
         <!-- childs -->
         <childs>
+            <child>Projects_ProjectTree_Tasks_Menu_Action_CreateRootTask</child>
+            <child>Projects_ProjectTree_Tasks_Menu_Action_CreateSubTask</child>
             <child>Projects_ProjectTree_Tasks_Menu_Action_EditTasks</child>
             <child>Projects_ProjectTree_Tasks_Menu_Action_CreateTasks</child>
             <child>Projects_ProjectTree_Tasks_Menu_Action_ValidateTasks</child>
