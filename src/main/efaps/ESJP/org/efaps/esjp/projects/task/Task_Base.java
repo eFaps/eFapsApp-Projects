@@ -739,6 +739,49 @@ public abstract class Task_Base
         return ret;
     }
 
+
+    /**
+     * After update the dates of parent tasks will be corrected.
+     * @param _parameter Parameter as passed from the eFaps API
+     * @return new Return
+     * @throws EFapsException on error
+     */
+    public Return updatePostTrigger(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Instance instance = _parameter.getInstance();
+        final PrintQuery print = new PrintQuery(instance);
+        final SelectBuilder sel = new SelectBuilder().linkto(CIProjects.TaskAbstract.ParentTaskAbstractLink).instance();
+        print.addSelect(sel);
+        print.addAttribute(CIProjects.TaskAbstract.DateFrom, CIProjects.TaskAbstract.DateUntil);
+        print.executeWithoutAccessCheck();
+        final Instance parentInst = print.getSelect(sel);
+        if (parentInst.isValid()) {
+            final Update update = new Update(parentInst);
+            boolean execute = false;
+            final PrintQuery parentPrint = new PrintQuery(parentInst);
+            parentPrint.addAttribute(CIProjects.TaskAbstract.DateFrom, CIProjects.TaskAbstract.DateUntil);
+            parentPrint.executeWithoutAccessCheck();
+
+            final DateTime parentDateFrom = parentPrint.<DateTime>getAttribute(CIProjects.TaskAbstract.DateFrom);
+            final DateTime parentDateUntil = parentPrint.<DateTime>getAttribute(CIProjects.TaskAbstract.DateUntil);
+            final DateTime dateFrom = print.<DateTime>getAttribute(CIProjects.TaskAbstract.DateFrom);
+            final DateTime dateUntil = print.<DateTime>getAttribute(CIProjects.TaskAbstract.DateUntil);
+
+            if (dateFrom.isBefore(parentDateFrom)) {
+                update.add(CIProjects.TaskAbstract.DateFrom, dateFrom);
+                execute = true;
+            }
+            if (dateUntil.isAfter(parentDateUntil)) {
+                update.add(CIProjects.TaskAbstract.DateUntil, dateUntil);
+                execute = true;
+            }
+            if (execute) {
+                update.execute();
+            }
+        }
+        return new Return();
+    }
     /**
      * Before deletion the subtask will be deleted.
      * @param _parameter Parameter as passed from the eFaps API
