@@ -33,6 +33,12 @@
         <version-expression>(version==latest)</version-expression>
         <name>Projects_TaskTable</name>
         <!-- fields -->
+        <field name="order">
+            <property name="ModeEdit">HIDDEN</property>
+            <property name="ModeView">HIDDEN</property>
+            <property name="Attribute">Order</property>
+            <property name="Label">Projects_TaskAbstract/Order.Label</property>
+        </field>
         <field name="name">
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="Attribute">Name</property>
@@ -40,6 +46,7 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="Width">3</property>
+            <property name="SortAble">false</property>
             <trigger program="org.efaps.esjp.projects.task.Task"
                 method="accessCheck4AutomaticNumbering"
                 name="Projects_TaskTable.name.UI_ACCESSCHECK"
@@ -54,6 +61,7 @@
             <property name="ModeEdit">READONLY</property>
             <property name="ModeCreate">READONLY</property>
             <property name="Width">2</property>
+            <property name="SortAble">false</property>
             <trigger program="org.efaps.esjp.projects.task.Task"
                 method="accessCheck4AutomaticNumbering"
                 name="Projects_TaskTable.name.UI_ACCESSCHECK"
@@ -67,6 +75,7 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="Width">3</property>
+            <property name="SortAble">false</property>
         </field>
          <field name="dateFrom">
             <property name="Attribute">DateFrom</property>
@@ -75,6 +84,7 @@
             <property name="ModeCreate">EDITABLE</property>
             <property name="Width">1</property>
             <property name="Columns">7</property>
+            <property name="SortAble">false</property>
         </field>
         <field name="dateUntil">
             <property name="Attribute">DateUntil</property>
@@ -83,17 +93,20 @@
             <property name="ModeCreate">EDITABLE</property>
             <property name="Width">1</property>
             <property name="Columns">7</property>
+            <property name="SortAble">false</property>
         </field>
         <field name="status">
             <property name="Attribute">StatusAbstract</property>
             <property name="Label">Projects_TaskAbstract/StatusAbstract.Label</property>
             <property name="ModeEdit">NONE</property>
+            <property name="SortAble">false</property>
         </field>
         <field name="gant">
             <property name="Label">Projects_TaskTable.gant.Label</property>
             <property name="ModeEdit">NONE</property>
             <property name="Width">3</property>
             <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="SortAble">false</property>
             <trigger program="org.efaps.esjp.projects.task.Gant"
                 method="getGantFieldValue"
                 name="Projects_TaskTable.gant.UI_FIELD_VALUE"

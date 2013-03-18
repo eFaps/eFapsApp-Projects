@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
@@ -92,7 +93,8 @@ public abstract class GantHtmlTable_Base
         final SelectBuilder selPar = new SelectBuilder().linkto(CIProjects.TaskAbstract.ParentTaskAbstractLink).oid();
         multi.addSelect(selDate, selDue, selPar);
         multi.addAttribute(CIProjects.TaskAbstract.DateFrom, CIProjects.TaskAbstract.DateUntil,
-                        CIProjects.TaskAbstract.Name, CIProjects.TaskAbstract.Description);
+                        CIProjects.TaskAbstract.Name, CIProjects.TaskAbstract.Description,
+                        CIProjects.TaskAbstract.Order);
         add2MultiPrint(_parameter, multi);
         multi.execute();
         while (multi.next()) {
@@ -105,6 +107,8 @@ public abstract class GantHtmlTable_Base
             task.addAttribute(CIProjects.TaskAbstract.DateUntil.name, dateUntil);
             task.addAttribute(CIProjects.TaskAbstract.Name.name,
                             multi.getAttribute(CIProjects.TaskAbstract.Name));
+            task.addAttribute(CIProjects.TaskAbstract.Order.name,
+                            multi.getAttribute(CIProjects.TaskAbstract.Order));
             task.addAttribute(CIProjects.TaskAbstract.Description.name,
                             multi.getAttribute(CIProjects.TaskAbstract.Description));
             add2Attributes(_parameter, task, multi);
@@ -185,6 +189,18 @@ public abstract class GantHtmlTable_Base
             .append("overflow:hidden;")
             .append("text-overflow:ellipsis;")
             .append("width:200px;")
+            .append("}")
+            .append(" .level0 {")
+            .append("font-weight:bold;")
+            .append("}")
+            .append(" .level1 {")
+            .append("padding-left: 5px;")
+            .append("}")
+            .append(" .level2 {")
+            .append("padding-left: 10px;")
+            .append("}")
+            .append(" .level3 {")
+            .append("padding-left: 15px;")
             .append("}")
             .append(" .contained {")
             .append("background-color:grey;")
@@ -269,9 +285,25 @@ public abstract class GantHtmlTable_Base
         for (final ATask task : _tasks) {
             final String color = i % 2 == 0 ? "lightGray" : "lightBlue";
             _html.tr();
-            _html.td("<span class=\"taskName\">"+ task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name) + " "
-                            + task.<String>getAttributeValue(CIProjects.TaskAbstract.Description.name) + "</span>",
-                            "background-color:" + color);
+            final StringBuilder tag = new StringBuilder();
+            tag.append("<span class=\"taskName level")
+                .append(task.getLevel())
+                .append("\"")
+                .append("title=\"")
+                .append(StringEscapeUtils.escapeHtml4(task
+                                .<String>getAttributeValue(CIProjects.TaskAbstract.Name.name)))
+                .append(" - ")
+                .append(StringEscapeUtils.escapeHtml4(task
+                                .<String>getAttributeValue(CIProjects.TaskAbstract.Description.name)))
+                .append("\"")
+                .append(">")
+                .append(StringEscapeUtils.escapeHtml4(task
+                                .<String>getAttributeValue(CIProjects.TaskAbstract.Name.name)))
+                .append(" - ")
+                .append(StringEscapeUtils.escapeHtml4(task
+                                .<String>getAttributeValue(CIProjects.TaskAbstract.Description.name)))
+                .append("</span>");
+            _html.td(tag.toString(), "background-color:" + color);
             final DateTime dateFrom = task.getAttributeValue(CIProjects.TaskAbstract.DateFrom.name);
             final DateTime dateUntil = task.getAttributeValue(CIProjects.TaskAbstract.DateUntil.name);
             final Interval intervale = new Interval(dateFrom, dateUntil.isAfter(dateFrom) ? dateUntil.plusSeconds(1)
@@ -319,7 +351,7 @@ public abstract class GantHtmlTable_Base
         final StringBuilder html = new StringBuilder();
         html.append("<div>")
             .append(_task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name))
-            .append(" ")
+            .append(" - ")
             .append(_task.<String>getAttributeValue(CIProjects.TaskAbstract.Description.name))
             .append("</div>");
         return html.toString();
@@ -338,8 +370,8 @@ public abstract class GantHtmlTable_Base
             public int compare(final ATask _o1,
                                final ATask _o2)
             {
-                return _o1.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name)
-                    .compareTo(_o2.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name));
+                return _o1.<Integer>getAttributeValue(CIProjects.TaskAbstract.Order.name)
+                    .compareTo(_o2.<Integer>getAttributeValue(CIProjects.TaskAbstract.Order.name));
             }
         };
         return ret;
@@ -483,6 +515,22 @@ public abstract class GantHtmlTable_Base
         public ATask getParent()
         {
             return this.parent;
+        }
+
+
+        /**
+         * @return the level of this task
+         */
+        public int getLevel()
+        {
+            int ret = 0;
+            ATask parentTmp = this.parent;
+            while (parentTmp != null) {
+                ret++;
+                parentTmp = parentTmp.getParent();
+            }
+
+            return ret;
         }
     }
 }

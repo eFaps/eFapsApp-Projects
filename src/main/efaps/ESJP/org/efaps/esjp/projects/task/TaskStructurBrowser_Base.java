@@ -32,6 +32,7 @@ import org.efaps.db.Instance;
 import org.efaps.db.QueryBuilder;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ui.structurbrowser.StandartStructurBrowser;
+import org.efaps.ui.wicket.models.objects.UIStructurBrowser;
 import org.efaps.util.EFapsException;
 
 
@@ -81,5 +82,19 @@ public abstract class TaskStructurBrowser_Base
             oidMap.put(instance.getOid(), "delete");
         }
         return super.onNodeRemove(_parameter);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    protected Comparable getComparable(final Parameter _parameter,
+                                       final UIStructurBrowser _structurBrowser)
+    {
+        final StringBuilder ret = new StringBuilder();
+        ret.append(_structurBrowser.getHidden().get(0).getCellValue());
+        return ret.toString();
     }
 }
