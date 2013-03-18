@@ -180,6 +180,12 @@ public abstract class GantHtmlTable_Base
     {
         final StringBuilder css = new StringBuilder();
         css.append("<style type=\"text/css\">")
+            .append(" .taskName {")
+            .append("display:block;")
+            .append("overflow:hidden;")
+            .append("text-overflow:ellipsis;")
+            .append("width:200px;")
+            .append("}")
             .append(" .contained {")
             .append("background-color:grey;")
             .append("display:block;")
@@ -263,12 +269,13 @@ public abstract class GantHtmlTable_Base
         for (final ATask task : _tasks) {
             final String color = i % 2 == 0 ? "lightGray" : "lightBlue";
             _html.tr();
-            _html.td(task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name) + " "
-                            + task.<String>getAttributeValue(CIProjects.TaskAbstract.Description.name),
+            _html.td("<span class=\"taskName\">"+ task.<String>getAttributeValue(CIProjects.TaskAbstract.Name.name) + " "
+                            + task.<String>getAttributeValue(CIProjects.TaskAbstract.Description.name) + "</span>",
                             "background-color:" + color);
             final DateTime dateFrom = task.getAttributeValue(CIProjects.TaskAbstract.DateFrom.name);
             final DateTime dateUntil = task.getAttributeValue(CIProjects.TaskAbstract.DateUntil.name);
-            final Interval intervale = new Interval(dateFrom, dateUntil.isAfter(dateFrom) ? dateUntil : dateFrom);
+            final Interval intervale = new Interval(dateFrom, dateUntil.isAfter(dateFrom) ? dateUntil.plusSeconds(1)
+                            : dateFrom.plusSeconds(1));
             for (final DateTime date : _dates) {
                 _html.td(getCellValue(_parameter, task, intervale.contains(date)), intervale.contains(date)
                                 ? "padding-right:0;padding-left:0;background-color:" + color
