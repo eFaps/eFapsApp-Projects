@@ -114,6 +114,72 @@ public abstract class Task_Base
         return ret;
     }
 
+
+
+    /**
+     * Move a task up or down.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return empty Return
+     * @throws EFapsException on error
+     */
+    public Return upDownTask(final Parameter _parameter)
+        throws EFapsException
+    {
+        String[] oids = new String[0];
+        if (Context.getThreadContext().containsSessionAttribute("selectedOID")
+                        && Context.getThreadContext().getSessionAttribute("selectedOID") != null) {
+            oids = (String[]) Context.getThreadContext().getSessionAttribute("selectedOID");
+            Context.getThreadContext().setSessionAttribute("selectedOID", null);
+        }
+        final boolean up = "up".equals(_parameter.getParameterValue("upDown"));
+        final Integer count = Integer.valueOf(_parameter.getParameterValue("count"));
+        if (oids.length == 1) {
+            final Instance movePosInst = Instance.get(oids[0]);
+            final PrintQuery print = new PrintQuery(movePosInst);
+            print.addAttribute(CIProjects.TaskAbstract.Order, CIProjects.TaskAbstract.ParentTaskAbstractLink,
+                            CIProjects.TaskAbstract.ProjectAbstractLink);
+            print.executeWithoutAccessCheck();
+            final int order = print.<Integer>getAttribute(CIProjects.TaskAbstract.Order);
+            final Long parentId = print.<Long>getAttribute(CIProjects.TaskAbstract.ParentTaskAbstractLink);
+            final long projectId = print.<Long>getAttribute(CIProjects.TaskAbstract.ProjectAbstractLink);
+
+            final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
+            queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, projectId);
+            if (parentId != null) {
+                queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ParentTaskAbstractLink, parentId);
+            } else {
+                queryBldr.addWhereAttrIsNull(CIProjects.TaskAbstract.ParentTaskAbstractLink);
+            }
+            if (up) {
+                queryBldr.addWhereAttrLessValue(CIProjects.TaskAbstract.Order, order + 1 - Math.abs(count));
+                queryBldr.addOrderByAttributeDesc(CIProjects.TaskAbstract.Order);
+            } else {
+                queryBldr.addWhereAttrGreaterValue(CIProjects.TaskAbstract.Order, order - 1 + Math.abs(count));
+                queryBldr.addOrderByAttributeAsc(CIProjects.TaskAbstract.Order);
+            }
+            final InstanceQuery query = queryBldr.getQuery();
+            query.executeWithoutAccessCheck();
+            if (query.next()) {
+                final Instance targetPosInst = query.getCurrentValue();
+                final PrintQuery print2 = new PrintQuery(targetPosInst);
+                print2.addAttribute(CIProjects.TaskAbstract.Order);
+                print2.executeWithoutAccessCheck();
+
+                final Update update = new Update(movePosInst);
+                update.add(CIProjects.TaskAbstract.Order,
+                                print2.getAttribute(CIProjects.TaskAbstract.Order));
+                update.execute();
+
+                final Update update2 = new Update(targetPosInst);
+                update2.add(CIProjects.TaskAbstract.Order, order);
+                update2.execute();
+            }
+        }
+        return new Return();
+    }
+
+
     /**
      * @param _parameter    Parameter as passed by the eFasp API
      * @param _tasks        List of Task

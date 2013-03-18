@@ -40,6 +40,7 @@
             <child>Projects_ProjectTree_Tasks_Menu_Action_CreateTasks</child>
             <child>Projects_ProjectTree_Tasks_Menu_Action_ValidateTasks</child>
             <child>Projects_ProjectTree_Tasks_Menu_Action_CreateProgress</child>
+            <child>Projects_ProjectTree_Tasks_Menu_Action_UpDown</child>
             <child>Projects_ProjectTree_Tasks_Menu_Action_GantAsHtmlTable</child>
         </childs>
     </definition>
