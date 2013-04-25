@@ -33,6 +33,7 @@
         <version-expression>(version==latest)</version-expression>
         <name>Projects_ProgressTaskAbstract</name>
         <parent>Projects_ProgressAbstract</parent>
+        <purpose abstract="true"/>
         <attribute>
             <name>TaskAbstractLink</name>
             <type>Link</type>
