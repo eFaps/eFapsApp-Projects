@@ -343,7 +343,7 @@ public abstract class Project_Base
             for (final String childOid : childOids) {
                 final Instance child = Instance.get(childOid);
                 Insert insert = null;
-                if (callInstance.getType().equals(CIProjects.ProjectService.getType())) {
+                if (callInstance.getType().isKindOf(CIProjects.ProjectService.getType())) {
                     //defaults
                     if (child.getType().equals(CIProjects.ServiceRequest.getType())) {
                         insert = new Insert(CIProjects.ProjectService2Request);
@@ -435,7 +435,7 @@ public abstract class Project_Base
             final Instance callInstance = _parameter.getCallInstance();
             for (final String childOid : childOids) {
                 final Instance child = Instance.get(childOid);
-                if (callInstance.getType().equals(CIProjects.ProjectService.getType())) {
+                if (callInstance.getType().isKindOf(CIProjects.ProjectService.getType())) {
                     if (child.getType().equals(CIProjects.ServiceRequest.getType())
                                     && check4Relation(CIProjects.ProjectService2Request.uuid, child).next()) {
                         validate = false;
