@@ -97,7 +97,7 @@
 
             UIUpdate update = new UIUpdate();
             <!-- connect the Projects_MyDesk Menu to the main menu from efaps -->
-            update.add2Menu("5f89913f-b4c4-4263-b9f0-738d3ec10aea", "87001cc3-c45c-44de-b8f1-776df507f268", 1);
+            update.add2Menu("5f89913f-b4c4-4263-b9f0-738d3ec10aea", "87001cc3-c45c-44de-b8f1-776df507f268", 2);
 
             <!-- connect the Projects_Accounting_PeriodeTree_Label_Menu_Action_Create4Project Menu to the Accounting_PeriodeTree_Label_Menu_Action menu -->
             update.add2Menu("8a5727c9-e667-4c2c-b6f7-e67f881343cc", "33cdd0be-eb26-4f8c-af3d-d2b3782f09e2", -1);
