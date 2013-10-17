@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2003 - 2013 The eFaps Team
  *
@@ -30,30 +29,30 @@ import org.efaps.util.cache.CacheReloadException;
 
 /**
  * TODO comment!
- * 
+ *
  * @author The eFaps Team
  * @version $Id$
  */
 @EFapsUUID("7536a95f-c2bb-4e97-beb1-58ef3e75b80a")
 @EFapsRevision("$Rev$")
-public final class Projects 
+public final class Projects
 {
-	/**
-	 * Singelton.
-	 */
-	private Projects() 
-	{
-	}
+    /**
+     * Singelton.
+     */
+    private Projects()
+    {
+    }
 
-	/**
-	 * @return the SystemConfigruation for Sales
-	 * @throws CacheReloadException
-	 *             on error
-	 */
-	public static SystemConfiguration getSysConfig()
-			throws CacheReloadException {
-		// Mail-Configuration
-		return SystemConfiguration.get(UUID
-				.fromString("510dc4fe-86a1-4317-b79d-149cdcf2c748"));
-	}
+    /**
+     * @return the SystemConfiguration for projects
+     * @throws CacheReloadException on error
+     */
+    public static SystemConfiguration getSysConfig()
+        throws CacheReloadException
+    {
+        // Project-Configuration
+        return SystemConfiguration.get(UUID
+                        .fromString("510dc4fe-86a1-4317-b79d-149cdcf2c748"));
+    }
 }
