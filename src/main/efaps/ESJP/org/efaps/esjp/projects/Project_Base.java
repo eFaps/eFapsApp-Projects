@@ -21,6 +21,7 @@
 package org.efaps.esjp.projects;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import org.efaps.db.Instance;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.accounting.transaction.Transaction_Base;
 import org.efaps.esjp.ci.CIAccounting;
@@ -165,6 +167,7 @@ public abstract class Project_Base
         final Map<?, ?> props =  (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
         final Map<String, Map<String, String>> sortMap = new TreeMap<String, Map<String, String>>();
         if (input.length() > 0) {
+            final String formatStr = props.containsKey("FormatStr") ? (String) props.get("FormatStr") : "%s - %s - %s";
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
             queryBldr.addWhereAttrMatchValue(CIProjects.ProjectAbstract.Name, input + "*").setIgnoreCase(true);
             if (props.containsKey("StatusGroup")) {
@@ -176,12 +179,21 @@ public abstract class Project_Base
             final MultiPrintQuery print = queryBldr.getPrint();
             print.addAttribute(CIProjects.ProjectAbstract.OID, CIProjects.ProjectAbstract.Name,
                             CIProjects.ProjectAbstract.Description);
+            final SelectBuilder selContactName = SelectBuilder.get()
+                                        .linkto(CIProjects.ProjectAbstract.Contact)
+                                            .attribute(CIContacts.Contact.Name);
+                                                print.addSelect(selContactName);
+            print.addSelect(selContactName);
             print.execute();
             while (print.next()) {
                 final String name = print.<String>getAttribute(CIProjects.ProjectAbstract.Name);
                 final String oid = print.<String>getAttribute(CIProjects.ProjectAbstract.OID);
                 final String description = print.<String>getAttribute(CIProjects.ProjectAbstract.Description);
-                final String choice = name + " - " + description;
+                final String contactName = print.<String>getSelect(selContactName);
+                final Formatter formatter = new Formatter(Context.getThreadContext().getLocale());
+                formatter.format(formatStr, name, description, contactName);
+                final String choice = formatter.toString();
+                formatter.close();
                 final Map<String, String> map = new HashMap<String, String>();
                 map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), oid);
                 map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
