@@ -29,9 +29,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.efaps.admin.datamodel.Classification;
 import org.efaps.admin.datamodel.Status;
-import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.datamodel.ui.FieldValue;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -58,6 +56,7 @@ import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
+import org.efaps.esjp.contacts.Contacts;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
@@ -123,34 +122,8 @@ public abstract class Project_Base
     public Return autoComplete4Contact(final Parameter _parameter)
         throws EFapsException
     {
-        final String input = (String) _parameter.get(ParameterValues.OTHERS);
-        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final String type = (String) properties.get("Type");
-        if (input.length() > 0) {
-            final QueryBuilder queryBldr = new QueryBuilder(CIContacts.Contact);
-            if (type != null && type.length() > 0) {
-                final Classification classType = (Classification) Type.get(type);
-                queryBldr.addWhereClassification(classType);
-            }
-
-            queryBldr.addWhereAttrMatchValue(CIContacts.Contact.Name, input + "*").setIgnoreCase(true);
-            final MultiPrintQuery multi = queryBldr.getPrint();
-            multi.addAttribute(CIContacts.Contact.OID, CIContacts.Contact.Name);
-            multi.execute();
-            while (multi.next()) {
-                final String name = multi.<String>getAttribute(CIContacts.Contact.Name);
-                final String oid = multi.<String>getAttribute(CIContacts.Contact.OID);
-                final Map<String, String> map = new HashMap<String, String>();
-                map.put("eFapsAutoCompleteKEY", oid);
-                map.put("eFapsAutoCompleteVALUE", name);
-                map.put("eFapsAutoCompleteCHOICE", name);
-                list.add(map);
-            }
-        }
-        final Return retVal = new Return();
-        retVal.put(ReturnValues.VALUES, list);
-        return retVal;
+        final Contacts contact = new Contacts();
+        return contact.autoComplete4Contact(_parameter);
     }
 
     /**
