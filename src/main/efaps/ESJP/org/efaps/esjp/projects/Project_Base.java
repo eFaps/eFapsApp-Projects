@@ -191,18 +191,15 @@ public abstract class Project_Base
     public Return updateFields4Contact(final Parameter _parameter)
         throws EFapsException
     {
-        final Instance instance = Instance.get(_parameter.getParameterValue("contact"));
-        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        final Map<String, String> map = new HashMap<String, String>();
-        if (instance.getId() > 0) {
-            map.put("contactData", getFieldValue4Contact(instance));
-        } else {
-            map.put("contactData", "????");
-        }
-        list.add(map);
-        final Return retVal = new Return();
-        retVal.put(ReturnValues.VALUES, list);
-        return retVal;
+        final Contacts contacts = new Contacts() {
+            @Override
+            public String getFieldValue4Contact(final Instance _instance)
+                throws EFapsException
+            {
+                return Project_Base.this.getFieldValue4Contact(_instance);
+            }
+        };
+        return contacts.updateFields4Contact(_parameter);
     }
 
     /**
@@ -215,22 +212,8 @@ public abstract class Project_Base
     protected String getFieldValue4Contact(final Instance _instance)
         throws EFapsException
     {
-        final PrintQuery print = new PrintQuery(_instance);
-        print.addSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]");
-        print.addSelect("class[Contacts_ClassOrganisation].attribute[TaxNumber]");
-        print.addSelect("class[Contacts_ClassPerson].attribute[IdentityCard]");
-        print.execute();
-        final String taxnumber = print.<String>getSelect("class[Contacts_ClassOrganisation].attribute[TaxNumber]");
-        final String idcard = print.<String>getSelect("class[Contacts_ClassPerson].attribute[IdentityCard]");
-        final boolean dni = taxnumber == null || (taxnumber.length() < 1 && idcard != null && idcard.length() > 1);
-        final StringBuilder strBldr = new StringBuilder();
-        strBldr.append(dni ? DBProperties.getProperty("Contacts_ClassPerson/IdentityCard.Label")
-                            : DBProperties.getProperty("Contacts_ClassOrganisation/TaxNumber.Label"))
-                        .append(": ").append(dni ? idcard : taxnumber).append("  -  ")
-                        .append(DBProperties.getProperty("Sales_Contacts_ClassClient/BillingAdressStreet.Label"))
-                        .append(": ")
-                        .append(print.getSelect("class[Sales_Contacts_ClassClient].attribute[BillingAdressStreet]"));
-        return strBldr.toString();
+        final Contacts contacts = new Contacts();
+        return contacts.getFieldValue4Contact(_instance);
     }
 
     /**
