@@ -56,6 +56,7 @@ import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
+import org.efaps.esjp.common.uiform.Create;
 import org.efaps.esjp.contacts.Contacts;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
@@ -80,36 +81,72 @@ public abstract class Project_Base
     public Return create(final Parameter _parameter)
         throws EFapsException
     {
-        final String contactOid = _parameter.getParameterValue("contact");
+        return new Create() {
+            @Override
+            protected void add2basicInsert(final Parameter _parameter,
+                                           final Insert _insert)
+                throws EFapsException
+            {
+                final String contactOid = _parameter.getParameterValue("contact");
+                _insert.add(CIProjects.ProjectService.Contact, Instance.get(contactOid).getId());
+                _insert.add(CIProjects.ProjectService.Status,
+                                Status.find(CIProjects.ProjectServiceStatus.uuid, "Open").getId());
 
-        final Insert insert = new Insert(CIProjects.ProjectService);
-        insert.add(CIProjects.ProjectService.Name, _parameter.getParameterValue("name"));
-        insert.add(CIProjects.ProjectService.Description, _parameter.getParameterValue("description"));
-        insert.add(CIProjects.ProjectService.Date, _parameter.getParameterValue("date"));
-        insert.add(CIProjects.ProjectService.DueDate, _parameter.getParameterValue("dueDate"));
-        insert.add(CIProjects.ProjectService.Lead, _parameter.getParameterValue("lead"));
-        insert.add(CIProjects.ProjectService.Contact, Instance.get(contactOid).getId());
-        insert.add(CIProjects.ProjectService.Note, _parameter.getParameterValue("note"));
-        insert.add(CIProjects.ProjectService.Status, Status.find(CIProjects.ProjectServiceStatus.uuid, "Open").getId());
-        insert.execute();
-        final Instance inst = insert.getInstance();
+                add2ProjectCreate(_parameter, _insert);
+            }
 
-        final Instance callInst = _parameter.getCallInstance();
-        // if the call instance is a service request the status can be set to
-        // the next,
-        // and connect to the service
-        if (callInst != null && callInst.getType().equals(CIProjects.ServiceRequest.getType())) {
-            final Update update = new Update(callInst);
-            update.add(CIProjects.ServiceRequest.Status,
-                            Status.find(CIProjects.ServiceRequestStatus.uuid, "Accepted").getId());
-            update.execute();
+            @Override
+            public void connect(final Parameter _parameter,
+                                final Instance _instance)
+                throws EFapsException
+            {
+                final Instance callInst = _parameter.getCallInstance();
+                // if the call instance is a service request the status can be set to
+                // the next,
+                // and connect to the service
+                if (callInst != null && callInst.getType().equals(CIProjects.ServiceRequest.getType())) {
+                    final Update update = new Update(callInst);
+                    update.add(CIProjects.ServiceRequest.Status,
+                                    Status.find(CIProjects.ServiceRequestStatus.uuid, "Accepted").getId());
+                    update.execute();
 
-            final Insert relInsert = new Insert(CIProjects.ProjectService2Request);
-            relInsert.add(CIProjects.ProjectService2Request.FromLink, inst.getId());
-            relInsert.add(CIProjects.ProjectService2Request.ToLink, callInst.getId());
-            relInsert.execute();
-        }
-        return new Return();
+                    final Insert relInsert = new Insert(CIProjects.ProjectService2Request);
+                    relInsert.add(CIProjects.ProjectService2Request.FromLink, _instance);
+                    relInsert.add(CIProjects.ProjectService2Request.ToLink, callInst.getId());
+                    relInsert.execute();
+                }
+
+                connect2ProjectCreate(_parameter, _instance);
+            }
+        }.execute(_parameter);
+    }
+
+    /**
+     * Add additional attributes for the project.
+     *
+     * @param _parameter passed from eFaps API
+     * @param _insert Insert of project.
+     * @throws EFapsException on error.
+     */
+    protected void add2ProjectCreate(final Parameter _parameter,
+                                     final Insert _insert)
+        throws EFapsException
+    {
+
+    }
+
+    /**
+     * Add additional relations for the project.
+     *
+     * @param _parameter passed from eFaps API
+     * @param _instance of the project created.
+     * @throws EFapsException on error.
+     */
+    protected void connect2ProjectCreate(final Parameter _parameter,
+                                         final Instance _instance)
+        throws EFapsException
+    {
+
     }
 
     /**
