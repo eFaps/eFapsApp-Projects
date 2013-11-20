@@ -34,6 +34,7 @@
             <column name="PROJECTID" not-null="true" type="INTEGER"/>
             <column length="128" name="CONTACT" type="STRING_SHORT"/>
             <column name="DEFID" type="INTEGER"/>
+            <column length="128" name="ORIGIN" type="STRING_SHORT"/>
             <column length="128" name="PHONE" type="STRING_SHORT"/>
             <column length="255" name="EMAIL" type="STRING_SHORT"/>
             <column name="CREATOR" not-null="true" type="INTEGER"/>

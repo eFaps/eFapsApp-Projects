@@ -47,6 +47,8 @@
         <type>Projects_WorkOrder</type>
         <type>Projects_WorkReport</type>
         <type>Projects_PayRequest</type>
+        <type>Projects_CommunicationsMatrixAbstract</type>
+        <type>Projects_CommunicationsMatrix</type>
 
         <status group="Projects_ProjectServiceStatus">
             <key>Open</key>

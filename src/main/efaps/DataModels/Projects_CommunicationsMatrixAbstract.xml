@@ -83,6 +83,12 @@
             <sqlcolumn>EMAIL</sqlcolumn>
         </attribute>
         <attribute>
+            <name>Origin</name>
+            <type>String</type>
+            <sqltable>Projects_CommunicationsMatrixAbstractSQLTable</sqltable>
+            <sqlcolumn>ORIGIN</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>Creator</name>
             <type>CreatorLink</type>
             <sqltable>Projects_CommunicationsMatrixAbstractSQLTable</sqltable>
