@@ -37,6 +37,7 @@
             <column length="128" name="ORIGIN" type="STRING_SHORT"/>
             <column length="128" name="PHONE" type="STRING_SHORT"/>
             <column length="255" name="EMAIL" type="STRING_SHORT"/>
+            <column type="STRING_SHORT" name="NOTE" length="1024" />
             <column name="CREATOR" not-null="true" type="INTEGER"/>
             <column name="CREATED" not-null="true" type="DATETIME"/>
             <column name="MODIFIER" not-null="true" type="INTEGER"/>

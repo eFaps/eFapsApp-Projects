@@ -89,6 +89,12 @@
             <sqlcolumn>ORIGIN</sqlcolumn>
         </attribute>
         <attribute>
+            <name>Note</name>
+            <type>String</type>
+            <sqltable>Projects_CommunicationsMatrixAbstractSQLTable</sqltable>
+            <sqlcolumn>NOTE</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>Creator</name>
             <type>CreatorLink</type>
             <sqltable>Projects_CommunicationsMatrixAbstractSQLTable</sqltable>

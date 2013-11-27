@@ -26,6 +26,8 @@ public class CommunicationsMatrix_Base
                         _parameter.getParameterValue(CIFormProjects.Projects_CommunicationsMatrixForm.phone.name));
         insert.add(CIProjects.CommunicationsMatrix.Origin,
                         _parameter.getParameterValue(CIFormProjects.Projects_CommunicationsMatrixForm.origin.name));
+        insert.add(CIProjects.CommunicationsMatrix.Note,
+                        _parameter.getParameterValue(CIFormProjects.Projects_CommunicationsMatrixForm.note.name));
         final String pointOfContactLink = _parameter
                         .getParameterValue(CIFormProjects.Projects_CommunicationsMatrixForm.pointOfContact.name);
         if (pointOfContactLink != null) {

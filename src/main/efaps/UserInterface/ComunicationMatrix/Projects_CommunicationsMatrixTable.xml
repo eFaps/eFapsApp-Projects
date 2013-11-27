@@ -63,5 +63,11 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
         </field>
+        <field name="note">
+            <property name="Attribute">Note</property>
+            <property name="Label">Projects_CommunicationsMatrix/Note.Label</property>
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="ModeCreate">EDITABLE</property>
+        </field>
     </definition>
 </ui-table>
