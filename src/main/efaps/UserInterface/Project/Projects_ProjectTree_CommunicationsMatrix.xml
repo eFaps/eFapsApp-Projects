@@ -30,8 +30,8 @@
             <menu>Projects_ProjectTree_CommunicationsMatrix_Menu</menu>
             <table>Projects_CommunicationsMatrixTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_CommunicationsMatrix</property>
-                <property name="LinkFroms">ProjectAbstractLink</property>
+                <property name="Type">Projects_CommunicationsMatrix</property>
+                <property name="LinkFrom">ProjectAbstractLink</property>
             </evaluate>
             <help>org.efaps.wiki.projects.Tasks.wiki</help>
         </target>
