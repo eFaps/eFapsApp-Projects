@@ -93,8 +93,13 @@ public abstract class TaskStructurBrowser_Base
     protected Comparable getComparable(final Parameter _parameter,
                                        final UIStructurBrowser _structurBrowser)
     {
-        final StringBuilder ret = new StringBuilder();
-        ret.append(_structurBrowser.getHidden().get(0).getCellValue());
-        return ret.toString();
+
+        Comparable ret;
+        if (_structurBrowser.getHidden().isEmpty()) {
+            ret = super.getComparable(_parameter, _structurBrowser);
+        } else {
+            ret = new StringBuilder().append(_structurBrowser.getHidden().get(0).getCellValue()).toString();
+        }
+        return ret;
     }
 }
