@@ -659,7 +659,7 @@ public abstract class Task_Base
         final Map<String, String> oidMap = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
         final String[] rowKeys = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
         final String[] descriptions = _parameter.getParameterValues("description");
-        final String[] names = _parameter.getParameterValues("names");
+        final String[] names = _parameter.getParameterValues("name");
         final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");
         final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
 
