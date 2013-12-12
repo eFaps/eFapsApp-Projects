@@ -56,10 +56,10 @@
             <property name="TargetStructurBrowserField">name</property>
             <table>Projects_TaskTable</table>
             <evaluate program="org.efaps.esjp.projects.task.TaskStructurBrowser">
-                <property name="Types">Projects_TaskAbstract</property>
-                <property name="LinkFroms">ProjectAbstractLink</property>
-                <property name="Child_Types">Projects_TaskAbstract</property>
-                <property name="Child_LinkFroms">ParentTaskAbstractLink</property>
+                <property name="Type">Projects_TaskAbstract</property>
+                <property name="LinkFrom">ProjectAbstractLink</property>
+                <property name="Child_Type">Projects_TaskAbstract</property>
+                <property name="Child_LinkFrom">ParentTaskAbstractLink</property>
             </evaluate>
         </field>
     </definition>
