@@ -49,6 +49,7 @@
         <type>Projects_PayRequest</type>
         <type>Projects_CommunicationsMatrixAbstract</type>
         <type>Projects_CommunicationsMatrix</type>
+        <type>Projects_EventSchedule</type>
 
         <status group="Projects_ProjectServiceStatus">
             <key>Open</key>
@@ -79,6 +80,12 @@
         <status group="Projects_PayRequestStatus">
             <key>Open</key>
             <key>Accepted</key>
+            <key>Closed</key>
+            <key>Canceled</key>
+        </status>
+
+        <status group="Projects_EventScheduleStatus">
+            <key>Open</key>
             <key>Closed</key>
             <key>Canceled</key>
         </status>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+
+ Copyright 2003 - 2012 The eFaps Team
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author:          The eFaps Team
+ Revision:        $Rev: 6018 $
+ Last Changed:    $Date: 2011-01-04 13:49:04 -0500 (mar, 04 ene 2011) $
+ Last Changed By: $Author: jan@moxter.net $
+
+--><datamodel-type xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+
+    <uuid>22251170-4cc5-43ed-99ea-b87cc3adf120</uuid>
+    <file-application>eFapsApp-Commons</file-application>
+    <file-revision>$Rev: 6018 $</file-revision>
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+        <name>Projects_EventSchedule</name>
+        <parent>ERP_EventScheduleAbstract</parent>
+        <attribute>
+            <name>Status</name>
+            <type>Status</type>
+            <typelink>Projects_EventScheduleStatus</typelink>
+            <sqltable>ERP_EventScheduleAbstractSQLTable</sqltable>
+            <sqlcolumn>STATUS</sqlcolumn>
+            <trigger event="RANGE_VALUE" name="Projects_EventSchedule.Status.RANGE_VALUE" program="org.efaps.esjp.admin.datamodel.StatusValue">
+            </trigger>
+        </attribute>
+        <trigger program="org.efaps.esjp.admin.access.SimpleAccessCheckOnType"
+            name="Projects_EventSchedule.ACCESSCHECK"
+            event="ACCESSCHECK" />
+    </definition>
+</datamodel-type>
