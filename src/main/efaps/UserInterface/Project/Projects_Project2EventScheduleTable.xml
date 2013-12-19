@@ -29,13 +29,13 @@
         <!-- fields -->
         <field name="type">
             <property name="Attribute">Type</property>
-            <property name="Label">Projects_Project2LabelTable/Type.Label</property>
+            <property name="Label">Projects_Project2EventScheduleTable/Type.Label</property>
             <property name="ShowTypeIcon">true</property>
         </field>
         <field name="event">
             <property name="SelectAlternateOID">linkto[ToLink].oid</property>
             <property name="Select">linkto[ToLink].attribute[Name]</property>
-            <property name="Label">Projects_Project2LabelTable/Account.Label</property>
+            <property name="Label">Projects_EventSchedule/Name.Label</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
         </field>
         <field name="buttonOpenInNewWindow">
