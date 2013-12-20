@@ -31,8 +31,8 @@
             <property name="ModeEdit">READONLY</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModePrint">NONE</property>
-            <property name="SelectAlternateOID">linkfrom[Projects_ProjectService2EventSchedule#ToLink].linkto[FromLink].oid</property>
-            <property name="Phrase">$&lt;linkfrom[Projects_ProjectService2EventSchedule#ToLink].linkto[FromLink].type.label&gt; - $&lt;linkfrom[Projects_ProjectService2EventSchedule#ToLink].linkto[FromLink].attribute[Name]&gt;</property>
+            <property name="SelectAlternateOID">linkto[DefinitionLinkAbstract].oid</property>
+            <property name="Select">linkto[DefinitionLinkAbstract].attribute[Name]</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
             <property name="Label">Projects_EventScheduleForm.eventDefinition.Label</property>
