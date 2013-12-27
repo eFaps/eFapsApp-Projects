@@ -40,8 +40,8 @@
         <property name="Target">modal</property>
         <property name="TargetMode">create</property>
         <property name="TargetCreateType">Projects_EventSchedule</property>
-        <property name="WindowHeight">660</property>
-        <property name="WindowWidth">1200</property>
+        <property name="WindowHeight">460</property>
+        <property name="WindowWidth">700</property>
         <property name="TargetDefaultMenu">none</property>
 
     </definition>
