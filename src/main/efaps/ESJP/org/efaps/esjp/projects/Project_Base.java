@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.ui.FieldValue;
 import org.efaps.admin.dbproperty.DBProperties;
@@ -58,6 +57,7 @@ import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.esjp.contacts.Contacts;
+import org.efaps.esjp.erp.CommonDocument;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
@@ -70,6 +70,7 @@ import org.efaps.util.EFapsException;
 @EFapsUUID("e0c8e7d5-ca9c-46b3-967e-8bd307b17c93")
 @EFapsRevision("$Rev$")
 public abstract class Project_Base
+    extends CommonDocument
 {
     /**
      * Method top create a new Project.
@@ -285,44 +286,6 @@ public abstract class Project_Base
         final Return retVal = new Return();
         retVal.put(ReturnValues.SNIPLETT, js.toString());
         return retVal;
-    }
-
-    /**
-     * Get a "eFapsSetFieldValue" Javascript line.
-     * @param _idx          index of the field
-     * @param _fieldName    name of the field
-     * @param _value        value
-     * @return StringBuilder
-     */
-    protected StringBuilder getSetFieldValue(final int _idx,
-                                             final String _fieldName,
-                                             final String _value)
-    {
-        return getSetFieldValue(_idx, _fieldName, _value, true);
-    }
-
-    /**
-     * Get a "eFapsSetFieldValue" Javascript line.
-     * @param _idx          index of the field
-     * @param _fieldName    name of the field
-     * @param _value        value
-     * @param _escape       must the value be escaped
-     * @return StringBuilder
-     */
-    protected StringBuilder getSetFieldValue(final int _idx,
-                                             final String _fieldName,
-                                             final String _value,
-                                             final boolean _escape)
-    {
-        final StringBuilder ret = new StringBuilder();
-        ret.append("eFapsSetFieldValue(").append(_idx).append(",'").append(_fieldName).append("',");
-        if (_escape) {
-            ret.append("'").append(StringEscapeUtils.escapeEcmaScript(_value)).append("'");
-        } else {
-            ret.append(_value);
-        }
-        ret.append(");");
-        return ret;
     }
 
     /**
@@ -572,6 +535,7 @@ public abstract class Project_Base
         return new Return();
     }
 
+    @Override
     public Return getSalesPersonFieldValue(final Parameter _parameter)
         throws EFapsException
     {
