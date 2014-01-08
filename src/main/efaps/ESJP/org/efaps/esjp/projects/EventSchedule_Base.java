@@ -44,7 +44,6 @@ import org.efaps.db.QueryBuilder;
 import org.efaps.esjp.ci.CIERP;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.AbstractCommon;
-import org.efaps.esjp.common.quartz.IEventDefinition;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
@@ -58,7 +57,7 @@ import org.efaps.util.EFapsException;
 @EFapsUUID("232949c1-26ed-4bc0-859f-512541cfb78b")
 @EFapsRevision("$Rev: 11050 $")
 public abstract class EventSchedule_Base
-    extends AbstractCommon implements IEventDefinition
+    extends AbstractCommon
 {
     /**
      * Method top create a new Project.
@@ -180,10 +179,4 @@ public abstract class EventSchedule_Base
         retVal.put(ReturnValues.VALUES, list);
         return retVal;
     }
-
-    @Override
-    public void execute() {
-        System.out.println("Entro al Eventooooooooooooooo");
-    }
-
 }
