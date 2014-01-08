@@ -33,7 +33,11 @@
         <!-- target definitions -->
         <target>
             <form>Projects_EventScheduleForm</form>
-            <execute method="create" program="org.efaps.esjp.projects.EventSchedule"/>
+            <execute method="create" program="org.efaps.esjp.projects.EventSchedule">
+                <property name="ConnectType">Projects_ProjectService2EventSchedule</property>
+                <property name="ConnectParentAttribute">FromLink</property>
+                <property name="ConnectChildAttribute">ToLink</property>
+            </execute>
         </target>
 
         <!-- properties -->

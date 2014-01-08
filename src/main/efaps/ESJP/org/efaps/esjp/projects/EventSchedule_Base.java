@@ -43,8 +43,8 @@ import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.esjp.ci.CIERP;
 import org.efaps.esjp.ci.CIProjects;
-import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.uiform.Create;
+import org.efaps.esjp.erp.CommonDocument;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
@@ -57,7 +57,7 @@ import org.efaps.util.EFapsException;
 @EFapsUUID("232949c1-26ed-4bc0-859f-512541cfb78b")
 @EFapsRevision("$Rev: 11050 $")
 public abstract class EventSchedule_Base
-    extends AbstractCommon
+    extends CommonDocument
 {
     /**
      * Method top create a new Project.
@@ -87,15 +87,7 @@ public abstract class EventSchedule_Base
                                 final Instance _instance)
                 throws EFapsException
             {
-                final Instance projInst = _parameter.getInstance();
-
-                if (projInst.isValid()) {
-                    final Insert relInsert = new Insert(CIProjects.ProjectService2EventSchedule);
-                    relInsert.add(CIProjects.ProjectService2EventSchedule.FromLink, projInst);
-                    relInsert.add(CIProjects.ProjectService2EventSchedule.ToLink, _instance);
-                    relInsert.execute();
-                }
-
+                super.connect(_parameter, _instance);
                 connect2EventScheduleCreate(_parameter, _instance);
             }
         }.execute(_parameter);
@@ -110,7 +102,7 @@ public abstract class EventSchedule_Base
      * @throws EFapsException on error.
      */
     protected void add2EventScheduleCreate(final Parameter _parameter,
-                                     final Insert _insert)
+                                           final Insert _insert)
         throws EFapsException
     {
 
@@ -124,7 +116,7 @@ public abstract class EventSchedule_Base
      * @throws EFapsException on error.
      */
     protected void connect2EventScheduleCreate(final Parameter _parameter,
-                                         final Instance _instance)
+                                               final Instance _instance)
         throws EFapsException
     {
 
