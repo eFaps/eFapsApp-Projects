@@ -122,6 +122,7 @@
             <property name="Select">linkto[Contact].attribute[Name]</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="Required">true</property>
+            <property name="Columns">101</property>
             <trigger program="org.efaps.esjp.projects.document.ServiceRequest"
                 method="autoComplete4Contact"
                 name="Projects_ServiceRequestForm.contact.UI_Field_Autocomplete"

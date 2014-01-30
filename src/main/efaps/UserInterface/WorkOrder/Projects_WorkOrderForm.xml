@@ -134,7 +134,6 @@
             <property name="ModeEdit">READONLY</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModePrint">NONE</property>
-            <property name="Columns">130</property>
             <property name="SelectAlternateOID">linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].oid</property>
             <property name="Phrase">$&lt;linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].type.label&gt; - $&lt;linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].attribute[Name]&gt;</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
@@ -162,6 +161,7 @@
             <property name="ModeEdit">NONE</property>
             <property name="ModeView">NONE</property>
             <property name="Required">true</property>
+            <property name="Columns">101</property>
             <trigger program="org.efaps.esjp.projects.document.WorkOrder"
                 method="autoComplete4Contact"
                 name="Projects_WorkOrderForm.contact.UI_Field_Autocomplete"
