@@ -341,6 +341,10 @@ public abstract class Project_Base
                         insert = new Insert(CIProjects.ProjectService2Reminder);
                     } else if (child.getType().equals(CISales.CostSheet.getType())) {
                         insert = new Insert(CIProjects.ProjectService2CostSheet);
+                    } else if (child.getType().equals(CISales.UsageReport.getType())) {
+                        insert = new Insert(CIProjects.ProjectService2UsageReport);
+                    } else if (child.getType().equals(CISales.ReturnUsageReport.getType())) {
+                        insert = new Insert(CIProjects.ProjectService2ReturnUsageReport);
                     }
                     int i = 0;
                     while (insert == null && props.containsKey("connect" + i)) {
