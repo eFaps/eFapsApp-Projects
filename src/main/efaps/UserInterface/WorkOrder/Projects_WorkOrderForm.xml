@@ -134,6 +134,7 @@
             <property name="ModeEdit">READONLY</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModePrint">NONE</property>
+            <property name="Columns">130</property>
             <property name="SelectAlternateOID">linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].oid</property>
             <property name="Phrase">$&lt;linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].type.label&gt; - $&lt;linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].attribute[Name]&gt;</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>

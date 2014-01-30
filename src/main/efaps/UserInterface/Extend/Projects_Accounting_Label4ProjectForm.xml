@@ -55,6 +55,7 @@
             <property name="ModeSearch">EDITABLE</property>
             <property name="Attribute">Name</property>
             <property name="Required">true</property>
+            <property name="Columns">80</property>
             <trigger program="org.efaps.esjp.projects.Project"
                 method="autoComplete4Project"
                 name="Projects_Accounting_Label4ProjectForm.project.UI_FIELD_AUTOCOMPLETE"
