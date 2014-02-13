@@ -68,6 +68,11 @@
             <property name="ModeCreate">EDITABLE</property>
             <property name="Required">true</property>
         </field>
+        <field name="projectType">
+            <property name="ModeCreate">EDITABLE</property>
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="Attribute">ProjectTypeLink</property>
+        </field>
         <field name="description">
             <property name="Attribute">Description</property>
             <property name="Columns">60</property>

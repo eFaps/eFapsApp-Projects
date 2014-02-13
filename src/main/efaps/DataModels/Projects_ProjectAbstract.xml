@@ -108,6 +108,19 @@
             <sqlcolumn>NOTE</sqlcolumn>
         </attribute>
         <attribute>
+            <name>ProjectTypeLink</name>
+            <type>LinkWithRanges</type>
+            <typelink>Projects_AttributeDefinitionProjectType</typelink>
+            <sqltable>Projects_ProjectSQLTable</sqltable>
+            <sqlcolumn>PROYTYPEID</sqlcolumn>
+            <trigger event="RANGE_VALUE"
+                    name="Projects_ProjectAbstract.ProjectTypeLink"
+                    program="org.efaps.esjp.admin.datamodel.RangesValue">
+                    <property name="Value">Value</property>
+                    <property name="Type">Projects_AttributeDefinitionProjectType</property>
+            </trigger>
+        </attribute>
+        <attribute>
             <name>StatusAbstract</name>
             <type>Status</type>
             <typelink>Projects_ProjectStatus</typelink>
