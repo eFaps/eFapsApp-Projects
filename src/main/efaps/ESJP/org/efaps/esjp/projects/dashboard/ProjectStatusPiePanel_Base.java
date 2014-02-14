@@ -32,7 +32,7 @@ import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ui.html.dojo.charting.Orientation;
-import org.efaps.esjp.ui.html.dojo.charting.Pie;
+import org.efaps.esjp.ui.html.dojo.charting.PieChart;
 import org.efaps.esjp.ui.html.dojo.charting.PieData;
 import org.efaps.esjp.ui.html.dojo.charting.Serie;
 import org.efaps.ui.wicket.models.IEsjpSnipplet;
@@ -71,7 +71,7 @@ public abstract class ProjectStatusPiePanel_Base
             }
             values.put(status, count + 1);
         }
-        final Pie pie = new Pie();
+        final PieChart pie = new PieChart();
 
         final Serie<PieData> serie = new Serie<PieData>();
         pie.addSerie(serie);
