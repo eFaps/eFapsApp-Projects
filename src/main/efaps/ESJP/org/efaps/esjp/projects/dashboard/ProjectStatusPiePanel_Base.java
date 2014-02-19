@@ -59,6 +59,7 @@ public abstract class ProjectStatusPiePanel_Base
     {
         final Map<Status, Integer> values = new HashMap<Status, Integer>();
         final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectService);
+        add2QueryBldr(queryBldr);
         final MultiPrintQuery multi = queryBldr.getPrint();
         multi.addAttribute(CIProjects.ProjectService.Status);
         multi.execute();
@@ -90,6 +91,16 @@ public abstract class ProjectStatusPiePanel_Base
         }
         pie.setOrientation(Orientation.HORIZONTAL_LEGEND_CHART);
         return pie.getHtmlSnipplet();
+    }
+
+    /**
+     * @param _queryBldr
+     */
+    protected void add2QueryBldr(final QueryBuilder _queryBldr)
+        throws EFapsException
+    {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
