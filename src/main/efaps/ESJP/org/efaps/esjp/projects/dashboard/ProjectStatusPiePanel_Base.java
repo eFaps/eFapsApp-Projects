@@ -75,6 +75,7 @@ public abstract class ProjectStatusPiePanel_Base
         final PieChart pie = new PieChart();
 
         final Serie<PieData> serie = new Serie<PieData>();
+        pie.setTitle(getTitle());
         pie.addSerie(serie);
 
         for (final Entry<Status, Integer> entry : values.entrySet()) {
@@ -91,6 +92,15 @@ public abstract class ProjectStatusPiePanel_Base
         }
         pie.setOrientation(Orientation.HORIZONTAL_LEGEND_CHART);
         return pie.getHtmlSnipplet();
+    }
+
+    /**
+     * @return
+     */
+    protected String getTitle()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
