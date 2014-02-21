@@ -82,7 +82,7 @@ public abstract class ProjectStatusPiePanel_Base
             final PieData data = new PieData();
             serie.addData(data);
             final Integer y = entry.getValue();
-            data.setValue(y);
+            data.setYValue(y);
             data.setText(entry.getKey().getLabel());
             data.setLegend(entry.getKey().getLabel() + ": " + y);
             final BigDecimal percent = new BigDecimal(y).setScale(8)
