@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.efaps.admin.datamodel.Status;
+import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.MultiPrintQuery;
@@ -94,14 +95,12 @@ public abstract class ProjectStatusPiePanel_Base
         return pie.getHtmlSnipplet();
     }
 
-    /**
-     * @return
-     */
+
     protected String getTitle()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return DBProperties.getProperty(ProjectStatusPiePanel.class.getName() + ".Title");
     }
+
 
     /**
      * @param _queryBldr

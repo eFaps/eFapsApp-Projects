@@ -21,7 +21,6 @@
 
 package org.efaps.esjp.projects.dashboard;
 
-import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
@@ -44,10 +43,4 @@ public class ProjectStatusPiePanel
      *
      */
     private static final long serialVersionUID = 1L;
-
-    @Override
-    protected String getTitle()
-    {
-        return DBProperties.getProperty(ProjectStatusPiePanel.class.getName() + ".Title");
-    }
 }
