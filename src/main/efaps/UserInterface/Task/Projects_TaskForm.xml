@@ -115,10 +115,10 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
             <trigger program="org.efaps.esjp.common.uiform.Field"
-                method="getDimensionUoMFieldValue"
+                method="getUoMDropDownFieldValue"
                 name="Projects_TaskForm.uoM.UI_FIELD_VALUE"
                 event="UI_FIELD_VALUE" >
-                <property name="DimensionUUIDs">bf9c3466-4b56-42e1-80d5-2ed02715ae61</property>
+                <property name="Dimension">bf9c3466-4b56-42e1-80d5-2ed02715ae61</property>
             </trigger>
         </field>
         <field name="weight">
