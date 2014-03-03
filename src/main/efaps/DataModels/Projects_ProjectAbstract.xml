@@ -102,6 +102,18 @@
           </trigger>
         </attribute>
         <attribute>
+            <name>CurrencyLink</name>
+            <type>LinkWithRanges</type>
+            <typelink>ERP_Currency</typelink>
+            <sqltable>Projects_ProjectSQLTable</sqltable>
+            <sqlcolumn>CURRENCYID</sqlcolumn>
+             <trigger program="org.efaps.esjp.admin.datamodel.RangesValue"
+                name="Projects_ProjectAbstract.CurrencyLink.RANGE_VALUE" event="RANGE_VALUE">
+                <property name="Type">ERP_Currency</property>
+                <property name="Value">$&lt;attribute[Name]&gt; - $&lt;attribute[Symbol]&gt;</property>
+            </trigger>
+        </attribute>
+        <attribute>
             <name>Note</name>
             <type>String</type>
             <sqltable>Projects_ProjectSQLTable</sqltable>
