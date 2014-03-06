@@ -27,6 +27,9 @@ import java.util.Map.Entry;
 
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.dbproperty.DBProperties;
+import org.efaps.admin.event.Parameter;
+import org.efaps.admin.event.Return;
+import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.MultiPrintQuery;
@@ -96,11 +99,18 @@ public abstract class ProjectStatusPiePanel_Base
     }
 
 
-    protected String getTitle()
+    protected String getTitle() throws EFapsException
     {
         return DBProperties.getProperty(ProjectStatusPiePanel.class.getName() + ".Title");
     }
 
+    public Return getHtmlSnipplet(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        ret.put(ReturnValues.SNIPLETT, getHtmlSnipplet());
+        return ret;
+    }
 
     /**
      * @param _queryBldr
