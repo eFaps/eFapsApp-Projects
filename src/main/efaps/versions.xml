@@ -101,11 +101,18 @@
             <!-- connect the Projects_Contacts_ContactTree_Projects command to the tree menu from contacts -->
             update.add2Menu("b50f8c15-2b1e-4c15-b493-4eb1e669d1db", "e1944ac8-4007-476c-a5c8-2bfbdb2b79f9", -1);
 
-            <!-- connect the Projects_AttributeDefinitionMyDesk_Menu_Action to ERP_AttributeDefinitionMyDesk_Menu -->
-            update.add2Menu("d7429449-d7bf-4ccc-ba50-662a15dfa1e9", "69e0b34a-2483-4662-9a45-1ce5d4e420e6", -1);
-
             <!-- Project_Projects, Admin_Help_MainMenu -->
             update.add2Help("046b2b19-0008-4965-a8ca-d7d15587e9da", "dead549e-5cc6-49f9-9a79-8e33aa139f6d", -1);
+
+
+            <!-- Define attribute definition -->
+            <!-- connect the Projects_AttributeDefinitionMyDesk_Menu_Action to ERP_AttributeDefinitionMyDesk_Menu -->
+            update.add2Menu("d7429449-d7bf-4ccc-ba50-662a15dfa1e9", "69e0b34a-2483-4662-9a45-1ce5d4e420e6", -1);
+            
+            <!-- add to Projects_Admin role -->
+            RoleUpdate rolUp = new RoleUpdate("26b34a33-002f-4b32-9829-47d5e8d3f761");
+            <!-- ERP_AttributeDefinitionMyDesk -->
+            rolUp.addUI("1c506850-7e64-439f-ad65-9c82dc762db8");
         </script>
     </version>
 </install>
