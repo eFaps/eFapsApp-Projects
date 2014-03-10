@@ -79,6 +79,7 @@
             import org.efaps.db.QueryBuilder;
             import org.efaps.db.InstanceQuery;
             import org.efaps.esjp.admin.ui.UIUpdate;
+            import org.efaps.esjp.admin.user.RoleUpdate;
 
             EFAPS_LOGGER.info("Importing Data for eFapsApp-Projects");
 
@@ -108,7 +109,7 @@
             <!-- Define attribute definition -->
             <!-- connect the Projects_AttributeDefinitionMyDesk_Menu_Action to ERP_AttributeDefinitionMyDesk_Menu -->
             update.add2Menu("d7429449-d7bf-4ccc-ba50-662a15dfa1e9", "69e0b34a-2483-4662-9a45-1ce5d4e420e6", -1);
-            
+
             <!-- add to Projects_Admin role -->
             RoleUpdate rolUp = new RoleUpdate("26b34a33-002f-4b32-9829-47d5e8d3f761");
             <!-- ERP_AttributeDefinitionMyDesk -->
