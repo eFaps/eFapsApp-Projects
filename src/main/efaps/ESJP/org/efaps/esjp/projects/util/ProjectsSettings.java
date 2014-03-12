@@ -34,4 +34,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 @EFapsRevision("$Rev$")
 public interface ProjectsSettings
 {
+    /**
+     * Properties.<br/>
+     * Can be concatenated.<br/>
+     * Set a Price List for a Type used to Calculator. Used for Sales Documents.
+     */
+    String NAMING = "org.efaps.projects.Naming";
 }

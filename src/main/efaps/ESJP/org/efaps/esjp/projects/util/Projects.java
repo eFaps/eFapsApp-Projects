@@ -52,7 +52,6 @@ public final class Projects
         throws CacheReloadException
     {
         // Project-Configuration
-        return SystemConfiguration.get(UUID
-                        .fromString("510dc4fe-86a1-4317-b79d-149cdcf2c748"));
+        return SystemConfiguration.get(UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a"));
     }
 }
