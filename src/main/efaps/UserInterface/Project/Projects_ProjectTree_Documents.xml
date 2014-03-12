@@ -36,8 +36,8 @@
             <menu>Projects_ProjectTree_Documents_Menu</menu>
             <table>Projects_Project2DocumentTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_Project2DocumentAbstract</property>
-                <property name="LinkFroms">FromAbstract</property>
+                <property name="Type">Projects_Project2DocumentAbstract</property>
+                <property name="LinkFrom">FromAbstract</property>
             </evaluate>
             <help>org.efaps.wiki.projects.Showprojects.wiki</help>
         </target>
