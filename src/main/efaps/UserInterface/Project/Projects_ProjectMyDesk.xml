@@ -41,7 +41,7 @@
             <menu>Projects_ProjectMyDesk_Menu</menu>
             <table>Projects_ProjectTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ProjectAbstract</property>
+                <property name="Type">Projects_ProjectAbstract</property>
                 <property name="ExpandChildTypes">true</property>
             </evaluate>
             <help>org.efaps.wiki.projects.Project.wiki</help>
