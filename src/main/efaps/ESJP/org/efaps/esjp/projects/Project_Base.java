@@ -240,6 +240,41 @@ public abstract class Project_Base
         return contacts.updateFields4Contact(_parameter);
     }
 
+
+    public Return updateField4Project(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        final Map<String, String> map = new HashMap<String, String>();
+        final Instance instance = Instance.get(_parameter.getParameterValue("project"));
+        final String contactField = getProperty(_parameter, "ContactField");
+        final String contactData = getProperty(_parameter, "ContactData");
+        if (contactField != null || contactData != null) {
+            final PrintQuery print = new PrintQuery(instance);
+            final SelectBuilder contInst = SelectBuilder.get().linkto(CIProjects.ProjectAbstract.Contact).instance();
+            final SelectBuilder contName = SelectBuilder.get().linkto(CIProjects.ProjectAbstract.Contact)
+                            .attribute(CIContacts.Contact.Name);
+            print.addSelect(contInst, contName);
+            print.executeWithoutAccessCheck();
+
+            final Instance contactInst = print.<Instance>getSelect(contInst);
+            if (contactData != null) {
+                final Contacts contacts = new Contacts();
+                final String data = contacts.getFieldValue4Contact(contactInst);
+                map.put(contactData, data);
+            }
+            if (contactField != null) {
+                map.put(contactField + "AutoComplete", print.<String>getSelect(contName));
+                map.put(contactField, contactInst.getOid());
+            }
+        }
+        list.add(map);
+        ret.put(ReturnValues.VALUES, list);
+        return ret;
+    }
+
+
     /**
      * Method to get the value for the field directly under the Contact.
      *
