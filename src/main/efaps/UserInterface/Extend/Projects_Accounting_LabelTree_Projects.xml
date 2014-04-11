@@ -34,8 +34,8 @@
         <name>Projects_Accounting_LabelTree_Projects</name>
         <access>
             <role>Accounting_Admin</role>
-            <role>Accounting_Modifier</role>
-            <role>Accounting_Reader</role>
+            <role>Accounting_Accountant</role>
+            <role>Accounting_Manager</role>
         </access>
         <target>
             <table>Projects_Accounting_Label2ProjectTable</table>
