@@ -245,8 +245,8 @@ public abstract class Project_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        final Map<String, String> map = new HashMap<String, String>();
+        final List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        final Map<String, Object> map = new HashMap<String, Object>();
         final Instance instance = Instance.get(_parameter.getParameterValue("project"));
         final String contactField = getProperty(_parameter, "ContactField");
         final String contactData = getProperty(_parameter, "ContactData");
@@ -266,7 +266,7 @@ public abstract class Project_Base
             }
             if (contactField != null) {
                 map.put(contactField + "AutoComplete", print.<String>getSelect(contName));
-                map.put(contactField, contactInst.getOid());
+                map.put(contactField, new String[] {contactInst.getOid(), print.<String>getSelect(contName)});
             }
         }
         list.add(map);
@@ -312,9 +312,9 @@ public abstract class Project_Base
             final String contactData = getFieldValue4Contact(Instance.get(contactOID));
 
             js.append("Wicket.Event.add(window, \"domready\", function(event) {")
-                .append(getSetFieldValue(0, "contact", contactOID, true))
-                .append(getSetFieldValue(0, "contactAutoComplete", contactName, true))
-                .append(getSetFieldValue(0, "contactData", contactData, true))
+                .append(getSetFieldValue(0, "contact", contactOID, contactName))
+                .append(getSetFieldValue(0, "contactAutoComplete", contactName))
+                .append(getSetFieldValue(0, "contactData", contactData))
                 .append(" });");
         }
         js.append("</script>");
