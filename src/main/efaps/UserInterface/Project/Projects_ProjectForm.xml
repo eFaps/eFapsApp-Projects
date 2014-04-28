@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
-  Copyright 2003 - 2009 The eFaps Team
+  Copyright 2003 - 2014 The eFaps Team
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -41,7 +40,6 @@
             <property name="Columns">12</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">EDITABLE</property>
-            <property name="ModeSearch">EDITABLE</property>
             <property name="Attribute">Date</property>
             <property name="Required">true</property>
         </field>
@@ -49,7 +47,6 @@
             <property name="Columns">12</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">EDITABLE</property>
-            <property name="ModeSearch">EDITABLE</property>
             <property name="Attribute">DueDate</property>
             <property name="Required">true</property>
         </field>
@@ -57,7 +54,6 @@
             <property name="Columns">40</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">EDITABLE</property>
-            <property name="ModeSearch">EDITABLE</property>
             <property name="Attribute">Lead</property>
             <property name="Required">true</property>
         </field>
@@ -66,6 +62,7 @@
             <property name="Columns">15</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
+            <property name="ModeSearch">EDITABLE</property>
             <property name="Required">true</property>
         </field>
         <field name="projectType">
@@ -78,6 +75,7 @@
             <property name="Columns">60</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
+            <property name="ModeSearch">EDITABLE</property>
         </field>
         <field name="contact">
             <property name="SelectAlternateOID">linkto[Contact].oid</property>
@@ -114,12 +112,10 @@
             <property name="SelectAlternateOID">linkto[Creator].oid</property>
             <property name="Attribute">Creator</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="ModeSearch">EDITABLE</property>
             <property name="ShowTypeIcon">true</property>
         </field>
         <field name="created">
             <property name="Attribute">Created</property>
-            <property name="ModeSearch">EDITABLE</property>
         </field>
         <field name="modifyGroup" character="Group">
             <property name="GroupCount">2</property>
@@ -128,12 +124,10 @@
             <property name="SelectAlternateOID">linkto[Modifier].oid</property>
             <property name="Attribute">Modifier</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="ModeSearch">EDITABLE</property>
             <property name="ShowTypeIcon">true</property>
         </field>
         <field name="modified">
             <property name="Attribute">Modified</property>
-            <property name="ModeSearch">EDITABLE</property>
         </field>
         <field name="status">
             <property name="Attribute">Status</property>

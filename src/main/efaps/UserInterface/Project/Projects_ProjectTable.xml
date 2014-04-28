@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
- Copyright 2003 - 2009 The eFaps Team
+ Copyright 2003 - 2014 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -41,10 +40,12 @@
         <field name="name">
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="Attribute">Name</property>
+            <property name="ModeSearch">EDITABLE</property>
             <property name="Label">Projects_ProjectAbstract/Name.Label</property>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
+            <property name="ModeSearch">EDITABLE</property>
             <property name="Label">Projects_ProjectAbstract/Description.Label</property>
         </field>
         <field name="contact">
@@ -64,6 +65,7 @@
         <field name="status">
             <property name="Attribute">StatusAbstract</property>
             <property name="Label">Projects_ProjectAbstract/StatusAbstract.Label</property>
+            <property name="ModeSearch">EDITABLE</property>
         </field>
         <field name="buttonOpenInNewWindow">
             <icon>eFapsActionNewWindow</icon>

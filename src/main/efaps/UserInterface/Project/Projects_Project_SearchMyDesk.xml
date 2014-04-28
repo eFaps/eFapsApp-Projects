@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
-<!--
-
- Copyright 2003 - 2009 The eFaps Team
+ Copyright 2003 - 2014 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,25 +19,28 @@
  Last Changed:    $Date$
  Last Changed By: $Author$
 
--->
+--><ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
 
-<ui-menu xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>5f89913f-b4c4-4263-b9f0-738d3ec10aea</uuid>
+    <uuid>3f05a388-5675-4df3-b384-02352f756a17</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev$</file-revision>
+
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_MyDesk</name>
-        <childs>
-            <child>Projects_Project_SearchMyDesk</child>
-            <child>Projects_ProjectMyDesk</child>
-            <child>Projects_ServiceRequestMyDesk</child>
-            <child>Projects_WorkOrderMyDesk</child>
-            <child>Projects_WorkReportMyDesk</child>
-            <child>Projects_TaskMyDesk</child>
-            <child>Projects_PayRequestMyDesk</child>
-        </childs>
+        <name>Projects_Project_SearchMyDesk</name>
+        <access>
+            <role>Projects_Admin</role>
+            <role>Projects_Modifier</role>
+            <role>Projects_Reader</role>
+        </access>
+
+        <!-- target definitions -->
+        <target>
+            <search>Projects_Project_Search</search>
+            <evaluate program="org.efaps.esjp.common.uitable.MultiPrint"/>
+        </target>
+        <!-- properties -->
+        <property name="Target">popup</property>
     </definition>
-</ui-menu>
+
+</ui-command>
