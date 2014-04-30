@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.UUID;
 
@@ -196,20 +195,11 @@ public abstract class Project_Base
             queryBldr.addWhereAttrInQuery(CIProjects.ProjectAbstract.ID, filterAttrQuery);
             queryBldr.addOrderByAttributeAsc(CIProjects.ProjectAbstract.Name);
             InterfaceUtils.addMaxResult2QueryBuilder4AutoComplete(_parameter, queryBldr);
-            if (containsProperty(_parameter, "StatusGroup")) {
-                final Map<Integer, String> statusGroup = analyseProperty(_parameter, "StatusGroup");
-                final Map<Integer, String> statusMap = analyseProperty(_parameter, "Status");
-                final List<Status> statusList = new ArrayList<Status>();
-                for (final Entry<Integer, String> entry : statusGroup.entrySet()) {
-                    final Status status = Status.find(entry.getValue(), statusMap.get(entry.getKey()));
-                    if (status != null) {
-                        statusList.add(status);
-                    }
-                }
-                if (!statusList.isEmpty()) {
-                    queryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.StatusAbstract, statusList.toArray());
-                }
+            final List<Status> statusList = getStatusListFromProperties(_parameter);
+            if (!statusList.isEmpty()) {
+                queryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.StatusAbstract, statusList.toArray());
             }
+
             final MultiPrintQuery print = queryBldr.getPrint();
             print.addAttribute(CIProjects.ProjectAbstract.OID, CIProjects.ProjectAbstract.Name,
                             CIProjects.ProjectAbstract.Description);
