@@ -21,10 +21,10 @@
 package org.efaps.esjp.projects;
 
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.UUID;
 
@@ -56,6 +56,7 @@ import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.common.uiform.Create;
+import org.efaps.esjp.common.util.InterfaceUtils;
 import org.efaps.esjp.contacts.Contacts;
 import org.efaps.esjp.erp.CommonDocument;
 import org.efaps.ui.wicket.util.EFapsKey;
@@ -175,25 +176,46 @@ public abstract class Project_Base
         throws EFapsException
     {
         final String input = (String) _parameter.get(ParameterValues.OTHERS);
-        final Map<?, ?> props =  (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
+
         final Map<String, Map<String, String>> sortMap = new TreeMap<String, Map<String, String>>();
         if (input.length() > 0) {
-            final String formatStr = props.containsKey("FormatStr") ? (String) props.get("FormatStr") : "%s - %s - %s";
+            final String choiceFormat = containsProperty(_parameter, "ChoiceFormat")
+                            ? getProperty(_parameter, "ChoiceFormat") : "%s - %s - %s";
+            final String valueFormat = containsProperty(_parameter, "ValueFormat")
+                            ? getProperty(_parameter, "ValueFormat") : "%s - %s";
+
+            final QueryBuilder filterAttrQueryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
+            filterAttrQueryBldr.setOr(true);
+            filterAttrQueryBldr.addWhereAttrMatchValue(CIProjects.ProjectAbstract.Name, input + "*")
+                            .setIgnoreCase(true);
+            filterAttrQueryBldr.addWhereAttrMatchValue(CIProjects.ProjectAbstract.Description, input + "*")
+                            .setIgnoreCase(true);
+            final AttributeQuery filterAttrQuery = filterAttrQueryBldr.getAttributeQuery(CIProjects.ProjectAbstract.ID);
+
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
-            queryBldr.addWhereAttrMatchValue(CIProjects.ProjectAbstract.Name, input + "*").setIgnoreCase(true);
-            if (props.containsKey("StatusGroup")) {
-                final Status status = Status.find((String) props.get("StatusGroup"), (String) props.get("Status"));
-                if (status != null) {
-                    queryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.StatusAbstract, status.getId());
+            queryBldr.addWhereAttrInQuery(CIProjects.ProjectAbstract.ID, filterAttrQuery);
+            queryBldr.addOrderByAttributeAsc(CIProjects.ProjectAbstract.Name);
+            InterfaceUtils.addMaxResult2QueryBuilder4AutoComplete(_parameter, queryBldr);
+            if (containsProperty(_parameter, "StatusGroup")) {
+                final Map<Integer, String> statusGroup = analyseProperty(_parameter, "StatusGroup");
+                final Map<Integer, String> statusMap = analyseProperty(_parameter, "Status");
+                final List<Status> statusList = new ArrayList<Status>();
+                for (final Entry<Integer, String> entry : statusGroup.entrySet()) {
+                    final Status status = Status.find(entry.getValue(), statusMap.get(entry.getKey()));
+                    if (status != null) {
+                        statusList.add(status);
+                    }
+                }
+                if (!statusList.isEmpty()) {
+                    queryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.StatusAbstract, statusList.toArray());
                 }
             }
             final MultiPrintQuery print = queryBldr.getPrint();
             print.addAttribute(CIProjects.ProjectAbstract.OID, CIProjects.ProjectAbstract.Name,
                             CIProjects.ProjectAbstract.Description);
             final SelectBuilder selContactName = SelectBuilder.get()
-                                        .linkto(CIProjects.ProjectAbstract.Contact)
-                                            .attribute(CIContacts.Contact.Name);
-                                                print.addSelect(selContactName);
+                            .linkto(CIProjects.ProjectAbstract.Contact)
+                            .attribute(CIContacts.Contact.Name);
             print.addSelect(selContactName);
             print.execute();
             while (print.next()) {
@@ -201,13 +223,15 @@ public abstract class Project_Base
                 final String oid = print.<String>getAttribute(CIProjects.ProjectAbstract.OID);
                 final String description = print.<String>getAttribute(CIProjects.ProjectAbstract.Description);
                 final String contactName = print.<String>getSelect(selContactName);
-                final Formatter formatter = new Formatter(Context.getThreadContext().getLocale());
-                formatter.format(formatStr, name, description, contactName);
-                final String choice = formatter.toString();
-                formatter.close();
+
+                final String choice = String.format(Context.getThreadContext().getLocale(), choiceFormat, name,
+                                description, contactName);
+                final String value = String.format(Context.getThreadContext().getLocale(), valueFormat, name,
+                                description, contactName);
+
                 final Map<String, String> map = new HashMap<String, String>();
                 map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), oid);
-                map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
+                map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), value);
                 map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), choice);
                 sortMap.put(choice, map);
             }
