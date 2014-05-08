@@ -49,7 +49,7 @@ import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
-import org.efaps.esjp.accounting.transaction.Transaction_Base;
+import org.efaps.esjp.accounting.Periode;
 import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
@@ -571,9 +571,7 @@ public abstract class Project_Base
     public Return createLabel4Project(final Parameter _parameter)
         throws EFapsException
     {
-        final Instance periodeInstance = (Instance) Context.getThreadContext().getSessionAttribute(
-                        Transaction_Base.PERIODE_SESSIONKEY);
-
+        final Instance periodeInstance = new Periode().evaluateCurrentPeriod(_parameter);
         final Insert insert = new Insert(CIAccounting.LabelProject);
         insert.add(CIAccounting.LabelProject.Name.name, _parameter.getParameterValue("projectAutoComplete"));
         insert.add(CIAccounting.LabelProject.Description, _parameter.getParameterValue("description"));
