@@ -75,6 +75,16 @@ public abstract class OnCreateFromDocument_Base
                                     .linkfrom(CIProjects.ProjectService2DeliveryNote,
                                                     CIProjects.ProjectService2DeliveryNote.ToLink)
                                     .linkto(CIProjects.ProjectService2DeliveryNote.FromLink);
+                } else if (instance.getType().isKindOf(CISales.QuoteRequest.getType())) {
+                    projBaseSel = SelectBuilder.get()
+                                    .linkfrom(CIProjects.ProjectService2QuoteRequest,
+                                                    CIProjects.ProjectService2QuoteRequest.ToLink)
+                                    .linkto(CIProjects.ProjectService2QuoteRequest.FromLink);
+                } else if (instance.getType().isKindOf(CISales.ProductRequest.getType())) {
+                    projBaseSel = SelectBuilder.get()
+                                    .linkfrom(CIProjects.ProjectService2ProductRequest,
+                                                    CIProjects.ProjectService2ProductRequest.ToLink)
+                                    .linkto(CIProjects.ProjectService2ProductRequest.FromLink);
                 }
 
                 if (projBaseSel != null) {
