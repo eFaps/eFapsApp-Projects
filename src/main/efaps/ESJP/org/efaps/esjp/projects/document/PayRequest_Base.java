@@ -21,9 +21,6 @@
 package org.efaps.esjp.projects.document;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,14 +32,15 @@ import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
-import org.efaps.db.Context;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
+import org.efaps.db.SelectBuilder;
+import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
-import org.efaps.util.DateTimeUtil;
+import org.efaps.esjp.erp.NumberFormatter;
 import org.efaps.util.EFapsException;
-import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 
 /**
  * TODO comment!
@@ -73,13 +71,13 @@ public abstract class PayRequest_Base
         throws EFapsException
     {
         final String date = _parameter.getParameterValue("date");
-        final Long contactid = Instance.get(_parameter.getParameterValue("contact")).getId();
+        final Instance contact = Instance.get(_parameter.getParameterValue("contact"));
         final BigDecimal netTotal = analizeTable(_parameter);
 
         final Insert insert = new Insert(CIProjects.PayRequest);
-        insert.add(CIProjects.PayRequest.Contact, contactid);
+        insert.add(CIProjects.PayRequest.Contact, contact.getId());
         insert.add(CIProjects.PayRequest.Date, date == null
-                                        ? DateTimeUtil.normalize(new DateMidnight().toDateTime()) : date);
+                                        ? new DateTime().withTime(0, 0, 0, 0) : date);
         insert.add(CIProjects.PayRequest.Salesperson, _parameter.getParameterValue("salesperson"));
         insert.add(CIProjects.PayRequest.Name, _parameter.getParameterValue("name"));
         insert.add(CIProjects.PayRequest.Status, ((Long) Status.find(CIProjects.PayRequestStatus.uuid, "Open")
@@ -131,23 +129,28 @@ public abstract class PayRequest_Base
         final Instance inst = _parameter.getCallInstance();
 
         final StringBuilder js = new StringBuilder();
-        js.append("<script type=\"text/javascript\">");
+        js.append("<script type=\"text/javascript\">\n")
+            .append("require([\"dojo/ready\"],")
+            .append(" function(ready){\n")
+            .append(" ready(1500, function(){");
         if (inst != null && inst.getType().getUUID().equals(CIProjects.ProjectService.uuid)) {
-            final PrintQuery print = new PrintQuery(inst);
-            print.addSelect("linkto[Contact].oid", "linkto[Contact].attribute[Name]");
-            print.execute();
-            final String contactOID = print.<String>getSelect("linkto[Contact].oid");
-            final String contactName = print.<String>getSelect("linkto[Contact].attribute[Name]");
-            final String contactData = getFieldValue4Contact(Instance.get(contactOID));
+            final SelectBuilder selContact = new SelectBuilder().linkto(CIProjects.ProjectService.Contact);
+            final SelectBuilder selContactInst = new SelectBuilder(selContact).instance();
+            final SelectBuilder selContactName = new SelectBuilder(selContact).attribute(CIContacts.Contact.Name);
 
-            js.append("Wicket.Event.add(window, \"domready\", function(event) {")
-                .append(" document.getElementsByName('contact')[0].value='").append(contactOID).append("';")
-                .append("document.getElementsByName('contactAutoComplete')[0].value='").append(contactName).append("';")
-                .append("document.getElementsByName('contactData')[0].appendChild(document.createTextNode('")
-                .append(contactData).append("'));")
-                .append(" });");
+            final PrintQuery print = new PrintQuery(inst);
+            print.addSelect(selContactInst, selContactName);
+            print.execute();
+
+            final Instance contact = print.<Instance>getSelect(selContactInst);
+            final String contactName = print.<String>getSelect(selContactName);
+            final String contactData = getFieldValue4Contact(contact);
+
+            js.append(getSetFieldValue(0, "contact", contact.getOid(), contactName)).append("\n")
+                .append(getSetFieldReadOnlyScript(_parameter, "contact")).append("\n")
+                .append(getSetFieldValue(0, "contactData", contactData)).append("\n");
         }
-        js.append("</script>");
+        js.append("});").append("});\n</script>\n");
         final Return retVal = new Return();
         retVal.put(ReturnValues.SNIPLETT, js.toString());
         return retVal;
@@ -167,7 +170,7 @@ public abstract class PayRequest_Base
         final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         final Map<String, String> map = new HashMap<String, String>();
 
-        map.put("netTotal", getTwoDigitsformater().format(total));
+        map.put("netTotal", NumberFormatter.get().getTwoDigitsFormatter().format(total));
         list.add(map);
         retVal.put(ReturnValues.VALUES, list);
 
@@ -188,22 +191,4 @@ public abstract class PayRequest_Base
         }
         return total;
     }
-
-    /**
-     * Method to get a formater.
-     *
-     * @return a formater
-     * @throws EFapsException on error
-     */
-    protected DecimalFormat getTwoDigitsformater()
-        throws EFapsException
-    {
-        final DecimalFormat formater = (DecimalFormat) NumberFormat.getInstance(Context.getThreadContext().getLocale());
-        formater.setMaximumFractionDigits(2);
-        formater.setMinimumFractionDigits(2);
-        formater.setRoundingMode(RoundingMode.HALF_UP);
-        formater.setParseBigDecimal(true);
-        return formater;
-    }
-
 }
