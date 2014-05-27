@@ -90,6 +90,11 @@ public abstract class OnCreateFromDocument_Base
                                     .linkfrom(CIProjects.ProjectService2PettyCash,
                                                     CIProjects.ProjectService2PettyCash.ToLink)
                                     .linkto(CIProjects.ProjectService2PettyCash.FromLink);
+                } else if (instance.getType().isKindOf(CISales.AccountFundsToBeSettled.getType())) {
+                    projBaseSel = SelectBuilder.get()
+                                    .linkfrom(CIProjects.ProjectService2FundsToBeSettled,
+                                                    CIProjects.ProjectService2FundsToBeSettled.ToLink)
+                                    .linkto(CIProjects.ProjectService2FundsToBeSettled.FromLink);
                 }
                 if (projBaseSel != null) {
                     final SelectBuilder projInstSel = new SelectBuilder(projBaseSel).instance();
