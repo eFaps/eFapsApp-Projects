@@ -58,6 +58,7 @@ import org.efaps.esjp.common.uiform.Create;
 import org.efaps.esjp.common.util.InterfaceUtils;
 import org.efaps.esjp.contacts.Contacts;
 import org.efaps.esjp.erp.CommonDocument;
+import org.efaps.esjp.projects.listener.OnCreateFromDocument;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
@@ -336,6 +337,45 @@ public abstract class Project_Base
         retVal.put(ReturnValues.SNIPLETT, js.toString());
         return retVal;
     }
+
+    /**
+     * Method returns a javacript to set the values for the contact.
+     *
+     * @param _parameter Parameter as passed from eFaps
+     * @return Return with javascript
+     * @throws EFapsException on error
+     */
+    public Return getJavaScript4ProjectUIValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Instance inst = _parameter.getInstance();
+        final StringBuilder js = new StringBuilder();
+        if (inst != null && inst.isValid()) {
+            final List<Instance> instances = new ArrayList<Instance>();
+            instances.add(inst);
+            final StringBuilder pJs = (new OnCreateFromDocument().add2JavaScript4Document(_parameter, instances));
+
+            final boolean readOnly = "true".equalsIgnoreCase(getProperty(_parameter, "ReadOnly"));
+
+            if (pJs.length() > 0) {
+                js.append("<script type=\"text/javascript\">\n")
+                    .append("require([\"dojo/ready\", \"dojo/query\",\"dojo/dom-construct\"],")
+                    .append(" function(ready, query, domConstruct){\n")
+                    .append(" ready(1500, function(){")
+                    .append(pJs);
+                if (readOnly) {
+                    final String fieldName = containsProperty(_parameter, "FieldName") ? getProperty(_parameter,
+                                    "FieldName") : "project";
+                    js.append(getSetFieldReadOnlyScript(_parameter, fieldName));
+                }
+                js.append("});").append("});\n</script>\n");
+            }
+        }
+        final Return retVal = new Return();
+        retVal.put(ReturnValues.SNIPLETT, js.toString());
+        return retVal;
+    }
+
 
     /**
      * Method to connect a document to a service. the type of the relation is

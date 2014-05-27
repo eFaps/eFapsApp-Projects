@@ -85,8 +85,12 @@ public abstract class OnCreateFromDocument_Base
                                     .linkfrom(CIProjects.ProjectService2ProductRequest,
                                                     CIProjects.ProjectService2ProductRequest.ToLink)
                                     .linkto(CIProjects.ProjectService2ProductRequest.FromLink);
+                } else if (instance.getType().isKindOf(CISales.AccountPettyCash.getType())) {
+                    projBaseSel = SelectBuilder.get()
+                                    .linkfrom(CIProjects.ProjectService2PettyCash,
+                                                    CIProjects.ProjectService2PettyCash.ToLink)
+                                    .linkto(CIProjects.ProjectService2PettyCash.FromLink);
                 }
-
                 if (projBaseSel != null) {
                     final SelectBuilder projInstSel = new SelectBuilder(projBaseSel).instance();
                     final SelectBuilder projNameSel = new SelectBuilder(projBaseSel)
@@ -98,7 +102,9 @@ public abstract class OnCreateFromDocument_Base
                     print.execute();
                     final Instance projInst = print.<Instance>getSelect(projInstSel);
                     if (projInst != null && projInst.isValid()) {
-                        ret.append(getSetFieldValue(0, "project", projInst.getOid(),
+                        final String fieldName = containsProperty(_parameter, "FieldName") ? getProperty(_parameter,
+                                        "FieldName") : "project";
+                        ret.append(getSetFieldValue(0, fieldName, projInst.getOid(),
                                         print.<String>getSelect(projNameSel) + " - "
                                                         + print.<String>getSelect(projDescSel)));
                     }
