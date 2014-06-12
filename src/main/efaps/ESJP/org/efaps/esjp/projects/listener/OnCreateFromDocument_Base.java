@@ -107,8 +107,9 @@ public abstract class OnCreateFromDocument_Base
                     print.execute();
                     final Instance projInst = print.<Instance>getSelect(projInstSel);
                     if (projInst != null && projInst.isValid()) {
-                        final String fieldName = containsProperty(_parameter, "FieldName") ? getProperty(_parameter,
-                                        "FieldName") : "project";
+                        final String fieldName = containsProperty(_parameter, "FieldName4Project")
+                                        ? getProperty(_parameter, "FieldName4Project")
+                                        : "project";
                         ret.append(getSetFieldValue(0, fieldName, projInst.getOid(),
                                         print.<String>getSelect(projNameSel) + " - "
                                                         + print.<String>getSelect(projDescSel)));
