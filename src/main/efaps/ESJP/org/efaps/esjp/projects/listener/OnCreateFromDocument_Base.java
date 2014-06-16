@@ -70,6 +70,11 @@ public abstract class OnCreateFromDocument_Base
                                     .linkfrom(CIProjects.ProjectService2OrderOutbound,
                                                     CIProjects.ProjectService2OrderOutbound.ToLink)
                                     .linkto(CIProjects.ProjectService2OrderOutbound.FromLink);
+                } else if (instance.getType().isKindOf(CISales.Invoice.getType())) {
+                    projBaseSel = SelectBuilder.get()
+                                        .linkfrom(CIProjects.ProjectService2Invoice,
+                                                        CIProjects.ProjectService2Invoice.ToLink)
+                                        .linkto(CIProjects.ProjectService2Invoice.FromLink);
                 } else if (instance.getType().isKindOf(CISales.DeliveryNote.getType())) {
                     projBaseSel = SelectBuilder.get()
                                     .linkfrom(CIProjects.ProjectService2DeliveryNote,
