@@ -256,6 +256,11 @@ public abstract class Project_Base
     }
 
 
+    /**
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return listmap for fieldupdate event
+     * @throws EFapsException on error
+     */
     public Return updateField4Project(final Parameter _parameter)
         throws EFapsException
     {
@@ -284,11 +289,41 @@ public abstract class Project_Base
                 map.put(contactField, new String[] {contactInst.getOid(), print.<String>getSelect(contName)});
             }
         }
+
+        final String projDataField = getProperty(_parameter, "Project_DataField", "projectData");
+        map.put(projDataField, getProjectData(_parameter, instance).toString());
         list.add(map);
         ret.put(ReturnValues.VALUES, list);
         return ret;
     }
 
+
+    /**
+     * @param _parameter Parameter as passed by the eFasp API
+     * @param _projInst instance of the project
+     * @return StringBuilder containing information abouty the project
+     * @throws EFapsException on error
+     */
+    public StringBuilder getProjectData(final Parameter _parameter,
+                                        final Instance _projInst)
+        throws EFapsException
+    {
+
+        final StringBuilder ret = new StringBuilder();
+        if (_projInst != null && _projInst.isValid()) {
+            final PrintQuery print = new PrintQuery(_projInst);
+            final SelectBuilder contName = SelectBuilder.get().linkto(CIProjects.ProjectAbstract.Contact)
+                            .attribute(CIContacts.Contact.Name);
+            print.addSelect(contName);
+            print.addAttribute(CIProjects.ProjectAbstract.Description, CIProjects.ProjectAbstract.Name);
+            print.executeWithoutAccessCheck();
+            ret.append(print.getAttribute(CIProjects.ProjectAbstract.Name))
+                .append(" - ").append(print.getAttribute(CIProjects.ProjectAbstract.Description))
+                .append(" - ")
+                .append(print.getSelect(contName));
+        }
+        return ret;
+    }
 
     /**
      * Method to get the value for the field directly under the Contact.

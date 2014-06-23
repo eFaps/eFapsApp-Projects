@@ -32,6 +32,7 @@ import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.erp.CommonDocument;
+import org.efaps.esjp.projects.Project;
 import org.efaps.esjp.sales.listener.IOnCreateFromDocument;
 import org.efaps.util.EFapsException;
 
@@ -117,12 +118,16 @@ public abstract class OnCreateFromDocument_Base
                     print.execute();
                     final Instance projInst = print.<Instance>getSelect(projInstSel);
                     if (projInst != null && projInst.isValid()) {
-                        final String fieldName = containsProperty(_parameter, "FieldName4Project")
-                                        ? getProperty(_parameter, "FieldName4Project")
-                                        : "project";
+
+                        final String projDataField = getProperty(_parameter, "Project_DataFieldName", "projectData");
+                        final String fieldName = getProperty(_parameter, "Project_FieldName", "project");
+
                         ret.append(getSetFieldValue(0, fieldName, projInst.getOid(),
                                         print.<String>getSelect(projNameSel) + " - "
                                                         + print.<String>getSelect(projDescSel)));
+                        ret.append(getSetFieldValue(0, projDataField,
+                                        new Project().getProjectData(_parameter, projInst).toString(), null, false));
+
                     }
                 }
             }
