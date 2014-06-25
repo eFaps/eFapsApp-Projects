@@ -124,9 +124,10 @@ public abstract class OnCreateFromDocument_Base
 
                         ret.append(getSetFieldValue(0, fieldName, projInst.getOid(),
                                         print.<String>getSelect(projNameSel) + " - "
-                                                        + print.<String>getSelect(projDescSel)));
-                        ret.append(getSetFieldValue(0, projDataField,
-                                        new Project().getProjectData(_parameter, projInst).toString(), null, false));
+                                                        + print.<String>getSelect(projDescSel)))
+                            .append("\n")
+                            .append(getSetFieldValue(0, projDataField,
+                                        new Project().getProjectData(_parameter, projInst).toString(), null, true));
 
                     }
                 }
