@@ -96,12 +96,12 @@ public abstract class OnCreateFromDocument_Base
                                     .linkfrom(CIProjects.ProjectService2ProductRequest,
                                                     CIProjects.ProjectService2ProductRequest.ToLink)
                                     .linkto(CIProjects.ProjectService2ProductRequest.FromLink);
-                }else if (instance.getType().isKindOf(CISales.ServiceRequest.getType())) {
+                } else if (instance.getType().isKindOf(CISales.ServiceRequest.getType())) {
                     projBaseSel = SelectBuilder.get()
                                     .linkfrom(CIProjects.ProjectService2ServiceRequest,
                                                     CIProjects.ProjectService2ServiceRequest.ToLink)
                                     .linkto(CIProjects.ProjectService2ServiceRequest.FromLink);
-                }else if (instance.getType().isKindOf(CISales.AccountPettyCash.getType())) {
+                } else if (instance.getType().isKindOf(CISales.AccountPettyCash.getType())) {
                     projBaseSel = SelectBuilder.get()
                                     .linkfrom(CIProjects.ProjectService2PettyCash,
                                                     CIProjects.ProjectService2PettyCash.ToLink)
@@ -111,6 +111,8 @@ public abstract class OnCreateFromDocument_Base
                                     .linkfrom(CIProjects.ProjectService2FundsToBeSettled,
                                                     CIProjects.ProjectService2FundsToBeSettled.ToLink)
                                     .linkto(CIProjects.ProjectService2FundsToBeSettled.FromLink);
+                } else {
+                    projBaseSel = getSelectBuilder(_parameter, _instances);
                 }
                 if (projBaseSel != null) {
                     final SelectBuilder projInstSel = new SelectBuilder(projBaseSel).instance();
@@ -139,6 +141,18 @@ public abstract class OnCreateFromDocument_Base
             }
         }
         return ret;
+    }
+
+    /**
+     * @param _parameter
+     * @return
+     */
+    protected SelectBuilder getSelectBuilder(final Parameter _parameter,
+                                             final List<Instance> _instances)
+        throws EFapsException
+    {
+        // to be used by implementations
+        return null;
     }
 
     @Override
