@@ -49,7 +49,7 @@ import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
-import org.efaps.esjp.accounting.Periode;
+import org.efaps.esjp.accounting.Period;
 import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
@@ -646,11 +646,11 @@ public abstract class Project_Base
     public Return createLabel4Project(final Parameter _parameter)
         throws EFapsException
     {
-        final Instance periodeInstance = new Periode().evaluateCurrentPeriod(_parameter);
+        final Instance periodeInstance = new Period().evaluateCurrentPeriod(_parameter);
         final Insert insert = new Insert(CIAccounting.LabelProject);
         insert.add(CIAccounting.LabelProject.Name.name, _parameter.getParameterValue("projectAutoComplete"));
         insert.add(CIAccounting.LabelProject.Description, _parameter.getParameterValue("description"));
-        insert.add(CIAccounting.LabelProject.PeriodeAbstractLink, periodeInstance.getId());
+        insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodeInstance.getId());
         insert.execute();
 
         final Instance projInstance = Instance.get(_parameter.getParameterValue("project"));
