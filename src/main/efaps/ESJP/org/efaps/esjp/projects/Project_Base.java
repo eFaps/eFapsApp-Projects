@@ -52,6 +52,7 @@ import org.efaps.db.Update;
 import org.efaps.esjp.accounting.Period;
 import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
+import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.common.uiform.Create;
@@ -388,7 +389,7 @@ public abstract class Project_Base
         if (inst != null && inst.isValid()) {
             final List<Instance> instances = new ArrayList<Instance>();
             instances.add(inst);
-            final StringBuilder pJs = (new OnCreateFromDocument().add2JavaScript4Document(_parameter, instances));
+            final StringBuilder pJs = new OnCreateFromDocument().add2JavaScript4Document(_parameter, instances);
 
             final boolean readOnly = "true".equalsIgnoreCase(getProperty(_parameter, "ReadOnly"));
 
@@ -647,13 +648,20 @@ public abstract class Project_Base
         throws EFapsException
     {
         final Instance periodeInstance = new Period().evaluateCurrentPeriod(_parameter);
+        final Instance projInstance = Instance.get(_parameter.getParameterValue(
+                        CIFormProjects.Projects_Accounting_Label4ProjectForm.project.name));
+
+        final PrintQuery print =new PrintQuery(projInstance);
+        print.addAttribute(CIProjects.ProjectAbstract.Name);
+        print.executeWithoutAccessCheck();
+
         final Insert insert = new Insert(CIAccounting.LabelProject);
-        insert.add(CIAccounting.LabelProject.Name.name, _parameter.getParameterValue("projectAutoComplete"));
-        insert.add(CIAccounting.LabelProject.Description, _parameter.getParameterValue("description"));
+        insert.add(CIAccounting.LabelProject.Name.name, print.getAttribute(CIProjects.ProjectAbstract.Name));
+        insert.add(CIAccounting.LabelProject.Description, _parameter.getParameterValue(
+                        CIFormProjects.Projects_Accounting_Label4ProjectForm.description.name));
         insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodeInstance.getId());
         insert.execute();
 
-        final Instance projInstance = Instance.get(_parameter.getParameterValue("project"));
         final Insert relInsert = new Insert(CIProjects.ProjectService2Label);
         relInsert.add(CIProjects.ProjectService2Label.FromLink, projInstance.getId());
         relInsert.add(CIProjects.ProjectService2Label.ToLink, insert.getInstance().getId());
