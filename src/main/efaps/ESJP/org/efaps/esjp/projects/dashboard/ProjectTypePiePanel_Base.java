@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.api.ui.IEsjpSnipplet;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
@@ -35,7 +36,6 @@ import org.efaps.esjp.ui.html.dojo.charting.Orientation;
 import org.efaps.esjp.ui.html.dojo.charting.PieChart;
 import org.efaps.esjp.ui.html.dojo.charting.PieData;
 import org.efaps.esjp.ui.html.dojo.charting.Serie;
-import org.efaps.ui.wicket.models.IEsjpSnipplet;
 import org.efaps.util.EFapsException;
 
 /**
