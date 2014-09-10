@@ -24,7 +24,7 @@
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev: 5314 $</file-revision>
     <definition>
-        <version-expression>(version==NONE)</version-expression>
+        <version-expression>(version==latest)</version-expression>
         <profiles>
             <profile name="eFaps"/>
         </profiles>
