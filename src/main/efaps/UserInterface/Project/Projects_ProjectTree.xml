@@ -50,6 +50,7 @@
             <child>Projects_ProjectTree_Tasks</child>
             <child>Projects_ProjectTree_CommunicationsMatrix</child>
             <child>Projects_ProjectTree_EventSchedule</child>
+            <child>Projects_ProjectTree_AnalysisProductReport</child>
         </childs>
         <!-- properties -->
         <property name="Target">content</property>
@@ -78,6 +79,7 @@
             <child>Projects_ProjectTree_Tasks</child>
             <child>Projects_ProjectTree_CommunicationsMatrix</child>
             <child>Projects_ProjectTree_EventSchedule</child>
+            <child>Projects_ProjectTree_AnalysisProductReport</child>
         </childs>
         <!-- properties -->
         <property name="Target">content</property>
