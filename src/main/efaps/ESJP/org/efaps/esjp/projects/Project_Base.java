@@ -49,10 +49,7 @@ import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
-import org.efaps.esjp.accounting.Period;
-import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
-import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.common.uiform.Create;
@@ -635,38 +632,6 @@ public abstract class Project_Base
         print.execute();
         return html.append(_child.getType().getLabel()
                             + " - " + print.<String>getAttribute(CISales.DocumentAbstract.Name));
-    }
-
-    /**
-     * Create a Label for accounting from a project.
-     *
-     * @param _parameter Parameter as passed from the eFaps API
-     * @return new empty Return
-     * @throws EFapsException on error
-     */
-    public Return createLabel4Project(final Parameter _parameter)
-        throws EFapsException
-    {
-        final Instance periodeInstance = new Period().evaluateCurrentPeriod(_parameter);
-        final Instance projInstance = Instance.get(_parameter.getParameterValue(
-                        CIFormProjects.Projects_Accounting_Label4ProjectForm.project.name));
-
-        final PrintQuery print =new PrintQuery(projInstance);
-        print.addAttribute(CIProjects.ProjectAbstract.Name);
-        print.executeWithoutAccessCheck();
-
-        final Insert insert = new Insert(CIAccounting.LabelProject);
-        insert.add(CIAccounting.LabelProject.Name.name, print.getAttribute(CIProjects.ProjectAbstract.Name));
-        insert.add(CIAccounting.LabelProject.Description, _parameter.getParameterValue(
-                        CIFormProjects.Projects_Accounting_Label4ProjectForm.description.name));
-        insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodeInstance.getId());
-        insert.execute();
-
-        final Insert relInsert = new Insert(CIProjects.ProjectService2Label);
-        relInsert.add(CIProjects.ProjectService2Label.FromLink, projInstance.getId());
-        relInsert.add(CIProjects.ProjectService2Label.ToLink, insert.getInstance().getId());
-        relInsert.execute();
-        return new Return();
     }
 
     @Override
