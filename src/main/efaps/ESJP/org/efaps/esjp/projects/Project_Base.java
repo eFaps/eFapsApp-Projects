@@ -49,6 +49,8 @@ import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
+import org.efaps.esjp.accounting.Period;
+import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
@@ -633,6 +635,52 @@ public abstract class Project_Base
         return html.append(_child.getType().getLabel()
                             + " - " + print.<String>getAttribute(CISales.DocumentAbstract.Name));
     }
+
+    /**
+     * Create a Label for accounting from a project.
+     *
+     * @param _parameter Parameter as passed from the eFaps API
+     * @return new empty Return
+     * @throws EFapsException on error
+     */
+    public Return createLabel4Project(final Parameter _parameter)
+        throws EFapsException
+    {
+        createLabel4Project(_parameter, _parameter.getInstance());
+        return new Return();
+    }
+
+
+    /**
+     * Create a Label for accounting from a project.
+     *
+     * @param _parameter Parameter as passed from the eFaps API
+     * @return new empty Return
+     * @throws EFapsException on error
+     */
+    public void createLabel4Project(final Parameter _parameter,
+                                    final Instance _projectInst)
+        throws EFapsException
+    {
+
+        final Instance periodeInstance = new Period().evaluateCurrentPeriod(_parameter);
+
+        final PrintQuery print = new PrintQuery(_projectInst);
+        print.addAttribute(CIProjects.ProjectAbstract.Name, CIProjects.ProjectAbstract.Description);
+        print.executeWithoutAccessCheck();
+
+        final Insert insert = new Insert(CIAccounting.LabelProject);
+        insert.add(CIAccounting.LabelProject.Name.name, print.getAttribute(CIProjects.ProjectAbstract.Name));
+        insert.add(CIAccounting.LabelProject.Description, print.getAttribute(CIProjects.ProjectAbstract.Description));
+        insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodeInstance.getId());
+        insert.execute();
+
+        final Insert relInsert = new Insert(CIProjects.ProjectService2Label);
+        relInsert.add(CIProjects.ProjectService2Label.FromLink, _projectInst);
+        relInsert.add(CIProjects.ProjectService2Label.ToLink, insert.getInstance().getId());
+        relInsert.execute();
+    }
+
 
     @Override
     public Return getSalesPersonFieldValue(final Parameter _parameter)
