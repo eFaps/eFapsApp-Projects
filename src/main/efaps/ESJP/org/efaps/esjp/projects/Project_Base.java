@@ -118,6 +118,27 @@ public abstract class Project_Base
                     relInsert.execute();
                 }
 
+                final Instance periodInst = new Period().evaluateCurrentPeriod(_parameter);
+
+                if (periodInst != null && periodInst.isValid()) {
+                    final PrintQuery print = new PrintQuery(_instance);
+                    print.addAttribute(CIProjects.ProjectAbstract.Name, CIProjects.ProjectAbstract.Description);
+                    print.execute();
+
+                    final Insert insert = new Insert(CIAccounting.LabelProject);
+                    insert.add(CIAccounting.LabelProject.Name, print.getAttribute(CIProjects.ProjectAbstract.Name));
+                    insert.add(CIAccounting.LabelProject.Description,
+                                    print.getAttribute(CIProjects.ProjectAbstract.Description));
+                    insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodInst);
+                    insert.add(CIAccounting.LabelProject.Status, Status.find(CIAccounting.LabelStatus.Active));
+                    insert.executeWithoutAccessCheck();
+
+                    final Insert relInsert = new Insert(CIProjects.ProjectService2Label);
+                    relInsert.add(CIProjects.ProjectService2Label.FromLink, _instance);
+                    relInsert.add(CIProjects.ProjectService2Label.ToLink, insert.getInstance());
+                    relInsert.executeWithoutAccessCheck();
+                }
+
                 connect2ProjectCreate(_parameter, _instance);
             }
         }.execute(_parameter);
