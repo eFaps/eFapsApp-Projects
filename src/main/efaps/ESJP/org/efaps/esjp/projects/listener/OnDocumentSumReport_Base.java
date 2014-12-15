@@ -38,7 +38,9 @@ import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIProjects;
+import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.erp.FilteredReport;
+import org.efaps.esjp.erp.FilteredReport_Base.InstanceFilterValue;
 import org.efaps.esjp.sales.listener.IOnDocumentSumReport;
 import org.efaps.esjp.sales.report.DocumentSumGroupedByDate_Base.ValueList;
 import org.efaps.util.EFapsException;
@@ -124,6 +126,26 @@ public abstract class OnDocumentSumReport_Base
             }
         }
     }
+
+    @Override
+    public void add2QueryBuilder(final Parameter _parameter,
+                                 final QueryBuilder _queryBldr)
+        throws EFapsException
+    {
+        final Map<String, Object> filter = new FilteredReport().getFilterMap(_parameter);
+
+        if (filter.containsKey("project")) {
+            final InstanceFilterValue filterValue = (InstanceFilterValue) filter.get("project");
+            if (filterValue != null && filterValue.getObject().isValid()) {
+                final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectService2DocumentAbstract);
+                queryBldr.addWhereAttrEqValue(CIProjects.ProjectService2DocumentAbstract.FromService,
+                                filterValue.getObject());
+                _queryBldr.addWhereAttrInQuery(CISales.DocumentSumAbstract.ID,
+                                queryBldr.getAttributeQuery(CIProjects.ProjectService2DocumentAbstract.ToDocument));
+            }
+        }
+    }
+
 
     @Override
     public int getWeight()
