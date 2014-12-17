@@ -47,5 +47,10 @@
             <value>false</value>
             <description>Show the fields to create the workorder by project ofr by client.</description>
         </attribute>
+        <attribute>
+            <key>org.efaps.projects.ResultReport</key>
+            <value><![CDATA[Expense01=Sales_OrderOutbound
+Expense02=Sales_ServiceOrderOutbound ]]></value>
+        </attribute>
     </definition>
 </common-systemconfiguration>

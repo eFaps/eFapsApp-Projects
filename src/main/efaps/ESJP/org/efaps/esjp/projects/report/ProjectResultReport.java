@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2013 The eFaps Team
+ * Copyright 2003 - 2014 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,37 +19,24 @@
  */
 
 
-package org.efaps.esjp.projects.util;
+package org.efaps.esjp.projects.report;
 
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
+
 /**
- * TODO comment!
+ * This class must be replaced for customization, therefore it is left empty.
+ * Functional description can be found in the related "<code>_base</code>"
+ * class.
  *
  * @author The eFaps Team
  * @version $Id$
  */
-@EFapsUUID("eac97366-119e-4797-ad33-6c7481a9efce")
+@EFapsUUID("93a6c630-4411-406c-b8a0-08b89397783e")
 @EFapsRevision("$Rev$")
-public interface ProjectsSettings
+public class ProjectResultReport
+    extends ProjectResultReport_Base
 {
-    /**
-     * Base String for settings in projects.
-     */
-    String BASE = "org.efaps.projects.";
 
-    /**
-     * Properties.<br/>
-     * Can be concatenated.<br/>
-     * Set a Price List for a Type used to Calculator. Used for Sales Documents.
-     */
-    String NAMING = ProjectsSettings.BASE + "Naming";
-
-    /**
-     * Properties.<br/>
-     * Can be concatenated.<br/>
-     * Configure the ResultReport.
-     */
-    String RESULTREPORT = ProjectsSettings.BASE + "ResultReport";
 }

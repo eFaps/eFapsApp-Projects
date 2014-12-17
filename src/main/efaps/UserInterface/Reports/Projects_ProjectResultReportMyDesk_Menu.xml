@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
-<!--
-
- Copyright 2003 - 2009 The eFaps Team
+ Copyright 2003 - 2014 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -22,26 +20,18 @@
  Last Changed By: $Author$
 
 -->
-
-<ui-menu xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>5f89913f-b4c4-4263-b9f0-738d3ec10aea</uuid>
+<ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>db3d6a3e-31ee-4ed2-83ee-0049a921f42f</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Projects_MyDesk</name>
-        <icon>Projects_MyDeskImg</icon>
+        <name>Projects_ProjectResultReportMyDesk_Menu</name>
         <childs>
-            <child>Projects_Project_SearchMyDesk</child>
-            <child>Projects_ProjectMyDesk</child>
-            <child>Projects_ServiceRequestMyDesk</child>
-            <child>Projects_WorkOrderMyDesk</child>
-            <child>Projects_WorkReportMyDesk</child>
-            <child>Projects_TaskMyDesk</child>
-            <child>Projects_PayRequestMyDesk</child>
-            <child>Projects_ProjectResultReportMyDesk</child>
+            <child>Projects_ProjectResultReportMyDesk_Menu_DownloadExcel</child>
+            <child>Projects_ProjectResultReportMyDesk_Menu_DownloadPDF</child>
+            <child>Projects_ProjectResultReportMyDesk_Menu_Filter</child>
         </childs>
     </definition>
 </ui-menu>
