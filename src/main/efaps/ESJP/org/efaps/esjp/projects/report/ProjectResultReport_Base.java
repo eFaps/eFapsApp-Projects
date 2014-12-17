@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
 import org.efaps.admin.common.MsgPhrase;
+import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -255,9 +256,15 @@ public abstract class ProjectResultReport_Base
                     final Type type = (Type) map.get("type");
                     for (final ProjectBean bean : getBeans(_parameter)) {
                         if (bean.getDocs().containsKey(type)) {
+                            final boolean negate = "true".equalsIgnoreCase(properties.getProperty(type.getName()
+                                            + ".negate"));
                             final DocBean doc = bean.getDocs().get(type);
-                            final BigDecimal cross = doc.getCross();
-                            final BigDecimal net = doc.getNet();
+                            BigDecimal cross = doc.getCross();
+                            BigDecimal net = doc.getNet();
+                            if (negate) {
+                                cross = cross.negate();
+                                net = net.negate();
+                            }
                             map.put(bean.getNetKey(), net);
                             map.put(bean.getCrossKey(), cross);
                             if (totalMap.containsKey(bean.getNetKey())) {
@@ -314,6 +321,13 @@ public abstract class ProjectResultReport_Base
                 _queryBldr.addWhereAttrInQuery(CISales.DocumentAbstract.ID,
                                 attrQueryBldr.getAttributeQuery(CIProjects.Project2DocumentAbstract.ToAbstract));
             }
+            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                            ProjectsSettings.RESULTREPORT, true);
+
+            final List<Status> statusList = getStatusListFromProperties(_parameter, properties);
+            if (!statusList.isEmpty()) {
+                _queryBldr.addWhereAttrEqValue(CISales.DocumentAbstract.StatusAbstract, statusList.toArray());
+            }
         }
 
         @Override
@@ -367,6 +381,7 @@ public abstract class ProjectResultReport_Base
                 final Map<Instance, ProjectBean> map = new HashMap<>();
                 final QueryBuilder queryBldr = new QueryBuilder(CISales.DocumentSumAbstract);
                 add2QueryBuilder(_parameter, queryBldr);
+
                 final MultiPrintQuery multi = queryBldr.getPrint();
                 final SelectBuilder selProject = SelectBuilder.get()
                                 .linkfrom(CIProjects.Project2DocumentAbstract.ToAbstract)
@@ -529,7 +544,9 @@ public abstract class ProjectResultReport_Base
          */
         public DocBean addCross(final BigDecimal _cross)
         {
-            this.cross = this.cross.add(_cross);
+            if (_cross != null) {
+                this.cross = this.cross.add(_cross);
+            }
             return this;
         }
 
@@ -550,7 +567,9 @@ public abstract class ProjectResultReport_Base
          */
         public DocBean addNet(final BigDecimal _net)
         {
-            this.net = this.net.add(_net);
+            if (_net != null) {
+                this.net = this.net.add(_net);
+            }
             return this;
         }
 
@@ -582,7 +601,9 @@ public abstract class ProjectResultReport_Base
          */
         public DocBean setCross(final BigDecimal _cross)
         {
-            this.cross = _cross;
+            if (_cross != null) {
+                this.cross = _cross;
+            }
             return this;
         }
 

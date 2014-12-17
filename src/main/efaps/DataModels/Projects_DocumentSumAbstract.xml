@@ -32,14 +32,8 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Projects_DocumentSumAbstract</name>
-        <parent>Projects_DocumentAbstract</parent>
+        <parent>Sales_DocumentSumAbstract</parent>
         <purpose abstract="true"/>
-        <attribute>
-            <name>NetTotal</name>
-            <type>Decimal</type>
-            <sqltable>Projects_DocumentSumSQLTable</sqltable>
-            <sqlcolumn>NETTOTAL</sqlcolumn>
-        </attribute>
         <trigger program="org.efaps.esjp.admin.access.SimpleAccessCheckOnType"
             name="Projects_DocumentSumAbstract.ACCESSCHECK" event="ACCESSCHECK" />
     </definition>
