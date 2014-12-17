@@ -261,19 +261,25 @@ public abstract class ProjectResultReport_Base
                             final DocBean doc = bean.getDocs().get(type);
                             BigDecimal cross = doc.getCross();
                             BigDecimal net = doc.getNet();
+                            BigDecimal tax = cross.subtract(net);
                             if (negate) {
                                 cross = cross.negate();
                                 net = net.negate();
+                                tax = tax.negate();
                             }
                             map.put(bean.getNetKey(), net);
                             map.put(bean.getCrossKey(), cross);
+                            map.put(bean.getTaxKey(), tax);
                             if (totalMap.containsKey(bean.getNetKey())) {
                                 totalMap.put(bean.getNetKey(), ((BigDecimal) totalMap.get(bean.getNetKey())).add(net));
                                 totalMap.put(bean.getCrossKey(),
                                                 ((BigDecimal) totalMap.get(bean.getCrossKey())).add(cross));
+                                totalMap.put(bean.getTaxKey(),
+                                                ((BigDecimal) totalMap.get(bean.getTaxKey())).add(tax));
                             } else {
                                 totalMap.put(bean.getNetKey(), net);
                                 totalMap.put(bean.getCrossKey(), cross);
+                                totalMap.put(bean.getTaxKey(), tax);
                             }
                         }
                     }
