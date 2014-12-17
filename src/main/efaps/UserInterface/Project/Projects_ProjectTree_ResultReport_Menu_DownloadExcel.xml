@@ -20,7 +20,8 @@
  Last Changed By: $Author$
 
 -->
-<ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+<ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>931e7f36-0092-484a-a2a9-475dbf349bd7</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev$</file-revision>
@@ -29,14 +30,8 @@
         <name>Projects_ProjectTree_ResultReport_Menu_DownloadExcel</name>
         <icon>Document_Excel</icon>
         <target>
-            <execute method="exportReport" program="org.efaps.esjp.projects.report.AnalysisProductReport">
+            <execute method="exportReport" program="org.efaps.esjp.projects.report.ProjectResultReport">
                 <property name="Mime">xls</property>
-                <property name="FilterKey">org.efaps.esjp.projects.report.AnalysisProductReport.FilterKey</property>
-                <property name="Type01">Sales_DeliveryNote</property>
-                <property name="Type02">Sales_RecievingTicket</property>
-                <property name="Type03">Sales_UsageReport</property>
-                <property name="Type100">Sales_ReturnSlip</property>
-                <property name="Type101">Sales_ReturnUsageReport</property>
             </execute>
         </target>
         <property name="Target">hidden</property>
