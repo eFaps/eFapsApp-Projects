@@ -185,7 +185,7 @@ public abstract class ProjectResultReport_Base
         {
             final Map<String, Object> map = new HashMap<>();
             map.put("descr", DBProperties.getProperty(ProjectResultReport.class.getName() + "." + _key + ".descr"));
-            map.put("style", Style.HEADER);
+            map.put("style", Style.HEADER.toString());
             _source.add(map);
         }
 
@@ -236,7 +236,7 @@ public abstract class ProjectResultReport_Base
             throws CacheReloadException, EFapsException
         {
             final Map<String, Object> totalMap = new HashMap<>();
-            totalMap.put("style", Style.TOTAL);
+            totalMap.put("style", Style.TOTAL.toString());
             final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
                             ProjectsSettings.RESULTREPORT, true);
             int i = 1;
@@ -350,7 +350,7 @@ public abstract class ProjectResultReport_Base
 
             final StyleBuilder headerStyle = DynamicReports.stl.style()
                             .conditionalStyles(headerCondition, totalCondition);
-            _builder.addField("style", Style.class);
+            _builder.addField("style", String.class);
 
             final List<ColumnGridComponentBuilder> groupBuilders = new ArrayList<>();
             final TextColumnBuilder<String> descrColumn = DynamicReports.col.column(DBProperties
@@ -634,8 +634,8 @@ public abstract class ProjectResultReport_Base
         @Override
         public Boolean evaluate(final ReportParameters reportParameters)
         {
-            final Style style = reportParameters.getValue("style");
-            return Style.HEADER.equals(style);
+            final String style = reportParameters.getValue("style");
+            return "HEADER".equals(style);
         }
     }
 
@@ -648,8 +648,8 @@ public abstract class ProjectResultReport_Base
         @Override
         public Boolean evaluate(final ReportParameters reportParameters)
         {
-            final Style style = reportParameters.getValue("style");
-            return Style.TOTAL.equals(style);
+            final String style = reportParameters.getValue("style");
+            return "TOTAL".equals(style);
         }
     }
 }
