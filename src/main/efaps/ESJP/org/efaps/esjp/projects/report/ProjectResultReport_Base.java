@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -82,9 +83,17 @@ public abstract class ProjectResultReport_Base
     extends FilteredReport
 {
 
+    /**
+     * Enum used for styling.
+     */
     public enum Style
     {
-        NONE, HEADER, TOTAL;
+        /**None. */
+        NONE,
+        /**HEADER. */
+        HEADER,
+        /**TOTAL. */
+        TOTAL;
     }
 
     /**
@@ -126,19 +135,37 @@ public abstract class ProjectResultReport_Base
         return ret;
     }
 
+    /**
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return a DynamicReport
+     * @throws EFapsException on error
+     */
     protected DynProjectResultReport getDynReport(final Parameter _parameter)
         throws EFapsException
     {
         return new DynProjectResultReport(this);
     }
 
+    /**
+     * Dynamic Report.
+     */
     public static class DynProjectResultReport
         extends AbstractDynamicReport
     {
 
+        /**
+         * Beans.
+         */
         private List<ProjectBean> beans;
+
+        /**
+         * Report this DynamicReport belongs to.
+         */
         private final FilteredReport filteredReport;
 
+        /**
+         * @param _filteredReport filtered report
+         */
         public DynProjectResultReport(final FilteredReport _filteredReport)
         {
             this.filteredReport = _filteredReport;
@@ -150,36 +177,221 @@ public abstract class ProjectResultReport_Base
         {
             final List<Map<String, Object>> source = new ArrayList<>();
 
-            final List<Map<String, Object>> expenseSource = new ArrayList<>();
-            final Map<String, Object> expensetotalMap = addBlock(_parameter, expenseSource, "Expense");
+            if (transpose(_parameter)) {
+                final Map<Type, String> maping = new HashMap<>();
+                maping.putAll(getTypeMap(_parameter, "Expense"));
+                maping.putAll(getTypeMap(_parameter, "Collection"));
+                maping.putAll(getTypeMap(_parameter, "Estimate"));
 
-            final List<Map<String, Object>> collectionSource = new ArrayList<>();
-            final Map<String, Object> collectionTotalMap = addBlock(_parameter, collectionSource, "Collection");
+                final Map<String, Object> totalMap = new HashMap<>();
+                totalMap.put("project", DBProperties.getProperty(ProjectResultReport.class.getName() + ".total.descr"));
+                totalMap.put("style", Style.TOTAL.toString());
+                final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                                ProjectsSettings.RESULTREPORT, true);
+                for (final ProjectBean  bean : getBeans(_parameter)) {
+                    BigDecimal expenseNet = BigDecimal.ZERO;
+                    BigDecimal estimateNet = BigDecimal.ZERO;
+                    BigDecimal collectionNet = BigDecimal.ZERO;
+                    BigDecimal expenseCross = BigDecimal.ZERO;
+                    BigDecimal collectionCross = BigDecimal.ZERO;
+                    BigDecimal estimateCross = BigDecimal.ZERO;
 
-            final List<Map<String, Object>> estimateSource = new ArrayList<>();
-            final Map<String, Object> estimateTotalMap = addBlock(_parameter, estimateSource, "Estimate");
+                    final Map<String, Object> map = new HashMap<>();
+                    source.add(map);
+                    map.put("project", bean.getName());
+                    for (final Entry<Type, DocBean> entry : bean.getDocs().entrySet()) {
+                        final boolean negate = "true".equalsIgnoreCase(properties.getProperty(entry.getKey().getName()
+                                        + ".negate"));
 
-            addHeader(_parameter, source, "estimate");
-            source.addAll(estimateSource);
-            source.add(estimateTotalMap);
-            source.add(Collections.<String, Object>emptyMap());
-            addHeader(_parameter, source, "expense");
-            source.addAll(expenseSource);
-            source.add(expensetotalMap);
-            source.add(Collections.<String, Object>emptyMap());
-            addHeader(_parameter, source, "collection");
-            source.addAll(collectionSource);
-            source.add(collectionTotalMap);
-            source.add(Collections.<String, Object>emptyMap());
+                        BigDecimal cross = entry.getValue().getCross();
+                        BigDecimal net = entry.getValue().getNet();
+                        BigDecimal tax = cross.subtract(net);
+                        if (negate) {
+                            cross = cross.negate();
+                            net = net.negate();
+                            tax = tax.negate();
+                        }
+                        map.put(entry.getKey().getName() + ".net", net);
+                        map.put(entry.getKey().getName() + ".cross", cross);
+                        map.put(entry.getKey().getName() + ".tax", tax);
 
-            addHeader(_parameter, source, "estimateGain");
-            addResult(_parameter, source, estimateTotalMap, expensetotalMap);
-            source.add(Collections.<String, Object>emptyMap());
-            addHeader(_parameter, source, "collectionGain");
-            addResult(_parameter, source, collectionTotalMap, expensetotalMap);
+                        add2Map(totalMap, entry.getKey().getName() + ".net", net);
+                        add2Map(totalMap, entry.getKey().getName() + ".cross", cross);
+                        add2Map(totalMap, entry.getKey().getName() + ".tax", tax);
 
+                        switch (maping.get(entry.getKey())) {
+                            case "Expense":
+                                expenseNet = expenseNet.add(net);
+                                expenseCross = expenseCross.add(cross);
+                                break;
+                            case "Collection":
+                                collectionNet = collectionNet.add(net);
+                                collectionCross = collectionCross.add(cross);
+                                break;
+                            case "Estimate":
+                                estimateNet = estimateNet.add(net);
+                                estimateCross = estimateCross.add(cross);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    BigDecimal estimateGainPercentNet = BigDecimal.ZERO;
+                    BigDecimal estimateGainPercentCross = BigDecimal.ZERO;
+                    BigDecimal collectionGainPercentNet = BigDecimal.ZERO;
+                    BigDecimal collectionGainPercentCross = BigDecimal.ZERO;
+
+                    if (estimateNet.compareTo(BigDecimal.ZERO) != 0) {
+                        estimateGainPercentNet = BigDecimal.ONE.subtract(
+                                        expenseNet.divide(estimateNet, BigDecimal.ROUND_HALF_UP))
+                                        .multiply(new BigDecimal(100));
+                    }
+                    if (estimateCross.compareTo(BigDecimal.ZERO) != 0) {
+                        estimateGainPercentCross = BigDecimal.ONE.subtract(expenseCross
+                                        .divide(estimateCross, BigDecimal.ROUND_HALF_UP))
+                                        .multiply(new BigDecimal(100));
+                    }
+                    if (collectionNet.compareTo(BigDecimal.ZERO) != 0) {
+                        collectionGainPercentNet = BigDecimal.ONE.subtract(
+                                        expenseNet.divide(collectionNet, BigDecimal.ROUND_HALF_UP))
+                                        .multiply(new BigDecimal(100));
+                    }
+                    if (collectionCross.compareTo(BigDecimal.ZERO) != 0) {
+                        collectionGainPercentCross = BigDecimal.ONE.subtract(expenseCross
+                                        .divide(collectionCross, BigDecimal.ROUND_HALF_UP))
+                                        .multiply(new BigDecimal(100));
+                    }
+
+                    map.put("estimateGain.gain.net", estimateNet.subtract(expenseNet));
+                    map.put("estimateGain.gainPercent.net", estimateGainPercentNet);
+                    map.put("estimateGain.gain.cross", estimateCross.subtract(expenseCross));
+                    map.put("estimateGain.gainPercent.cross", estimateGainPercentCross);
+                    map.put("collectionGain.gain.net", collectionNet.subtract(expenseNet));
+                    map.put("collectionGain.gainPercent.net", collectionGainPercentNet);
+                    map.put("collectionGain.gain.cross", collectionCross.subtract(expenseCross));
+                    map.put("collectionGain.gainPercent.cross", collectionGainPercentCross);
+
+                    add2Map(totalMap, "expenseNet", expenseNet);
+                    add2Map(totalMap, "estimateNet", estimateNet);
+                    add2Map(totalMap, "collectionNet", collectionNet);
+                    add2Map(totalMap, "expenseCross", expenseCross);
+                    add2Map(totalMap, "collectionCross", collectionCross);
+                    add2Map(totalMap, "estimateCross", estimateCross);
+                }
+
+                source.add(totalMap);
+
+                // total percent calculation
+                final BigDecimal expenseNet = (BigDecimal) totalMap.get("expenseNet");
+                final BigDecimal estimateNet = (BigDecimal) totalMap.get("estimateNet");
+                final BigDecimal collectionNet = (BigDecimal) totalMap.get("collectionNet");
+                final BigDecimal expenseCross = (BigDecimal) totalMap.get("expenseCross");
+                final BigDecimal collectionCross = (BigDecimal) totalMap.get("collectionCross");
+                final BigDecimal estimateCross = (BigDecimal) totalMap.get("estimateCross");
+
+                BigDecimal estimateGainPercentNet = BigDecimal.ZERO;
+                BigDecimal estimateGainPercentCross = BigDecimal.ZERO;
+                BigDecimal collectionGainPercentNet = BigDecimal.ZERO;
+                BigDecimal collectionGainPercentCross = BigDecimal.ZERO;
+
+                if (estimateNet.compareTo(BigDecimal.ZERO) != 0) {
+                    estimateGainPercentNet = BigDecimal.ONE.subtract(
+                                    expenseNet.divide(estimateNet, BigDecimal.ROUND_HALF_UP))
+                                    .multiply(new BigDecimal(100));
+                }
+                if (estimateCross.compareTo(BigDecimal.ZERO) != 0) {
+                    estimateGainPercentCross = BigDecimal.ONE.subtract(expenseCross
+                                    .divide(estimateCross, BigDecimal.ROUND_HALF_UP))
+                                    .multiply(new BigDecimal(100));
+                }
+                if (collectionNet.compareTo(BigDecimal.ZERO) != 0) {
+                    collectionGainPercentNet = BigDecimal.ONE.subtract(
+                                    expenseNet.divide(collectionNet, BigDecimal.ROUND_HALF_UP))
+                                    .multiply(new BigDecimal(100));
+                }
+                if (collectionCross.compareTo(BigDecimal.ZERO) != 0) {
+                    collectionGainPercentCross = BigDecimal.ONE.subtract(expenseCross
+                                    .divide(collectionCross, BigDecimal.ROUND_HALF_UP))
+                                    .multiply(new BigDecimal(100));
+                }
+                totalMap.put("estimateGain.gain.net", estimateNet.subtract(expenseNet));
+                totalMap.put("estimateGain.gainPercent.net", estimateGainPercentNet);
+                totalMap.put("estimateGain.gain.cross", estimateCross.subtract(expenseCross));
+                totalMap.put("estimateGain.gainPercent.cross", estimateGainPercentCross);
+                totalMap.put("collectionGain.gain.net", collectionNet.subtract(expenseNet));
+                totalMap.put("collectionGain.gainPercent.net", collectionGainPercentNet);
+                totalMap.put("collectionGain.gain.cross", collectionCross.subtract(expenseCross));
+                totalMap.put("collectionGain.gainPercent.cross", collectionGainPercentCross);
+
+            } else {
+                final List<Map<String, Object>> expenseSource = new ArrayList<>();
+                final Map<String, Object> expensetotalMap = addBlock(_parameter, expenseSource, "Expense");
+
+                final List<Map<String, Object>> collectionSource = new ArrayList<>();
+                final Map<String, Object> collectionTotalMap = addBlock(_parameter, collectionSource, "Collection");
+
+                final List<Map<String, Object>> estimateSource = new ArrayList<>();
+                final Map<String, Object> estimateTotalMap = addBlock(_parameter, estimateSource, "Estimate");
+
+                addHeader(_parameter, source, "estimate");
+                source.addAll(estimateSource);
+                source.add(estimateTotalMap);
+                source.add(Collections.<String, Object>emptyMap());
+                addHeader(_parameter, source, "expense");
+                source.addAll(expenseSource);
+                source.add(expensetotalMap);
+                source.add(Collections.<String, Object>emptyMap());
+                addHeader(_parameter, source, "collection");
+                source.addAll(collectionSource);
+                source.add(collectionTotalMap);
+                source.add(Collections.<String, Object>emptyMap());
+
+                addHeader(_parameter, source, "estimateGain");
+                addResult(_parameter, source, estimateTotalMap, expensetotalMap);
+                source.add(Collections.<String, Object>emptyMap());
+                addHeader(_parameter, source, "collectionGain");
+                addResult(_parameter, source, collectionTotalMap, expensetotalMap);
+            }
             return new JRMapCollectionDataSource(new ArrayList<Map<String, ?>>(source));
         }
+
+        /**
+         * @param _map map to add to
+         * @param _key ket to be used
+         * @param _amount amount to be added
+         */
+        protected void add2Map(final Map<String, Object> _map,
+                               final String _key,
+                               final BigDecimal _amount)
+        {
+            if (_map.containsKey(_key)) {
+                _map.put(_key, ((BigDecimal) _map.get(_key)).add(_amount));
+            } else {
+                _map.put(_key, _amount);
+            }
+        }
+
+
+
+        protected Map<Type, String> getTypeMap(final Parameter _parameter,
+                                               final String _key)
+            throws EFapsException
+        {
+            final Map<Type, String> ret = new HashMap<>();
+            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                            ProjectsSettings.RESULTREPORT, true);
+            int i = 1;
+            String keyTmp = _key + String.format("%02d", i);
+            while (properties.containsKey(keyTmp)) {
+                final String typeStr = properties.getProperty(keyTmp);
+                ret.put(Type.get(typeStr), _key);
+                i++;
+                keyTmp = _key + String.format("%02d", i);
+            }
+            return ret;
+        }
+
 
         protected void addHeader(final Parameter _parameter,
                                  final List<Map<String, Object>> _source,
@@ -308,7 +520,7 @@ public abstract class ProjectResultReport_Base
             } else {
                 final Map<String, Object> filterMap = getFilteredReport().getFilterMap(_parameter);
                 final QueryBuilder projAttrQueryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
-                final Set<Instance> projInsts = new HashSet<>();;
+                final Set<Instance> projInsts = new HashSet<>();
                 if (filterMap.containsKey("project")) {
                     final InstanceSetFilterValue filter = (InstanceSetFilterValue) filterMap.get("project");
                     if (filter.getObject() != null) {
@@ -353,47 +565,149 @@ public abstract class ProjectResultReport_Base
             }
         }
 
+        protected ColumnTitleGroupBuilder getColumnGroup(final Parameter _parameter,
+                                                         final JasperReportBuilder _builder,
+                                                         final String _key,
+                                                         final String _propKey,
+                                                         final StyleBuilder _headerStyle)
+            throws EFapsException
+        {
+            final ColumnTitleGroupBuilder ret = DynamicReports.grid.titleGroup(
+                            DBProperties.getProperty(ProjectResultReport.class.getName() + "." + _propKey + ".descr"));
+
+            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                            ProjectsSettings.RESULTREPORT, true);
+            int i = 1;
+            String keyTmp = _key + String.format("%02d", i);
+            boolean result = true;
+            while (properties.containsKey(keyTmp)) {
+                result = false;
+                final String typeStr = properties.getProperty(keyTmp);
+
+                final TextColumnBuilder<BigDecimal> netColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.net"),
+                                typeStr + ".net", DynamicReports.type.bigDecimalType()).setWidth(80)
+                                .setStyle(_headerStyle);
+                final TextColumnBuilder<BigDecimal> taxColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.tax"),
+                                typeStr + ".tax", DynamicReports.type.bigDecimalType()).setWidth(80)
+                                .setStyle(_headerStyle);
+                final TextColumnBuilder<BigDecimal> crossColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.cross"),
+                                typeStr + ".cross", DynamicReports.type.bigDecimalType()).setWidth(80)
+                                .setStyle(_headerStyle);
+
+                final ColumnTitleGroupBuilder group = DynamicReports.grid.titleGroup(Type.get(typeStr).getLabel(),
+                                netColumn, taxColumn, crossColumn);
+                ret.add(group);
+                _builder.addColumn(netColumn, taxColumn, crossColumn);
+                i++;
+                keyTmp = _key + String.format("%02d", i);
+            }
+            if (result) {
+                final TextColumnBuilder<BigDecimal> netColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.net"),
+                                _propKey + ".gain.net", DynamicReports.type.bigDecimalType()).setStyle(_headerStyle);
+                final TextColumnBuilder<BigDecimal> crossColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.cross"),
+                                _propKey + ".gain.cross", DynamicReports.type.bigDecimalType()).setStyle(_headerStyle);
+                final TextColumnBuilder<BigDecimal> netPercentColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.net"),
+                                _propKey + ".gainPercent.net", DynamicReports.type.bigDecimalType()).setStyle(
+                                _headerStyle);
+                final TextColumnBuilder<BigDecimal> crossPercentColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.cross"),
+                                _propKey + ".gainPercent.cross", DynamicReports.type.bigDecimalType()).setStyle(
+                                _headerStyle);
+
+                final ColumnTitleGroupBuilder gainGroup = DynamicReports.grid.titleGroup(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".gain.descr"), netColumn,
+                                crossColumn);
+
+                final ColumnTitleGroupBuilder gainPercentGroup = DynamicReports.grid.titleGroup(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".gainPercent.descr"),
+                                netPercentColumn, crossPercentColumn);
+
+                ret.add(gainGroup, gainPercentGroup);
+                _builder.addColumn(netColumn, crossColumn, netPercentColumn, crossPercentColumn);
+            }
+            return ret;
+        }
+
         @Override
         protected void addColumnDefintion(final Parameter _parameter,
                                           final JasperReportBuilder _builder)
             throws EFapsException
         {
-            final ConditionalStyleBuilder headerCondition = DynamicReports.stl.conditionalStyle(
-                            new HeaderConditionExpression()).setBold(true).setBackgroundColor(Color.darkGray)
-                            .setForegroundColor(Color.white);
-
             final ConditionalStyleBuilder totalCondition = DynamicReports.stl.conditionalStyle(
                             new TotalConditionExpression()).setBold(true).setItalic(true);
+            if (transpose(_parameter)) {
+                final StyleBuilder headerStyle = DynamicReports.stl.style()
+                                .conditionalStyles(totalCondition);
+                _builder.addField("style", String.class);
+                final TextColumnBuilder<String> projectColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.project"),
+                                "project", DynamicReports.type.stringType()).setWidth(250).setStyle(headerStyle);
+                _builder.addColumn(projectColumn);
+                final ColumnTitleGroupBuilder estimateGroup = getColumnGroup(_parameter, _builder, "Estimate",
+                                "estimate", headerStyle);
+                final ColumnTitleGroupBuilder expenseGroup = getColumnGroup(_parameter, _builder, "Expense", "expense",
+                                headerStyle);
+                final ColumnTitleGroupBuilder collectionGroup = getColumnGroup(_parameter, _builder, "Collection",
+                                "collection", headerStyle);
+                final ColumnTitleGroupBuilder estimateGainGroup = getColumnGroup(_parameter, _builder, null,
+                                "estimateGain", headerStyle);
+                final ColumnTitleGroupBuilder collectionGainGroup = getColumnGroup(_parameter, _builder, null,
+                                "collectionGain", headerStyle);
+                _builder.columnGrid(projectColumn, estimateGroup, expenseGroup, collectionGroup, estimateGainGroup,
+                                collectionGainGroup);
+            } else {
+                final ConditionalStyleBuilder headerCondition = DynamicReports.stl.conditionalStyle(
+                                new HeaderConditionExpression()).setBold(true).setBackgroundColor(Color.darkGray)
+                                .setForegroundColor(Color.white);
 
-            final StyleBuilder headerStyle = DynamicReports.stl.style()
-                            .conditionalStyles(headerCondition, totalCondition);
-            _builder.addField("style", String.class);
+                final StyleBuilder headerStyle = DynamicReports.stl.style()
+                                .conditionalStyles(headerCondition, totalCondition);
+                _builder.addField("style", String.class);
 
-            final List<ColumnGridComponentBuilder> groupBuilders = new ArrayList<>();
-            final TextColumnBuilder<String> descrColumn = DynamicReports.col.column(DBProperties
-                            .getProperty(ProjectResultReport.class.getName() + ".Column.descr"),
-                            "descr", DynamicReports.type.stringType()).setStyle(headerStyle);
-            _builder.addColumn(descrColumn);
-            groupBuilders.add(descrColumn);
-            descrColumn.setWidth(200);
+                final List<ColumnGridComponentBuilder> groupBuilders = new ArrayList<>();
+                final TextColumnBuilder<String> descrColumn = DynamicReports.col.column(DBProperties
+                                .getProperty(ProjectResultReport.class.getName() + ".Column.descr"),
+                                "descr", DynamicReports.type.stringType()).setStyle(headerStyle);
+                _builder.addColumn(descrColumn);
+                groupBuilders.add(descrColumn);
+                descrColumn.setWidth(200);
 
-            for (final ProjectBean bean : getBeans(_parameter)) {
-                final TextColumnBuilder<BigDecimal> netColumn = DynamicReports.col.column(DBProperties
-                                .getProperty(ProjectResultReport.class.getName() + ".Column.net"),
-                                bean.getNetKey(), DynamicReports.type.bigDecimalType()).setStyle(headerStyle);
-                final TextColumnBuilder<BigDecimal> taxColumn = DynamicReports.col.column(DBProperties
-                                .getProperty(ProjectResultReport.class.getName() + ".Column.tax"),
-                                bean.getTaxKey(), DynamicReports.type.bigDecimalType()).setStyle(headerStyle);
-                final TextColumnBuilder<BigDecimal> crossColumn = DynamicReports.col.column(DBProperties
-                                .getProperty(ProjectResultReport.class.getName() + ".Column.cross"),
-                                bean.getCrossKey(), DynamicReports.type.bigDecimalType()).setStyle(headerStyle);
-                final ColumnTitleGroupBuilder projectGroup = DynamicReports.grid.titleGroup(bean.getName(), netColumn,
-                                taxColumn, crossColumn);
-                projectGroup.setTitleFixedWidth(250);
-                groupBuilders.add(projectGroup);
-                _builder.addColumn(netColumn, taxColumn, crossColumn);
+                for (final ProjectBean bean : getBeans(_parameter)) {
+                    final TextColumnBuilder<BigDecimal> netColumn = DynamicReports.col.column(DBProperties
+                                    .getProperty(ProjectResultReport.class.getName() + ".Column.net"),
+                                    bean.getNetKey(), DynamicReports.type.bigDecimalType()).setStyle(headerStyle);
+                    final TextColumnBuilder<BigDecimal> taxColumn = DynamicReports.col.column(DBProperties
+                                    .getProperty(ProjectResultReport.class.getName() + ".Column.tax"),
+                                    bean.getTaxKey(), DynamicReports.type.bigDecimalType()).setStyle(headerStyle);
+                    final TextColumnBuilder<BigDecimal> crossColumn = DynamicReports.col.column(DBProperties
+                                    .getProperty(ProjectResultReport.class.getName() + ".Column.cross"),
+                                    bean.getCrossKey(), DynamicReports.type.bigDecimalType()).setStyle(headerStyle);
+                    final ColumnTitleGroupBuilder projectGroup = DynamicReports.grid.titleGroup(bean.getName(),
+                                    netColumn,
+                                    taxColumn, crossColumn);
+                    projectGroup.setTitleFixedWidth(250);
+                    groupBuilders.add(projectGroup);
+                    _builder.addColumn(netColumn, taxColumn, crossColumn);
+                }
+                _builder.columnGrid(groupBuilders.toArray(new ColumnGridComponentBuilder[groupBuilders.size()]));
             }
-            _builder.columnGrid(groupBuilders.toArray(new ColumnGridComponentBuilder[groupBuilders.size()]));
+        }
+
+        public boolean transpose(final Parameter _parameter)
+            throws EFapsException
+        {
+            boolean ret = false;
+            final Map<String, Object> filterMap = getFilteredReport().getFilterMap(_parameter);
+            if (filterMap.containsKey("transpose")) {
+                ret = (Boolean) filterMap.get("transpose");
+            }
+            return ret;
         }
 
         protected List<ProjectBean> getBeans(final Parameter _parameter)
