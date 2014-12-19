@@ -54,6 +54,12 @@
                 event="UI_FIELD_AUTOCOMPLETE">
                 <property name="AutoType">TOKEN</property>
             </trigger>
+            <trigger event="UI_FIELD_VALUE" method="getInstanceSetFieldValue"
+                name="Projects_ProjectResultReportFilterForm.project.UI_FIELD_VALUE"
+                program="org.efaps.esjp.erp.FilteredReport" >
+                <!-- Project_ProjectMsgPhrase -->
+                <property name="Projects_ProjectService_MsgPhrase">64c30826-cb22-4579-a3d5-bd10090f155e</property>
+            </trigger>
         </field>
     </definition>
 </ui-form>
