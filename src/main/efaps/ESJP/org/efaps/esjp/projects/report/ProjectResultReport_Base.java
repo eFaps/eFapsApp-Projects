@@ -26,9 +26,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
 
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
@@ -305,22 +307,37 @@ public abstract class ProjectResultReport_Base
                                 projAttrQueryBldr.getAttributeQuery(CIProjects.Project2DocumentAbstract.ToAbstract));
             } else {
                 final Map<String, Object> filterMap = getFilteredReport().getFilterMap(_parameter);
-                final DateTime start;
-                final DateTime end;
-                if (filterMap.containsKey("dateFrom")) {
-                    start = (DateTime) filterMap.get("dateFrom");
-                } else {
-                    start = new DateTime();
-                }
-                if (filterMap.containsKey("dateTo")) {
-                    end = (DateTime) filterMap.get("dateTo");
-                } else {
-                    end = new DateTime();
-                }
                 final QueryBuilder projAttrQueryBldr = new QueryBuilder(CIProjects.ProjectAbstract);
-                projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
-                projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date, start.minusMinutes(1));
+                final Set<Instance> projInsts = new HashSet<>();;
+                if (filterMap.containsKey("project")) {
+                    final InstanceSetFilterValue filter = (InstanceSetFilterValue) filterMap.get("project");
+                    if (filter.getObject() != null) {
+                        for (final Instance instance : filter.getObject()) {
+                            if (instance.isValid()) {
+                                projInsts.add(instance);
+                            }
+                        }
+                    }
+                }
+                if (projInsts.isEmpty()) {
+                    final DateTime start;
+                    final DateTime end;
+                    if (filterMap.containsKey("dateFrom")) {
+                        start = (DateTime) filterMap.get("dateFrom");
+                    } else {
+                        start = new DateTime();
+                    }
+                    if (filterMap.containsKey("dateTo")) {
+                        end = (DateTime) filterMap.get("dateTo");
+                    } else {
+                        end = new DateTime();
+                    }
 
+                    projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
+                    projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date, start.minusMinutes(1));
+                } else {
+                    projAttrQueryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.ID, projInsts.toArray());
+                }
                 final QueryBuilder attrQueryBldr = new QueryBuilder(CIProjects.Project2DocumentAbstract);
                 attrQueryBldr.addWhereAttrInQuery(CIProjects.Project2DocumentAbstract.FromAbstract,
                                 projAttrQueryBldr.getAttributeQuery(CIProjects.ProjectAbstract.ID));
