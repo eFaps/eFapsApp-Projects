@@ -89,39 +89,41 @@ public abstract class OnDocumentSumReport_Base
                               final ValueList _valueList)
         throws EFapsException
     {
-        final Map<String, Object> filter = new FilteredReport().getFilterMap(_parameter);
-        boolean project = false;
-        if (filter.containsKey("projectGroup")) {
-            project = (Boolean) filter.get("projectGroup");
-        }
-        if (project) {
-            final Map<Instance, String> map = new HashMap<Instance, String>();
-
-            final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectService2DocumentAbstract);
-            queryBldr.addWhereAttrEqValue(CIProjects.ProjectService2DocumentAbstract.ToDocument,
-                            _valueList.getDocInstances().toArray());
-
-            final MultiPrintQuery multi = queryBldr.getPrint();
-            final SelectBuilder selProj = SelectBuilder.get()
-                            .linkto(CIProjects.ProjectService2DocumentAbstract.FromService);
-            final SelectBuilder selDocInst = SelectBuilder.get()
-                            .linkto(CIProjects.ProjectService2DocumentAbstract.ToDocument)
-                            .instance();
-            // Project_ProjectMsgPhrase
-            final MsgPhrase msgPhrase = MsgPhrase.get(UUID.fromString("64c30826-cb22-4579-a3d5-bd10090f155e"));
-            multi.addMsgPhrase(selProj, msgPhrase);
-            multi.addSelect(selDocInst);
-            multi.execute();
-            while (multi.next()) {
-                final Instance docInst = multi.getSelect(selDocInst);
-                final String projectStr = multi.getMsgPhrase(selProj, msgPhrase);
-                map.put(docInst, projectStr);
+        if (!_valueList.isEmpty()) {
+            final Map<String, Object> filter = new FilteredReport().getFilterMap(_parameter);
+            boolean project = false;
+            if (filter.containsKey("projectGroup")) {
+                project = (Boolean) filter.get("projectGroup");
             }
+            if (project) {
+                final Map<Instance, String> map = new HashMap<Instance, String>();
 
-            for (final Map<String, Object> tmpMap : _valueList) {
-                final Instance docInstance = (Instance) tmpMap.get("docInstance");
-                if (docInstance != null && docInstance.isValid()) {
-                    tmpMap.put("project", map.get(docInstance));
+                final QueryBuilder queryBldr = new QueryBuilder(CIProjects.Project2DocumentAbstract);
+                queryBldr.addWhereAttrEqValue(CIProjects.Project2DocumentAbstract.ToAbstract,
+                                _valueList.getDocInstances().toArray());
+
+                final MultiPrintQuery multi = queryBldr.getPrint();
+                final SelectBuilder selProj = SelectBuilder.get()
+                                .linkto(CIProjects.Project2DocumentAbstract.FromAbstract);
+                final SelectBuilder selDocInst = SelectBuilder.get()
+                                .linkto(CIProjects.Project2DocumentAbstract.ToAbstract)
+                                .instance();
+                // Project_ProjectMsgPhrase
+                final MsgPhrase msgPhrase = MsgPhrase.get(UUID.fromString("64c30826-cb22-4579-a3d5-bd10090f155e"));
+                multi.addMsgPhrase(selProj, msgPhrase);
+                multi.addSelect(selDocInst);
+                multi.execute();
+                while (multi.next()) {
+                    final Instance docInst = multi.getSelect(selDocInst);
+                    final String projectStr = multi.getMsgPhrase(selProj, msgPhrase);
+                    map.put(docInst, projectStr);
+                }
+
+                for (final Map<String, Object> tmpMap : _valueList) {
+                    final Instance docInstance = (Instance) tmpMap.get("docInstance");
+                    if (docInstance != null && docInstance.isValid()) {
+                        tmpMap.put("project", map.get(docInstance));
+                    }
                 }
             }
         }
