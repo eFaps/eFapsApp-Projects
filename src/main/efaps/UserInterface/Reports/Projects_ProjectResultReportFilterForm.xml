@@ -44,6 +44,14 @@
                 name="Projects_ProjectResultReportFilterForm.dateTo.UI_FIELD_VALUE"
                 program="org.efaps.esjp.erp.FilteredReport" />
         </field>
+         <field name="dateTarget">
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.BooleanUI</property>
+            <property name="Label">org.efaps.esjp.projects.report.ProjectResultReport.dateTarget</property>
+            <trigger event="UI_FIELD_VALUE" method="getBooleanFieldValue"
+                name="Projects_ProjectResultReportFilterForm.dateTarget.UI_FIELD_VALUE"
+                program="org.efaps.esjp.erp.FilteredReport" />
+        </field>
         <field name="project">
             <property name="Label">org.efaps.esjp.projects.report.ProjectResultReport.project</property>
             <property name="ModeEdit">EDITABLE</property>

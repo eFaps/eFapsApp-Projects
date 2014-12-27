@@ -38,16 +38,19 @@
                 <property name="ReportField">report</property>
                 <property name="Field01">dateFrom</property>
                 <property name="Field02">dateTo</property>
-                <property name="Field03">project</property>
-                <property name="Field04">transpose</property>
+                <property name="Field03">dateTarget</property>
+                <property name="Field04">project</property>
+                <property name="Field05">transpose</property>
                 <property name="FilterType01">DateTime</property>
                 <property name="FilterType02">DateTime</property>
-                <property name="FilterType03">InstanceSet</property>
-                <property name="FilterType04">Boolean</property>
+                <property name="FilterType03">Boolean</property>
+                <property name="FilterType04">InstanceSet</property>
+                <property name="FilterType05">Boolean</property>
                 <property name="FilterDefault01">MONTH:-1</property>
                 <property name="FilterDefault02">TODAY</property>
-                <property name="FilterDefault03"></property>
-                <property name="FilterDefault04">false</property>
+                <property name="FilterDefault03">false</property>
+                <property name="FilterDefault04"></property>
+                <property name="FilterDefault05">false</property>
             </trigger>
             <trigger event="UI_FIELD_VALUE" index="2" method="getFilterFieldValue"
                 name="Sales_DocumentSumReportForm.filter.UI_FIELD_VALUE.2"
@@ -55,12 +58,14 @@
                 <property name="FilterKey">org.efaps.esjp.projects.report.ProjectResultReport.FilterKey</property>
                 <property name="Field01">dateFrom</property>
                 <property name="Field02">dateTo</property>
-                <property name="Field03">project</property>
-                <property name="Field04">transpose</property>
+                <property name="Field03">dateTarget</property>
+                <property name="Field04">project</property>
+                <property name="Field05">transpose</property>
                 <property name="DBProperty01">org.efaps.esjp.projects.report.ProjectResultReport.dateFrom</property>
                 <property name="DBProperty02">org.efaps.esjp.projects.report.ProjectResultReport.dateTo</property>
-                <property name="DBProperty03">org.efaps.esjp.projects.report.ProjectResultReport.project</property>
-                <property name="DBProperty04">org.efaps.esjp.projects.report.ProjectResultReport.transpose</property>
+                <property name="DBProperty03">org.efaps.esjp.projects.report.ProjectResultReport.dateTarget</property>
+                <property name="DBProperty04">org.efaps.esjp.projects.report.ProjectResultReport.project</property>
+                <property name="DBProperty05">org.efaps.esjp.projects.report.ProjectResultReport.transpose</property>
                 <!-- Project_ProjectMsgPhrase -->
                 <property name="Projects_ProjectService_MsgPhrase">64c30826-cb22-4579-a3d5-bd10090f155e</property>
              </trigger>

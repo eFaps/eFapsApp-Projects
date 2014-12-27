@@ -544,9 +544,18 @@ public abstract class ProjectResultReport_Base
                     } else {
                         end = new DateTime();
                     }
-
-                    projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
-                    projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date, start.minusMinutes(1));
+                    Boolean dateTarget = false;
+                    if (filterMap.containsKey("dateTarget")) {
+                        dateTarget = (Boolean) filterMap.get("dateTarget");
+                    }
+                    if (dateTarget) {
+                        projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
+                        projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date,
+                                        start.minusMinutes(1));
+                    } else {
+                        _queryBldr.addWhereAttrLessValue(CISales.DocumentAbstract.Date, end);
+                        _queryBldr.addWhereAttrGreaterValue(CISales.DocumentAbstract.Date, start.minusMinutes(1));
+                    }
                 } else {
                     projAttrQueryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.ID, projInsts.toArray());
                 }
