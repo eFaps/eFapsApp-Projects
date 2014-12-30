@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+
+ Copyright 2003 - 2014 The eFaps Team
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author:          The eFaps Team
+ Revision:        $Rev: 5314 $
+ Last Changed:    $Date: 2010-08-16 11:32:53 -0500 (Mon, 16 Aug 2010) $
+ Last Changed By: $Author: miguel.a.aranya $
+
+-->
+<datamodel-statusgroup xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>3b4f6743-1b59-4d1f-8c98-4a0f1e44c8c1</uuid>
+    <file-application>eFapsApp-Projects</file-application>
+    <file-revision>$Rev: 5314 $</file-revision>
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+        <name>Projects_ProjectService2EmployeeStatus</name>
+        <parent>Admin_DataModel_StatusAbstract</parent>
+        <status key="Active">
+            <description>this action is active.</description>
+        </status>
+        <status key="Inactive">
+            <description>this action is inactive.</description>
+        </status>
+    </definition>
+</datamodel-statusgroup>

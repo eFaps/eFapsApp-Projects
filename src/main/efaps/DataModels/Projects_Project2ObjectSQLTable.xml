@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+
+  Copyright 2007 - 2014 moxter.net S.A.C.
+
+  All Rights Reserved.
+? This program contains proprietary and trade secret information of
+? moxter.net S.A.C. Copyright notice is precautionary only and does not
+? evidence any actual or intended publication of such program.
+
+  Author:          moxter.net S.A.C.
+  Revision:        $Rev: 186 $
+  Last Changed:    $Date: 2014-03-26 12:26:50 -0500 (Wed, 26 Mar 2014) $
+  Last Changed By: $Author: jan.moxter $
+
+-->
+<datamodel-sqltable xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>94562e8e-c457-46f5-ad5a-4d40f7f5c6f6</uuid>
+    <file-application>Innobierto-Construction</file-application>
+    <file-revision>$Rev: 186 $</file-revision>
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+        <name>Projects_Project2ObjectQLTable</name>
+        <parent>ERP_Object2ObjectAbstractSQLTable</parent>
+        <database>
+            <table-name>T_PROJECT22OBJECT</table-name>
+            <parent-table>T_ERPOBJ2OBJ</parent-table>
+            <column name="STATUS" type="INTEGER" />
+        </database>
+    </definition>
+</datamodel-sqltable>
