@@ -23,7 +23,7 @@
         <name>Projects_Project2ObjectQLTable</name>
         <parent>ERP_Object2ObjectAbstractSQLTable</parent>
         <database>
-            <table-name>T_PROJECT22OBJECT</table-name>
+            <table-name>T_PROJECT2OBJECT</table-name>
             <parent-table>T_ERPOBJ2OBJ</parent-table>
             <column name="STATUS" type="INTEGER" />
         </database>
