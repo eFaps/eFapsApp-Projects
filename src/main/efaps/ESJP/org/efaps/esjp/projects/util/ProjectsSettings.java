@@ -52,4 +52,11 @@ public interface ProjectsSettings
      * Configure the ResultReport.
      */
     String RESULTREPORT = ProjectsSettings.BASE + "ResultReport";
+
+    /**
+     * Properties.<br/>
+     * Can be concatenated.<br/>
+     * Configure the Connections to projects.
+     */
+    String CONNECT2DOC = ProjectsSettings.BASE + "Connect2Doc";
 }

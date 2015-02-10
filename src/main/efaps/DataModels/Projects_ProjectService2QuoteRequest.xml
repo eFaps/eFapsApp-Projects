@@ -37,7 +37,7 @@
         <attribute>
             <name>ToLink</name>
             <type>Link</type>
-            <typelink>Sales_Quotation</typelink>
+            <typelink>Sales_QuoteRequest</typelink>
             <sqltable>Projects_Project2DocumentAbstractSQLTable</sqltable>
             <sqlcolumn>TOID</sqlcolumn>
         </attribute>

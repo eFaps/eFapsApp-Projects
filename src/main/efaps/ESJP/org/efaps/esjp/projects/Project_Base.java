@@ -21,15 +21,20 @@
 package org.efaps.esjp.projects;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
-import java.util.UUID;
 
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
+import org.apache.commons.lang3.BooleanUtils;
 import org.efaps.admin.datamodel.Status;
+import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.datamodel.ui.FieldValue;
-import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
@@ -52,13 +57,20 @@ import org.efaps.db.Update;
 import org.efaps.esjp.accounting.Period;
 import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
+import org.efaps.esjp.ci.CIERP;
 import org.efaps.esjp.ci.CIProjects;
-import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.common.uiform.Create;
+import org.efaps.esjp.common.uiform.Field;
+import org.efaps.esjp.common.uiform.Field_Base.DropDownPosition;
 import org.efaps.esjp.common.util.InterfaceUtils;
 import org.efaps.esjp.contacts.Contacts;
+import org.efaps.esjp.erp.AbstractWarning;
 import org.efaps.esjp.erp.CommonDocument;
+import org.efaps.esjp.erp.IWarning;
+import org.efaps.esjp.erp.WarningUtil;
 import org.efaps.esjp.projects.listener.OnCreateFromDocument;
+import org.efaps.esjp.projects.util.Projects;
+import org.efaps.esjp.projects.util.ProjectsSettings;
 import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
@@ -436,11 +448,6 @@ public abstract class Project_Base
     /**
      * Method to connect a document to a service. the type of the relation is
      * evaluated and set automatically.
-     * Can be extended passing properties:
-     * connect[N] = UUID of Type; UUID of Connection Type
-     * e.g.<br/>
-     * &lt;property name=&quot;connect0&quot;&gt;3d81d32d-71ab-47d7-a25c-379a2af214be;53ec5f98-dcff-4277-8952-f552101ae121&lt;/property&gt;<br/>
-     * &lt;property name=&quot;connect1&quot;&gt;4b041e2c-04db-46c6-bcbf-af4100ad5075;68e4823f-0dac-4d87-b54e-7acb02c1e460&lt;/property&gt;<br/>
      * @param _parameter Parameter as passed from eFaps
      * @return empty Return
      * @throws EFapsException on error
@@ -448,89 +455,25 @@ public abstract class Project_Base
     public Return connectDocument(final Parameter _parameter)
         throws EFapsException
     {
-        final Map<?, ?> others = (HashMap<?, ?>) _parameter.get(ParameterValues.OTHERS);
-        final Map<?, ?> props = (HashMap<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final String[] childOids = (String[]) others.get("selectedRow");
-        if (childOids != null) {
-            final Instance callInstance = _parameter.getCallInstance();
-            for (final String childOid : childOids) {
-                final Instance child = Instance.get(childOid);
-                Insert insert = null;
-                if (callInstance.getType().isKindOf(CIProjects.ProjectService.getType())) {
-                    //defaults
-                    if (child.getType().equals(CIProjects.ServiceRequest.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2Request);
-                    } else if (child.getType().equals(CIProjects.WorkOrder.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2WorkOrder);
-                    } else if (child.getType().equals(CIProjects.WorkReport.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2WorkReport);
-                    } else if (child.getType().equals(CISales.CreditNote.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2CreditNote);
-                    } else if (child.getType().equals(CISales.DeliveryNote.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2DeliveryNote);
-                    } else if (child.getType().equals(CISales.GoodsIssueSlip.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2GoodsIssueSlip);
-                    } else if (child.getType().equals(CISales.Invoice.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2Invoice);
-                    } else if (child.getType().equals(CISales.OrderOutbound.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2OrderOutbound);
-                    } else if (child.getType().equals(CISales.Quotation.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2Quotation);
-                    } else if (child.getType().equals(CISales.Receipt.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2Receipt);
-                    } else if (child.getType().equals(CISales.RecievingTicket.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2RecievingTicket);
-                    } else if (child.getType().equals(CISales.ReturnSlip.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2ReturnSlip);
-                    } else if (child.getType().equals(CISales.Reminder.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2Reminder);
-                    } else if (child.getType().equals(CISales.CostSheet.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2CostSheet);
-                    } else if (child.getType().equals(CISales.UsageReport.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2UsageReport);
-                    } else if (child.getType().equals(CISales.ReturnUsageReport.getType())) {
-                        insert = new Insert(CIProjects.ProjectService2ReturnUsageReport);
-                    }
-                    int i = 0;
-                    while (insert == null && props.containsKey("connect" + i)) {
-                        final String connectUUIDStr = (String) props.get("connect" + i);
-                        final String[] connectUUIDs = connectUUIDStr.split(";");
-                        if (child.getType().getUUID().equals(UUID.fromString(connectUUIDs[0]))) {
-                            insert = new Insert(UUID.fromString(connectUUIDs[1]));
-                        }
-                        i++;
-                    }
-                }
-                if (insert != null) {
-                    insert.add(CIProjects.Project2DocumentAbstract.FromAbstract, callInstance.getId());
-                    insert.add(CIProjects.Project2DocumentAbstract.ToAbstract, child.getId());
+        final Instance callInstance = _parameter.getCallInstance();
+        if (callInstance.getType().isKindOf(CIProjects.ProjectService.getType())) {
+            for (final Instance childInst : getSelectedInstances(_parameter)) {
+                final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                                ProjectsSettings.CONNECT2DOC, true);
+
+                final Map<Integer, String> childtypes = analyseProperty(_parameter, properties, "ConnectChildType");
+                final Map<Integer, String> connectTypes = analyseProperty(_parameter, properties, "ConnectType");
+                final BidiMap<Integer, String> bidi = new DualHashBidiMap<>(childtypes);
+
+                if (bidi.containsValue(childInst.getType().getName())) {
+                    final Insert insert = new Insert(connectTypes.get(bidi.getKey(childInst.getType().getName())));
+                    insert.add(CIProjects.Project2DocumentAbstract.FromAbstract, callInstance);
+                    insert.add(CIProjects.Project2DocumentAbstract.ToAbstract, childInst);
                     insert.execute();
                 }
             }
         }
         return new Return();
-    }
-
-    /**
-     * Check if the a relation of the given type already exists for this
-     * instance.
-     *
-     * @param _typeUUID uuid of the ration type
-     * @param _instance instance to be checked
-     * @return true if already an relation of the given type exists for the
-     *         instance, else false
-     * @throws EFapsException on error
-     */
-    protected MultiPrintQuery check4Relation(final UUID _typeUUID,
-                                     final Instance _instance)
-        throws EFapsException
-    {
-        final QueryBuilder queryBldr = new QueryBuilder(_typeUUID);
-        queryBldr.addWhereAttrMatchValue(CIProjects.Project2DocumentAbstract.ToAbstract, _instance.getId());
-        final MultiPrintQuery multi = queryBldr.getPrint();
-        multi.addAttribute(CIProjects.Project2DocumentAbstract.OID);
-        multi.execute();
-        return multi;
     }
 
     /**
@@ -544,117 +487,75 @@ public abstract class Project_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final Map<?, ?> others = (HashMap<?, ?>) _parameter.get(ParameterValues.OTHERS);
-        final StringBuilder html = new StringBuilder();
-        final String[] childOids = (String[]) others.get("selectedRow");
-        boolean validate = true;
-        if (childOids != null) {
-            final Instance callInstance = _parameter.getCallInstance();
-            for (final String childOid : childOids) {
-                final Instance child = Instance.get(childOid);
-                if (callInstance.getType().isKindOf(CIProjects.ProjectService.getType())) {
-                    if (child.getType().equals(CIProjects.ServiceRequest.getType())
-                                    && check4Relation(CIProjects.ProjectService2Request.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CIProjects.WorkOrder.getType())
-                                    && check4Relation(CIProjects.ProjectService2WorkOrder.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CIProjects.WorkReport.getType())
-                                    && check4Relation(CIProjects.ProjectService2WorkReport.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.CreditNote.getType())
-                                    && check4Relation(CIProjects.ProjectService2CreditNote.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.DeliveryNote.getType())
-                                    && check4Relation(CIProjects.ProjectService2DeliveryNote.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.GoodsIssueSlip.getType())
-                                    && check4Relation(CIProjects.ProjectService2GoodsIssueSlip.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.Invoice.getType())
-                                    && check4Relation(CIProjects.ProjectService2Invoice.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.OrderOutbound.getType())
-                                    && check4Relation(CIProjects.ProjectService2OrderOutbound.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.Quotation.getType())
-                                    && check4Relation(CIProjects.ProjectService2Quotation.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.Receipt.getType())
-                                    && check4Relation(CIProjects.ProjectService2Receipt.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.RecievingTicket.getType())
-                                    && check4Relation(CIProjects.ProjectService2RecievingTicket.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.ReturnSlip.getType())
-                                    && check4Relation(CIProjects.ProjectService2ReturnSlip.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.Reminder.getType())
-                                    && check4Relation(CIProjects.ProjectService2Reminder.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
-                    } else if (child.getType().equals(CISales.CostSheet.getType())
-                                    && check4Relation(CIProjects.ProjectService2CostSheet.uuid, child).next()) {
-                        validate = false;
-                        html.append(getString4ReturnInvalidate(child));
-                        break;
+        final List<IWarning> warnings = new ArrayList<IWarning>();
+        for (final Instance childInst : getSelectedInstances(_parameter)) {
+            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                            ProjectsSettings.CONNECT2DOC, true);
+
+            final Map<Integer, String> childtypes = analyseProperty(_parameter, properties, "ConnectChildType");
+            final Map<Integer, String> connectTypes = analyseProperty(_parameter, properties, "ConnectType");
+            final Map<Integer, String> unique = analyseProperty(_parameter, properties, "Unique");
+            final BidiMap<Integer, String> bidi = new DualHashBidiMap<>(childtypes);
+
+            if (bidi.containsValue(childInst.getType().getName())) {
+                final Type type = Type.get(connectTypes.get(bidi.getKey(childInst.getType().getName())));
+
+                final QueryBuilder queryBldr = new QueryBuilder(type);
+                queryBldr.addWhereAttrEqValue(CIProjects.Project2DocumentAbstract.FromAbstract,
+                                _parameter.getCallInstance());
+                queryBldr.addWhereAttrEqValue(CIProjects.Project2DocumentAbstract.ToAbstract, childInst);
+                if (!queryBldr.getQuery().execute().isEmpty()) {
+                    warnings.add(new Project2DocDuplicateWarning(childInst));
+                } else if (BooleanUtils.toBoolean(unique.get(bidi.getKey(childInst.getType().getName())))) {
+                    final QueryBuilder queryBldr2 = new QueryBuilder(type);
+                    queryBldr2.addWhereAttrEqValue(CIProjects.Project2DocumentAbstract.ToAbstract, childInst);
+                    if (!queryBldr2.getQuery().execute().isEmpty()) {
+                        warnings.add(new Project2DocUniqueWarning(childInst));
                     }
                 }
             }
-            if (validate) {
+        }
+        if (warnings.isEmpty()) {
+            ret.put(ReturnValues.TRUE, true);
+        } else {
+            ret.put(ReturnValues.SNIPLETT, WarningUtil.getHtml4Warning(warnings).toString());
+            if (!WarningUtil.hasError(warnings)) {
                 ret.put(ReturnValues.TRUE, true);
-                html.append(DBProperties.getProperty("org.efaps.esjp.projects.Project.validateConnectDoc"));
-                ret.put(ReturnValues.SNIPLETT, html.toString());
-            } else {
-                html.insert(0, DBProperties.getProperty("org.efaps.esjp.projects.Project.invalidateConnectDoc")
-                                                                                                            + "<p>");
-                ret.put(ReturnValues.SNIPLETT, html.toString());
             }
         }
         return ret;
     }
 
     /**
-     * Method to obtain the name of the document.
-     *
-     * @param _child with the instance of the document.
-     * @return StringBuilder with the name of the document.
-     * @throws EFapsException on error.
+     *  @param _parameter Parameter as passed from the eFaps API
+     * @return new empty Return
+     * @throws EFapsException on error
      */
-    protected StringBuilder getString4ReturnInvalidate(final Instance _child)
+    public Return getTypeFieldValue(final Parameter _parameter)
         throws EFapsException
     {
-        final StringBuilder html = new StringBuilder();
-        final PrintQuery print = new PrintQuery(_child);
-        print.addAttribute(CISales.DocumentAbstract.Name);
-        print.execute();
-        return html.append(_child.getType().getLabel()
-                            + " - " + print.<String>getAttribute(CISales.DocumentAbstract.Name));
+        final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
+                        ProjectsSettings.CONNECT2DOC, true);
+        final List<DropDownPosition> positions = new ArrayList<>();
+        for (final String typeStr : analyseProperty(_parameter, properties, "ConnectChildType").values()) {
+            final Type type = Type.get(typeStr);
+            if (type != null) {
+                final DropDownPosition position = new DropDownPosition(type.getId(), type.getLabel());
+                positions.add(position);
+            }
+        }
+        Collections.sort(positions, new Comparator<DropDownPosition>(){
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public int compare(final DropDownPosition _arg0,
+                               final DropDownPosition _arg1)
+            {
+                return _arg0.getOrderValue().compareTo(_arg1.getOrderValue());
+            }});
+        final Return ret = new Return();
+        ret.put(ReturnValues.SNIPLETT, new Field().getDropDownField(_parameter, positions));
+        return ret;
     }
 
     /**
@@ -820,5 +721,56 @@ public abstract class Project_Base
             }
         };
         return field.dropDownFieldValue(_parameter);
+    }
+
+    public static abstract class DocWarning
+        extends AbstractWarning
+    {
+        public DocWarning(final Instance _instance)
+            throws EFapsException
+        {
+            if (_instance.getType().isCIType(CIERP.DocumentAbstract)) {
+                final PrintQuery print = new PrintQuery(_instance);
+                print.addAttribute(CIERP.DocumentAbstract.Name);
+                print.execute();
+                addObject(_instance.getType().getLabel(), print.getAttribute(CIERP.DocumentAbstract.Name));
+            }
+        }
+    }
+
+    /**
+     * Warning for amount greater zero.
+     */
+    public static class Project2DocDuplicateWarning
+        extends DocWarning
+    {
+
+        /**
+         * Constructor.
+         */
+        public Project2DocDuplicateWarning(final Instance _instance)
+            throws EFapsException
+        {
+            super(_instance);
+            setError(true);
+        }
+    }
+
+    /**
+     * Warning for amount greater zero.
+     */
+    public static class Project2DocUniqueWarning
+        extends DocWarning
+    {
+
+        /**
+         * Constructor.
+         */
+        public Project2DocUniqueWarning(final Instance _instance)
+            throws EFapsException
+        {
+            super(_instance);
+            setError(true);
+        }
     }
 }

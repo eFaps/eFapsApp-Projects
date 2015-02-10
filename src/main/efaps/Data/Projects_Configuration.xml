@@ -52,5 +52,86 @@
             <value><![CDATA[Expense01=Sales_OrderOutbound
 Expense02=Sales_ServiceOrderOutbound ]]></value>
         </attribute>
+        <attribute>
+            <key>org.efaps.projects.Connect2Doc01</key>
+            <value><![CDATA[ConnectType01=Projects_ProjectService2ConsignmentNote
+ConnectChildType01=Sales_ConsignmentNote
+ConnectType02=Projects_ProjectService2WorkReport
+ConnectChildType02=Projects_WorkReport
+ConnectType03=Projects_ProjectService2WorkOrder
+ConnectChildType03=Projects_WorkOrder
+ConnectType04=Projects_ProjectService2UsageReport
+ConnectChildType04=Sales_UsageReport
+ConnectType05=Projects_ProjectService2ServiceRequest
+ConnectChildType05=Sales_ServiceRequest
+ConnectType06=Projects_ProjectService2ServiceOrderOutbound
+ConnectChildType06=Sales_ServiceOrderOutbound
+ConnectType07=Projects_ProjectService2ReturnUsageReport
+ConnectChildType07=Sales_ReturnUsageReport
+ConnectType08=Projects_ProjectService2ReturnSlip
+ConnectChildType08=Sales_ReturnSlip
+ConnectType09=Projects_ProjectService2Reservation
+ConnectChildType09=Sales_Reservation
+ConnectType10=Projects_ProjectService2Request
+ConnectChildType10=Projects_ServiceRequest]]></value>
+        </attribute>
+        <attribute>
+            <key>org.efaps.projects.Connect2Doc02</key>
+            <value><![CDATA[ConnectType11=Projects_ProjectService2Reminder
+ConnectChildType11=Sales_Reminder
+ConnectType12=Projects_ProjectService2RecievingTicket
+ConnectChildType12=Sales_RecievingTicket
+ConnectType13=Projects_ProjectService2Receipt
+ConnectChildType13=Sales_Receipt
+ConnectType14=Projects_ProjectService2QuoteRequest
+ConnectChildType14=Sales_Quotation
+ConnectType15=Projects_ProjectService2Quotation
+ConnectChildType15=Sales_Quotation
+ConnectType16=Projects_ProjectService2ProductRequest
+ConnectChildType16=Sales_ProductRequest
+ConnectType17=Projects_ProjectService2PettyCashReceipt
+ConnectChildType17=Sales_PettyCashReceipt
+ConnectType18=Projects_ProjectService2PettyCashBalance
+ConnectChildType18=Sales_PettyCashBalance
+ConnectType19=Projects_ProjectService2PettyCash
+ConnectChildType19=Sales_AccountPettyCash
+ConnectType20=Projects_ProjectService2PayRequest
+ConnectChildType20=Projects_PayRequest]]></value>
+        </attribute>
+        <attribute>
+            <key>org.efaps.projects.Connect2Doc03</key>
+            <value><![CDATA[ConnectType21=Projects_ProjectService2OrderOutbound
+ConnectChildType21=Sales_OrderOutbound
+ConnectType22=Projects_ProjectService2Invoice
+ConnectChildType22=Sales_Invoice
+ConnectType23=Projects_ProjectService2IncomingReminder
+ConnectChildType23=Sales_IncomingReminder
+ConnectType24=Projects_ProjectService2IncomingReceipt
+ConnectChildType24=Sales_IncomingReceipt
+ConnectType25=Projects_ProjectService2IncomingProfServReceipt
+ConnectChildType25=Sales_IncomingProfServReceipt
+ConnectType26=Projects_ProjectService2IncomingInvoice
+ConnectChildType26=Sales_IncomingInvoice
+ConnectType27=Projects_ProjectService2IncomingCreditNote
+ConnectChildType27=Sales_IncomingCreditNote
+ConnectType28=Projects_ProjectService2GoodsIssueSlip
+ConnectChildType28=Sales_GoodsIssueSlip
+ConnectType29=Projects_ProjectService2FundsToBeSettledReceipt
+ConnectChildType29=Sales_FundsToBeSettledReceipt
+ConnectType30=Projects_ProjectService2FundsToBeSettled
+ConnectChildType30=Sales_AccountFundsToBeSettled
+ConnectType31=Projects_ProjectService2DeliveryNote
+ConnectChildType31=Sales_DeliveryNote
+ConnectType32=Projects_ProjectService2CreditNote
+ConnectChildType32=Sales_CreditNote
+ConnectType33=Projects_ProjectService2CostSheet
+ConnectChildType33=Sales_CostSheet]]></value>
+        </attribute>
+        <attribute>
+            <key>org.efaps.projects.Connect2Doc04</key>
+            <value><![CDATA[ConnectChildType34=TimeReport_EmployeeTimeCard
+ConnectType34=TimeReport_Projects_ProjectService2EmployeeTimeCard
+Unique01=true]]></value>
+        </attribute>
     </definition>
 </common-systemconfiguration>

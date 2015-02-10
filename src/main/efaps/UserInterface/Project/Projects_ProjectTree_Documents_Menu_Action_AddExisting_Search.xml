@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2009 The eFaps Team
+ Copyright 2003 - 2015 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,8 +23,7 @@
 
 -->
 
-<ui-search xmlns="http://www.efaps.org/xsd"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<ui-search xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>c70275cb-f07b-47f0-8bb8-3c99552a8d6a</uuid>
     <file-application>eFapsApp-Projects</file-application>
@@ -32,11 +31,9 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Projects_ProjectTree_Documents_Menu_Action_AddExisting_Search</name>
-        <!-- defaults -->
         <default>
             <command>Projects_DocumentSearch</command>
         </default>
-        <!-- childs -->
         <childs>
             <child>Projects_DocumentSearch</child>
         </childs>
