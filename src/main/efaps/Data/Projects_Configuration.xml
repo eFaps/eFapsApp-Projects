@@ -131,7 +131,11 @@ ConnectChildType33=Sales_CostSheet]]></value>
             <key>org.efaps.projects.Connect2Doc04</key>
             <value><![CDATA[ConnectChildType34=TimeReport_EmployeeTimeCard
 ConnectType34=TimeReport_Projects_ProjectService2EmployeeTimeCard
-Unique01=true]]></value>
+Unique34=true
+ConnectChildType35=Payroll_Payslip
+ConnectType35=PayRoll_Projects_ProjectService2Payslip
+ConnectChildType36=Payroll_Advance
+ConnectType36=PayRoll_Projects_ProjectService2Advance]]></value>
         </attribute>
     </definition>
 </common-systemconfiguration>
