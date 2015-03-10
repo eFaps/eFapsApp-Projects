@@ -55,6 +55,7 @@ import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.program.esjp.Listener;
 import org.efaps.db.Instance;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
@@ -64,6 +65,7 @@ import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ci.CISales;
 import org.efaps.esjp.common.jasperreport.AbstractDynamicReport;
 import org.efaps.esjp.erp.FilteredReport;
+import org.efaps.esjp.projects.listener.IOnResultReport;
 import org.efaps.esjp.projects.util.Projects;
 import org.efaps.esjp.projects.util.ProjectsSettings;
 import org.efaps.util.EFapsException;
@@ -219,7 +221,13 @@ public abstract class ProjectResultReport_Base
                         add2Map(totalMap, entry.getKey().getName() + ".cross", cross);
                         add2Map(totalMap, entry.getKey().getName() + ".tax", tax);
 
-                        switch (maping.get(entry.getKey())) {
+                        String caseStr;
+                        if (maping.containsKey(entry.getKey())) {
+                            caseStr = maping.get(entry.getKey());
+                        } else {
+                            caseStr = "unknown";
+                        }
+                        switch (caseStr) {
                             case "Expense":
                                 expenseNet = expenseNet.add(net);
                                 expenseCross = expenseCross.add(cross);
@@ -749,9 +757,10 @@ public abstract class ProjectResultReport_Base
                         bean.setName(multi.getMsgPhrase(selProject, msgPhrase));
                         map.put(projectInst, bean);
                     }
-                    bean.add(multi.getCurrentInstance().getType(),
-                                    multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.NetTotal),
-                                    multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.CrossTotal));
+                    bean.add(_parameter,
+                            multi.getCurrentInstance(),
+                            multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.NetTotal),
+                            multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.CrossTotal));
                 }
                 this.beans.addAll(map.values());
             }
@@ -789,23 +798,34 @@ public abstract class ProjectResultReport_Base
         }
 
         /**
-         * @param _type
-         * @param _attribute
-         * @param _attribute2
+         * @param _parameter Parameter as passed by the eFaps API
+         * @param _instance instance the amounts belong to
+         * @param _net      net amount
+         * @param _cross    cross amount
+         * @throws EFapsException on error
          */
-        public void add(final Type _type,
+        public void add(final Parameter _parameter,
+                        final Instance _instance,
                         final BigDecimal _net,
                         final BigDecimal _cross)
+            throws EFapsException
         {
+            final Type type = _instance.getType();
             DocBean docBean;
-            if (this.docs.containsKey(_type)) {
-                docBean = this.docs.get(_type);
+            if (this.docs.containsKey(type)) {
+                docBean = this.docs.get(type);
             } else {
-                docBean = new DocBean().setType(_type);
-                this.docs.put(_type, docBean);
+                docBean = new DocBean().setType(type);
+                this.docs.put(type, docBean);
             }
-            docBean.addNet(_net);
-            docBean.addCross(_cross);
+            boolean add = true;
+            for (final IOnResultReport listener : Listener.get().<IOnResultReport>invoke(IOnResultReport.class)) {
+                add = listener.addAmounts2DocBean(_parameter, _instance, _net, _cross, docBean, add);
+            }
+            if (add) {
+                docBean.addNet(_net);
+                docBean.addCross(_cross);
+            }
         }
 
         /**
