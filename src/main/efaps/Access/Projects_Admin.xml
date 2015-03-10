@@ -41,6 +41,7 @@
         <access-type>statusBoost</access-type>
         <access-type>statusModify</access-type>
         <access-type>delete</access-type>
+        <access-type>grant</access-type>
 
         <type>Projects_ProjectService</type>
         <type>Projects_ServiceRequest</type>

@@ -97,7 +97,7 @@
           <trigger program="org.efaps.esjp.admin.datamodel.PersonRangeValue"
                    name="Emperador_Products_ClassFloorLaminate.SurfaceRange"
                    event="RANGE_VALUE">
-            <property name="Value">Name</property>
+            <property name="Value">$&lt;attribute[LastName]&gt;, $&lt;attribute[FirstName]&gt;</property>
             <property name="Type">Admin_User_Person</property>
           </trigger>
         </attribute>
