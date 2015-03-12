@@ -19,7 +19,9 @@
  Last Changed:    $Date$
  Last Changed By: $Author$
 
---><ui-form xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+-->
+<ui-form xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>d47869ff-5db7-47c7-9448-cee6f20775da</uuid>
     <file-application>eFapsApp-Projects</file-application>
     <file-revision>$Rev$</file-revision>
@@ -32,11 +34,11 @@
             <trigger program="org.efaps.esjp.projects.report.AnalysisProductReport" method="getReport"
                 name="Projects_AnalysisProductReportForm.report.UI_FIELD_VALUE" event="UI_FIELD_VALUE">
                 <property name="FilterKey">org.efaps.esjp.projects.report.AnalysisProductReport.FilterKey</property>
-                <property name="Type01">Sales_DeliveryNote</property>
-                <property name="Type02">Sales_RecievingTicket</property>
-                <property name="Type03">Sales_UsageReport</property>
-                <property name="Type100">Sales_ReturnSlip</property>
-                <property name="Type101">Sales_ReturnUsageReport</property>
+                <property name="Type01">Sales_RecievingTicket</property>
+                <property name="Type02">Sales_ReturnUsageReport</property>
+                <property name="Type03">Sales_ReturnSlip</property>
+                <property name="Type100">Sales_DeliveryNote</property>
+                <property name="Type101">Sales_UsageReport</property>
             </trigger>
         </field>
     </definition>
