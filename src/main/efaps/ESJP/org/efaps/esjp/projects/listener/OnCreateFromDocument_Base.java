@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2015 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
@@ -24,7 +21,7 @@ package org.efaps.esjp.projects.listener;
 import java.util.List;
 
 import org.efaps.admin.event.Parameter;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
@@ -35,8 +32,6 @@ import org.efaps.esjp.erp.CommonDocument;
 import org.efaps.esjp.projects.Project;
 import org.efaps.esjp.sales.listener.IOnCreateFromDocument;
 import org.efaps.util.EFapsException;
-
-
 /**
  * TODO comment!
  *
@@ -44,7 +39,7 @@ import org.efaps.util.EFapsException;
  * @version $Id$
  */
 @EFapsUUID("e761f76e-3ad4-4782-a743-636e53c4327a")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Pojects")
 public abstract class OnCreateFromDocument_Base
     extends CommonDocument
     implements IOnCreateFromDocument
@@ -61,56 +56,54 @@ public abstract class OnCreateFromDocument_Base
             if (instance.isValid()) {
                 final PrintQuery print = new PrintQuery(instance);
                 SelectBuilder projBaseSel = null;
-                if (instance.getType().isKindOf(CISales.IncomingInvoice.getType())) {
+                if (instance.getType().isKindOf(CISales.IncomingInvoice)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2IncomingInvoice,
-                                                    CIProjects.ProjectService2IncomingInvoice.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2IncomingInvoice.ToLink)
                                     .linkto(CIProjects.ProjectService2IncomingInvoice.FromLink);
-                } else if (instance.getType().isKindOf(CISales.OrderOutbound.getType())) {
+                } else if (instance.getType().isKindOf(CISales.OrderOutbound)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2OrderOutbound,
-                                                    CIProjects.ProjectService2OrderOutbound.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2OrderOutbound.ToLink)
                                     .linkto(CIProjects.ProjectService2OrderOutbound.FromLink);
-                } else if (instance.getType().isKindOf(CISales.ServiceOrderOutbound.getType())) {
+                } else if (instance.getType().isKindOf(CISales.ServiceOrderOutbound)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2ServiceOrderOutbound,
-                                                    CIProjects.ProjectService2ServiceOrderOutbound.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2ServiceOrderOutbound.ToLink)
                                     .linkto(CIProjects.ProjectService2ServiceOrderOutbound.FromLink);
-                } else if (instance.getType().isKindOf(CISales.Invoice.getType())) {
+                } else if (instance.getType().isKindOf(CISales.Invoice)) {
                     projBaseSel = SelectBuilder.get()
-                                        .linkfrom(CIProjects.ProjectService2Invoice,
-                                                        CIProjects.ProjectService2Invoice.ToLink)
+                                        .linkfrom(CIProjects.ProjectService2Invoice.ToLink)
                                         .linkto(CIProjects.ProjectService2Invoice.FromLink);
-                } else if (instance.getType().isKindOf(CISales.DeliveryNote.getType())) {
+                } else if (instance.getType().isKindOf(CISales.DeliveryNote)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2DeliveryNote,
-                                                    CIProjects.ProjectService2DeliveryNote.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2DeliveryNote.ToLink)
                                     .linkto(CIProjects.ProjectService2DeliveryNote.FromLink);
-                } else if (instance.getType().isKindOf(CISales.QuoteRequest.getType())) {
+                } else if (instance.getType().isKindOf(CISales.QuoteRequest)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2QuoteRequest,
-                                                    CIProjects.ProjectService2QuoteRequest.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2QuoteRequest.ToLink)
                                     .linkto(CIProjects.ProjectService2QuoteRequest.FromLink);
-                } else if (instance.getType().isKindOf(CISales.ProductRequest.getType())) {
+                } else if (instance.getType().isKindOf(CISales.ProductRequest)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2ProductRequest,
-                                                    CIProjects.ProjectService2ProductRequest.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2ProductRequest.ToLink)
                                     .linkto(CIProjects.ProjectService2ProductRequest.FromLink);
-                } else if (instance.getType().isKindOf(CISales.ServiceRequest.getType())) {
+                } else if (instance.getType().isKindOf(CISales.ServiceRequest)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2ServiceRequest,
-                                                    CIProjects.ProjectService2ServiceRequest.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2ServiceRequest.ToLink)
                                     .linkto(CIProjects.ProjectService2ServiceRequest.FromLink);
-                } else if (instance.getType().isKindOf(CISales.AccountPettyCash.getType())) {
+                } else if (instance.getType().isKindOf(CISales.AccountPettyCash)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2PettyCash,
-                                                    CIProjects.ProjectService2PettyCash.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2PettyCash.ToLink)
                                     .linkto(CIProjects.ProjectService2PettyCash.FromLink);
-                } else if (instance.getType().isKindOf(CISales.AccountFundsToBeSettled.getType())) {
+                } else if (instance.getType().isKindOf(CISales.AccountFundsToBeSettled)) {
                     projBaseSel = SelectBuilder.get()
-                                    .linkfrom(CIProjects.ProjectService2FundsToBeSettled,
-                                                    CIProjects.ProjectService2FundsToBeSettled.ToLink)
+                                    .linkfrom(CIProjects.ProjectService2FundsToBeSettled.ToLink)
                                     .linkto(CIProjects.ProjectService2FundsToBeSettled.FromLink);
+                } else if (instance.getType().isKindOf(CISales.RecievingTicket)) {
+                    projBaseSel = SelectBuilder.get()
+                                    .linkfrom(CIProjects.ProjectService2RecievingTicket.ToLink)
+                                    .linkto(CIProjects.ProjectService2RecievingTicket.FromLink);
+                } else if (instance.getType().isKindOf(CISales.Reservation)) {
+                    projBaseSel = SelectBuilder.get()
+                                    .linkfrom(CIProjects.ProjectService2Reservation.ToLink)
+                                    .linkto(CIProjects.ProjectService2Reservation.FromLink);
                 } else {
                     projBaseSel = getSelectBuilder(_parameter, _instances);
                 }
@@ -135,7 +128,6 @@ public abstract class OnCreateFromDocument_Base
                             .append("\n")
                             .append(getSetFieldValue(0, projDataField,
                                         new Project().getProjectData(_parameter, projInst).toString(), null, true));
-
                     }
                 }
             }
