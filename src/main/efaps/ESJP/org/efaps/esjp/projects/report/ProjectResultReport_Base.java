@@ -551,12 +551,15 @@ public abstract class ProjectResultReport_Base
                     dateTarget = (Boolean) filterMap.get("dateTarget");
                 }
                 if (dateTarget) {
-                    projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
+                    projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date,
+                                    end.withTimeAtStartOfDay().plusDays(1));
                     projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date,
-                                    start.minusMinutes(1));
+                                    start.withTimeAtStartOfDay().minusMinutes(1));
                 } else {
-                    _queryBldr.addWhereAttrLessValue(CISales.DocumentAbstract.Date, end);
-                    _queryBldr.addWhereAttrGreaterValue(CISales.DocumentAbstract.Date, start.minusMinutes(1));
+                    _queryBldr.addWhereAttrLessValue(CISales.DocumentAbstract.Date,
+                                    end.withTimeAtStartOfDay().plusDays(1));
+                    _queryBldr.addWhereAttrGreaterValue(CISales.DocumentAbstract.Date,
+                                    start.withTimeAtStartOfDay().minusMinutes(1));
                 }
 
                 final QueryBuilder attrQueryBldr = new QueryBuilder(CIProjects.Project2DocumentAbstract);
