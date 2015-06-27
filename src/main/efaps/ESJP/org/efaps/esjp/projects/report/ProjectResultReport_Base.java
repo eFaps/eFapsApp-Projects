@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2015 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,10 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.projects.report;
@@ -34,18 +30,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
-import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-import net.sf.dynamicreports.report.base.expression.AbstractSimpleExpression;
-import net.sf.dynamicreports.report.builder.DynamicReports;
-import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
-import net.sf.dynamicreports.report.builder.grid.ColumnGridComponentBuilder;
-import net.sf.dynamicreports.report.builder.grid.ColumnTitleGroupBuilder;
-import net.sf.dynamicreports.report.builder.style.ConditionalStyleBuilder;
-import net.sf.dynamicreports.report.builder.style.StyleBuilder;
-import net.sf.dynamicreports.report.definition.ReportParameters;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-
 import org.efaps.admin.common.MsgPhrase;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
@@ -53,7 +37,7 @@ import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.program.esjp.Listener;
 import org.efaps.db.Instance;
@@ -72,15 +56,25 @@ import org.efaps.util.EFapsException;
 import org.efaps.util.cache.CacheReloadException;
 import org.joda.time.DateTime;
 
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.base.expression.AbstractSimpleExpression;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.grid.ColumnGridComponentBuilder;
+import net.sf.dynamicreports.report.builder.grid.ColumnTitleGroupBuilder;
+import net.sf.dynamicreports.report.builder.style.ConditionalStyleBuilder;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.definition.ReportParameters;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id: AnalysisProductReport_Base.java 14136 2014-09-29 21:42:24Z
- *          m.aranya@moxter.net $
  */
 @EFapsUUID("9b3c65df-97aa-4fe5-84f3-2931e4f66cc1")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class ProjectResultReport_Base
     extends FilteredReport
 {
@@ -90,11 +84,11 @@ public abstract class ProjectResultReport_Base
      */
     public enum Style
     {
-        /**None. */
+        /** None. */
         NONE,
-        /**HEADER. */
+        /** HEADER. */
         HEADER,
-        /**TOTAL. */
+        /** TOTAL. */
         TOTAL;
     }
 
@@ -190,7 +184,7 @@ public abstract class ProjectResultReport_Base
                 totalMap.put("style", Style.TOTAL.toString());
                 final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
                                 ProjectsSettings.RESULTREPORT, true);
-                for (final ProjectBean  bean : getBeans(_parameter)) {
+                for (final ProjectBean bean : getBeans(_parameter)) {
                     BigDecimal expenseNet = BigDecimal.ZERO;
                     BigDecimal estimateNet = BigDecimal.ZERO;
                     BigDecimal collectionNet = BigDecimal.ZERO;
@@ -380,11 +374,9 @@ public abstract class ProjectResultReport_Base
             }
         }
 
-
-
         protected Map<Type, String> getTypeMap(final Parameter _parameter,
                                                final String _key)
-            throws EFapsException
+                                                   throws EFapsException
         {
             final Map<Type, String> ret = new HashMap<>();
             final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
@@ -400,7 +392,6 @@ public abstract class ProjectResultReport_Base
             return ret;
         }
 
-
         protected void addHeader(final Parameter _parameter,
                                  final List<Map<String, Object>> _source,
                                  final String _key)
@@ -415,7 +406,7 @@ public abstract class ProjectResultReport_Base
                                  final List<Map<String, Object>> _source,
                                  final Map<String, Object> _base,
                                  final Map<String, Object> _target)
-            throws EFapsException
+                                     throws EFapsException
         {
             final Map<String, Object> estimateGainMap = new HashMap<>();
             estimateGainMap.put("descr", DBProperties.getProperty(ProjectResultReport.class.getName() + ".gain.descr"));
@@ -455,7 +446,7 @@ public abstract class ProjectResultReport_Base
         protected Map<String, Object> addBlock(final Parameter _parameter,
                                                final List<Map<String, Object>> _source,
                                                final String _key)
-            throws CacheReloadException, EFapsException
+                                                   throws CacheReloadException, EFapsException
         {
             final Map<String, Object> totalMap = new HashMap<>();
             totalMap.put("style", Style.TOTAL.toString());
@@ -517,7 +508,7 @@ public abstract class ProjectResultReport_Base
          */
         protected void add2QueryBuilder(final Parameter _parameter,
                                         final QueryBuilder _queryBldr)
-            throws EFapsException
+                                            throws EFapsException
         {
             final Instance inst = _parameter.getInstance();
             if (inst != null && inst.isValid() && inst.getType().isKindOf(CIProjects.ProjectAbstract)) {
@@ -539,34 +530,35 @@ public abstract class ProjectResultReport_Base
                         }
                     }
                 }
-                if (projInsts.isEmpty()) {
-                    final DateTime start;
-                    final DateTime end;
-                    if (filterMap.containsKey("dateFrom")) {
-                        start = (DateTime) filterMap.get("dateFrom");
-                    } else {
-                        start = new DateTime();
-                    }
-                    if (filterMap.containsKey("dateTo")) {
-                        end = (DateTime) filterMap.get("dateTo");
-                    } else {
-                        end = new DateTime();
-                    }
-                    Boolean dateTarget = false;
-                    if (filterMap.containsKey("dateTarget")) {
-                        dateTarget = (Boolean) filterMap.get("dateTarget");
-                    }
-                    if (dateTarget) {
-                        projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
-                        projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date,
-                                        start.minusMinutes(1));
-                    } else {
-                        _queryBldr.addWhereAttrLessValue(CISales.DocumentAbstract.Date, end);
-                        _queryBldr.addWhereAttrGreaterValue(CISales.DocumentAbstract.Date, start.minusMinutes(1));
-                    }
-                } else {
+                if (!projInsts.isEmpty()) {
                     projAttrQueryBldr.addWhereAttrEqValue(CIProjects.ProjectAbstract.ID, projInsts.toArray());
                 }
+
+                final DateTime start;
+                final DateTime end;
+                if (filterMap.containsKey("dateFrom")) {
+                    start = (DateTime) filterMap.get("dateFrom");
+                } else {
+                    start = new DateTime();
+                }
+                if (filterMap.containsKey("dateTo")) {
+                    end = (DateTime) filterMap.get("dateTo");
+                } else {
+                    end = new DateTime();
+                }
+                Boolean dateTarget = false;
+                if (filterMap.containsKey("dateTarget")) {
+                    dateTarget = (Boolean) filterMap.get("dateTarget");
+                }
+                if (dateTarget) {
+                    projAttrQueryBldr.addWhereAttrLessValue(CIProjects.ProjectAbstract.Date, end);
+                    projAttrQueryBldr.addWhereAttrGreaterValue(CIProjects.ProjectAbstract.Date,
+                                    start.minusMinutes(1));
+                } else {
+                    _queryBldr.addWhereAttrLessValue(CISales.DocumentAbstract.Date, end);
+                    _queryBldr.addWhereAttrGreaterValue(CISales.DocumentAbstract.Date, start.minusMinutes(1));
+                }
+
                 final QueryBuilder attrQueryBldr = new QueryBuilder(CIProjects.Project2DocumentAbstract);
                 attrQueryBldr.addWhereAttrInQuery(CIProjects.Project2DocumentAbstract.FromAbstract,
                                 projAttrQueryBldr.getAttributeQuery(CIProjects.ProjectAbstract.ID));
@@ -587,7 +579,7 @@ public abstract class ProjectResultReport_Base
                                                          final String _key,
                                                          final String _propKey,
                                                          final StyleBuilder _headerStyle)
-            throws EFapsException
+                                                             throws EFapsException
         {
             final ColumnTitleGroupBuilder ret = DynamicReports.grid.titleGroup(
                             DBProperties.getProperty(ProjectResultReport.class.getName() + "." + _propKey + ".descr"));
@@ -631,11 +623,11 @@ public abstract class ProjectResultReport_Base
                 final TextColumnBuilder<BigDecimal> netPercentColumn = DynamicReports.col.column(DBProperties
                                 .getProperty(ProjectResultReport.class.getName() + ".Column.net"),
                                 _propKey + ".gainPercent.net", DynamicReports.type.bigDecimalType()).setStyle(
-                                _headerStyle);
+                                                _headerStyle);
                 final TextColumnBuilder<BigDecimal> crossPercentColumn = DynamicReports.col.column(DBProperties
                                 .getProperty(ProjectResultReport.class.getName() + ".Column.cross"),
                                 _propKey + ".gainPercent.cross", DynamicReports.type.bigDecimalType()).setStyle(
-                                _headerStyle);
+                                                _headerStyle);
 
                 final ColumnTitleGroupBuilder gainGroup = DynamicReports.grid.titleGroup(DBProperties
                                 .getProperty(ProjectResultReport.class.getName() + ".gain.descr"), netColumn,
@@ -654,7 +646,7 @@ public abstract class ProjectResultReport_Base
         @Override
         protected void addColumnDefintion(final Parameter _parameter,
                                           final JasperReportBuilder _builder)
-            throws EFapsException
+                                              throws EFapsException
         {
             final ConditionalStyleBuilder totalCondition = DynamicReports.stl.conditionalStyle(
                             new TotalConditionExpression()).setBold(true).setItalic(true);
@@ -758,9 +750,9 @@ public abstract class ProjectResultReport_Base
                         map.put(projectInst, bean);
                     }
                     bean.add(_parameter,
-                            multi.getCurrentInstance(),
-                            multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.NetTotal),
-                            multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.CrossTotal));
+                                    multi.getCurrentInstance(),
+                                    multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.NetTotal),
+                                    multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.CrossTotal));
                 }
                 this.beans.addAll(map.values());
             }
@@ -800,15 +792,15 @@ public abstract class ProjectResultReport_Base
         /**
          * @param _parameter Parameter as passed by the eFaps API
          * @param _instance instance the amounts belong to
-         * @param _net      net amount
-         * @param _cross    cross amount
+         * @param _net net amount
+         * @param _cross cross amount
          * @throws EFapsException on error
          */
         public void add(final Parameter _parameter,
                         final Instance _instance,
                         final BigDecimal _net,
                         final BigDecimal _cross)
-            throws EFapsException
+                            throws EFapsException
         {
             final Type type = _instance.getType();
             DocBean docBean;
