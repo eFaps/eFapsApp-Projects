@@ -15,22 +15,9 @@
  *
  */
 
-package org.efaps.esjp.projects;
-
-import org.efaps.admin.program.esjp.EFapsApplication;
-import org.efaps.admin.program.esjp.EFapsUUID;
-
 /**
- * This class must be replaced for customization, therefore it is left empty.
- * Functional description can be found in the related "<code>_base</code>"
- * class.
+ * Main package for projects.
  *
  * @author The eFaps Team
  */
-@EFapsUUID("7bc8c88f-64c3-402d-aed9-1ad0d93f5437")
-@EFapsApplication("eFapsApp-Projects")
-public class Project
-    extends Project_Base
-{
-
-}
+package org.efaps.esjp.projects;

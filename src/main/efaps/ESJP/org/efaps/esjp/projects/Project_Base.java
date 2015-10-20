@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2015 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.projects;
@@ -39,8 +36,9 @@ import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.program.esjp.Listener;
 import org.efaps.admin.ui.AbstractUserInterfaceObject.TargetMode;
 import org.efaps.admin.user.Group;
 import org.efaps.admin.user.Role;
@@ -68,6 +66,7 @@ import org.efaps.esjp.erp.AbstractWarning;
 import org.efaps.esjp.erp.CommonDocument;
 import org.efaps.esjp.erp.IWarning;
 import org.efaps.esjp.erp.WarningUtil;
+import org.efaps.esjp.projects.listener.IOnProject;
 import org.efaps.esjp.projects.listener.OnCreateFromDocument;
 import org.efaps.esjp.projects.util.Projects;
 import org.efaps.esjp.projects.util.ProjectsSettings;
@@ -78,10 +77,9 @@ import org.efaps.util.EFapsException;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @EFapsUUID("e0c8e7d5-ca9c-46b3-967e-8bd307b17c93")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class Project_Base
     extends CommonDocument
 {
@@ -318,13 +316,17 @@ public abstract class Project_Base
                 map.put(contactData, data);
             }
             if (contactField != null) {
-                map.put(contactField + "AutoComplete", print.<String>getSelect(contName));
                 map.put(contactField, new String[] {contactInst.getOid(), print.<String>getSelect(contName)});
             }
         }
 
         final String projDataField = getProperty(_parameter, "Project_DataField", "projectData");
         map.put(projDataField, getProjectData(_parameter, instance).toString());
+
+        for (final IOnProject listener : Listener.get().<IOnProject>invoke(IOnProject.class)) {
+            listener.updateField4Project(_parameter, instance, map);
+        }
+
         list.add(map);
         ret.put(ReturnValues.VALUES, list);
         return ret;
@@ -544,7 +546,8 @@ public abstract class Project_Base
                 positions.add(position);
             }
         }
-        Collections.sort(positions, new Comparator<DropDownPosition>(){
+        Collections.sort(positions, new Comparator<DropDownPosition>()
+        {
 
             @SuppressWarnings("unchecked")
             @Override
@@ -552,7 +555,8 @@ public abstract class Project_Base
                                final DropDownPosition _arg1)
             {
                 return _arg0.getOrderValue().compareTo(_arg1.getOrderValue());
-            }});
+            }
+        });
         final Return ret = new Return();
         ret.put(ReturnValues.SNIPLETT, new Field().getDropDownField(_parameter, positions));
         return ret;
@@ -572,12 +576,11 @@ public abstract class Project_Base
         return new Return();
     }
 
-
     /**
      * Create a Label for accounting from a project.
      *
      * @param _parameter Parameter as passed from the eFaps API
-     * @return new empty Return
+     * @param _projectInst the _project inst
      * @throws EFapsException on error
      */
     public void createLabel4Project(final Parameter _parameter,
@@ -621,6 +624,9 @@ public abstract class Project_Base
                 DropDownPosition pos;
                 if (TargetMode.EDIT.equals(fieldValue.getTargetMode())) {
                     pos = new DropDownPosition(_value, _option) {
+                        /**  */
+                        private static final long serialVersionUID = 1L;
+
                         @Override
                         public boolean isSelected()
                         {
@@ -633,6 +639,8 @@ public abstract class Project_Base
                 } else {
                     if ("true".equalsIgnoreCase((String) props.get("SelectCurrent"))) {
                         pos = new DropDownPosition(_value, _option) {
+                            /**  */
+                            private static final long serialVersionUID = 1L;
 
                             @Override
                             public boolean isSelected()
@@ -723,10 +731,21 @@ public abstract class Project_Base
         return field.dropDownFieldValue(_parameter);
     }
 
-    public static abstract class DocWarning
+    /**
+     * The Class DocWarning.
+     *
+     */
+    public abstract static class AbstractDocWarning
         extends AbstractWarning
     {
-        public DocWarning(final Instance _instance)
+
+        /**
+         * Instantiates a new doc warning.
+         *
+         * @param _instance the _instance
+         * @throws EFapsException on error
+         */
+        public AbstractDocWarning(final Instance _instance)
             throws EFapsException
         {
             if (_instance.getType().isCIType(CIERP.DocumentAbstract)) {
@@ -742,11 +761,14 @@ public abstract class Project_Base
      * Warning for amount greater zero.
      */
     public static class Project2DocDuplicateWarning
-        extends DocWarning
+        extends AbstractDocWarning
     {
 
         /**
          * Constructor.
+         *
+         * @param _instance the _instance
+         * @throws EFapsException on error
          */
         public Project2DocDuplicateWarning(final Instance _instance)
             throws EFapsException
@@ -760,11 +782,14 @@ public abstract class Project_Base
      * Warning for amount greater zero.
      */
     public static class Project2DocUniqueWarning
-        extends DocWarning
+        extends AbstractDocWarning
     {
 
         /**
          * Constructor.
+         *
+         * @param _instance the _instance
+         * @throws EFapsException on error
          */
         public Project2DocUniqueWarning(final Instance _instance)
             throws EFapsException
