@@ -23,6 +23,7 @@ import java.util.List;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.program.esjp.Listener;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.SelectBuilder;
@@ -128,6 +129,10 @@ public abstract class OnCreateFromDocument_Base
                             .append("\n")
                             .append(getSetFieldValue(0, projDataField,
                                         new Project().getProjectData(_parameter, projInst).toString(), null, true));
+
+                        for (final IOnProject listener : Listener.get().<IOnProject>invoke(IOnProject.class)) {
+                            ret.append(listener.add2JavaScript4Project4Document(_parameter, instance, projInst));
+                        }
                     }
                 }
             }

@@ -49,4 +49,17 @@ public interface IOnProject
                              final Map<String, Object> _uiMap)
        throws EFapsException;
 
+    /**
+     * Add2 java script4 project4 document.
+     *
+     * @param _parameter the _parameter
+     * @param _docInstance the doc instance
+     * @param _projectInstance the project instance
+     * @return the char sequence
+     * @throws EFapsException on error
+     */
+    CharSequence add2JavaScript4Project4Document(final Parameter _parameter,
+                                                 final Instance _docInstance,
+                                                 final Instance _projectInstance)
+        throws EFapsException;
 }
