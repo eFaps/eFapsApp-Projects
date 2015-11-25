@@ -52,8 +52,6 @@
         <field name="name">
             <property name="Attribute">Name</property>
             <property name="Columns">15</property>
-            <property name="ModeEdit">EDITABLE</property>
-            <property name="ModeCreate">EDITABLE</property>
             <property name="ModeSearch">EDITABLE</property>
             <property name="Required">true</property>
         </field>
@@ -77,7 +75,7 @@
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">NONE</property>
             <property name="Required">true</property>
-            <property name="Columns">101</property>
+            <property name="Columns">80</property>
             <trigger program="org.efaps.esjp.projects.Project"
                    method="autoComplete4Contact"
                    name="Projects_ProjectForm.contact.UI_Field_Autocomplete"

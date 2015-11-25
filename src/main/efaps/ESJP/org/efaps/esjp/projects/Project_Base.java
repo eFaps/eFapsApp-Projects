@@ -101,9 +101,7 @@ public abstract class Project_Base
             {
                 final String contactOid = _parameter.getParameterValue("contact");
                 _insert.add(CIProjects.ProjectService.Contact, Instance.get(contactOid).getId());
-                _insert.add(CIProjects.ProjectService.Status,
-                                Status.find(CIProjects.ProjectServiceStatus.uuid, "Open").getId());
-
+                _insert.add(CIProjects.ProjectService.Name, getDocName4Create(_parameter));
                 add2ProjectCreate(_parameter, _insert);
             }
 
