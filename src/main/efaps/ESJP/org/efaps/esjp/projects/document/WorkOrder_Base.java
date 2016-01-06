@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2012 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.projects.document;
@@ -27,7 +24,7 @@ import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
@@ -41,10 +38,9 @@ import org.efaps.util.EFapsException;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @EFapsUUID("8d8ef20d-8e38-4e39-b2d3-a555959dcaff")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class WorkOrder_Base
     extends DocumentAbstract
 {
@@ -85,7 +81,7 @@ public abstract class WorkOrder_Base
      * To allow easy override.
      *
      * @param _parameter    Parameter as passed by the eFaps API
-     * @param _insert       Insert the values can be added to
+     * @param _instance the instance
      * @throws EFapsException on error
      */
     protected void connect4create(final Parameter _parameter,
@@ -121,7 +117,7 @@ public abstract class WorkOrder_Base
             print.addAttribute(CIProjects.ProjectAbstract.Contact);
             print.execute();
 
-            _insert.add(CIProjects.WorkOrder.Contact, print.getAttribute(CIProjects.ProjectAbstract.Contact));
+            _insert.add(CIProjects.WorkOrder.Contact, print.<Long>getAttribute(CIProjects.ProjectAbstract.Contact));
         }
         // Projects-Configuration
         if (SystemConfiguration.get(UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a"))

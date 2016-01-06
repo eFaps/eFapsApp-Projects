@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2011 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
 package org.efaps.esjp.projects.task;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
-
 
 /**
  * This class must be replaced for customization, therefore it is left empty.
@@ -31,10 +27,9 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @EFapsUUID("bbf90b29-d0f4-44b0-8fd7-c8b406395fca")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class Progress
     extends Progress_Base
 {

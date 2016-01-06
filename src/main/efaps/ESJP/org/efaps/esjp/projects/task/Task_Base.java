@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2011 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
-
 
 package org.efaps.esjp.projects.task;
 
@@ -38,7 +34,7 @@ import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.ui.AbstractCommand;
 import org.efaps.admin.ui.AbstractUserInterfaceObject.TargetMode;
@@ -60,15 +56,13 @@ import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 import org.joda.time.DateTime;
 
-
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @EFapsUUID("17c3bf25-b929-4825-a261-2f738a77abaf")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class Task_Base
 {
     /**
@@ -168,7 +162,7 @@ public abstract class Task_Base
 
                 final Update update = new Update(movePosInst);
                 update.add(CIProjects.TaskAbstract.Order,
-                                print2.getAttribute(CIProjects.TaskAbstract.Order));
+                                print2.<Object>getAttribute(CIProjects.TaskAbstract.Order));
                 update.execute();
 
                 final Update update2 = new Update(targetPosInst);
@@ -600,6 +594,14 @@ public abstract class Task_Base
     }
 
 
+    /**
+     * Update task pos.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @param _projectInst the project inst
+     * @param _order the order
+     * @throws EFapsException on error
+     */
     protected void updateTaskPos(final Parameter _parameter,
                                  final Instance _projectInst,
                                  final Integer _order)
@@ -747,6 +749,13 @@ public abstract class Task_Base
         return new Return();
     }
 
+    /**
+     * Delete post trigger.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return the return
+     * @throws EFapsException on error
+     */
     public Return deletePostTrigger(final Parameter _parameter)
         throws EFapsException
     {
@@ -759,6 +768,12 @@ public abstract class Task_Base
         return new Return();
     }
 
+    /**
+     * Update task tree.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @throws EFapsException on error
+     */
     protected void updateTaskTree(final Parameter _parameter)
         throws EFapsException
     {
@@ -769,6 +784,15 @@ public abstract class Task_Base
         }
     }
 
+    /**
+     * Update task pos.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @param _taskPO the task po
+     * @param _idx the idx
+     * @return the int
+     * @throws EFapsException on error
+     */
     protected int updateTaskPos(final Parameter _parameter,
                                 final TaskPOs _taskPO,
                                 final int _idx)

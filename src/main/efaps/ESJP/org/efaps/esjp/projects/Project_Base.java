@@ -134,9 +134,10 @@ public abstract class Project_Base
                     print.execute();
 
                     final Insert insert = new Insert(CIAccounting.LabelProject);
-                    insert.add(CIAccounting.LabelProject.Name, print.getAttribute(CIProjects.ProjectAbstract.Name));
+                    insert.add(CIAccounting.LabelProject.Name,
+                                    print.<String>getAttribute(CIProjects.ProjectAbstract.Name));
                     insert.add(CIAccounting.LabelProject.Description,
-                                    print.getAttribute(CIProjects.ProjectAbstract.Description));
+                                    print.<String>getAttribute(CIProjects.ProjectAbstract.Description));
                     insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodInst);
                     insert.add(CIAccounting.LabelProject.Status, Status.find(CIAccounting.LabelStatus.Active));
                     insert.executeWithoutAccessCheck();
@@ -593,8 +594,9 @@ public abstract class Project_Base
         print.executeWithoutAccessCheck();
 
         final Insert insert = new Insert(CIAccounting.LabelProject);
-        insert.add(CIAccounting.LabelProject.Name.name, print.getAttribute(CIProjects.ProjectAbstract.Name));
-        insert.add(CIAccounting.LabelProject.Description, print.getAttribute(CIProjects.ProjectAbstract.Description));
+        insert.add(CIAccounting.LabelProject.Name.name, print.<String>getAttribute(CIProjects.ProjectAbstract.Name));
+        insert.add(CIAccounting.LabelProject.Description,
+                        print.<String>getAttribute(CIProjects.ProjectAbstract.Description));
         insert.add(CIAccounting.LabelProject.PeriodAbstractLink, periodeInstance.getId());
         insert.execute();
 
