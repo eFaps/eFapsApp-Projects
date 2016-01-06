@@ -350,10 +350,10 @@ public abstract class Project_Base
             print.addSelect(contName);
             print.addAttribute(CIProjects.ProjectAbstract.Description, CIProjects.ProjectAbstract.Name);
             print.executeWithoutAccessCheck();
-            ret.append(print.getAttribute(CIProjects.ProjectAbstract.Name))
-                .append(" - ").append(print.getAttribute(CIProjects.ProjectAbstract.Description))
+            ret.append(print.<String>getAttribute(CIProjects.ProjectAbstract.Name))
+                .append(" - ").append(print.<String>getAttribute(CIProjects.ProjectAbstract.Description))
                 .append(" - ")
-                .append(print.getSelect(contName));
+                .append(print.<String>getSelect(contName));
         }
         return ret;
     }
