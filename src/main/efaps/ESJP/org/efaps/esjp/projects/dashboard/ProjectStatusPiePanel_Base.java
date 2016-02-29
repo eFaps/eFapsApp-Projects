@@ -40,6 +40,7 @@ import org.efaps.esjp.ui.html.dojo.charting.Orientation;
 import org.efaps.esjp.ui.html.dojo.charting.PieChart;
 import org.efaps.esjp.ui.html.dojo.charting.PieData;
 import org.efaps.esjp.ui.html.dojo.charting.Serie;
+import org.efaps.util.EFapsBaseException;
 import org.efaps.util.EFapsException;
 
 /**
@@ -127,6 +128,13 @@ public abstract class ProjectStatusPiePanel_Base
         throws EFapsException
     {
         return true;
+    }
+
+    @Override
+    public String getIdentifier()
+        throws EFapsBaseException
+    {
+        return "ProjectStatusPiePanel";
     }
 
 }
