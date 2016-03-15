@@ -56,6 +56,7 @@ import org.efaps.esjp.accounting.Period;
 import org.efaps.esjp.ci.CIAccounting;
 import org.efaps.esjp.ci.CIContacts;
 import org.efaps.esjp.ci.CIERP;
+import org.efaps.esjp.ci.CIProducts;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.esjp.common.uiform.Field;
@@ -148,6 +149,31 @@ public abstract class Project_Base
                     relInsert.executeWithoutAccessCheck();
                 }
 
+                if (Projects.ASSIGNWAREHOUSE.get()) {
+                    final PrintQuery print = new PrintQuery(_instance);
+                    print.addAttribute(CIProjects.ProjectAbstract.Name, CIProjects.ProjectAbstract.Description);
+                    print.executeWithoutAccessCheck();
+
+                    final String name = Project_Base.this.getFormatedDBProperty("WarehouseName", print.getAttribute(
+                                    CIProjects.ProjectAbstract.Name), print.getAttribute(
+                                                    CIProjects.ProjectAbstract.Description));
+                    final String descr = Project_Base.this.getFormatedDBProperty("WarehouseDescription",
+                                    print.getAttribute(CIProjects.ProjectAbstract.Name),
+                                    print.getAttribute(CIProjects.ProjectAbstract.Description));
+
+                    final Insert insert = new Insert(CIProducts.Warehouse);
+                    insert.add(CIProducts.Warehouse.Name, name);
+                    insert.add(CIProducts.StorageAbstract.Description, descr);
+                    insert.add(CIProducts.Warehouse.StatusAbstract, Status.find(
+                                    CIProducts.StorageAbstractStatus.Active));
+                    insert.executeWithoutTrigger();
+                    final Instance wareHouseInst = insert.getInstance();
+
+                    final Insert relInsert = new Insert(CIProjects.ProjectService2Warehouse);
+                    relInsert.add(CIProjects.ProjectService2Warehouse.FromLink, _instance);
+                    relInsert.add(CIProjects.ProjectService2Warehouse.ToLink, wareHouseInst);
+                    relInsert.executeWithoutTrigger();
+                }
                 connect2ProjectCreate(_parameter, _instance);
             }
         }.execute(_parameter);
@@ -621,7 +647,7 @@ public abstract class Project_Base
             {
                 final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
                 final FieldValue fieldValue = (FieldValue) _parameter.get(ParameterValues.UIOBJECT);
-                DropDownPosition pos;
+                final DropDownPosition pos;
                 if (TargetMode.EDIT.equals(fieldValue.getTargetMode())) {
                     pos = new DropDownPosition(_value, _option) {
                         /**  */

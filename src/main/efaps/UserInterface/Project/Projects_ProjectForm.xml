@@ -80,7 +80,7 @@
                    method="autoComplete4Contact"
                    name="Projects_ProjectForm.contact.UI_Field_Autocomplete"
                    event="UI_FIELD_AUTOCOMPLETE">
-                <property name="Type">Contacts_ClassClient</property>
+                <property name="Classification">Contacts_ClassClient</property>
             </trigger>
             <trigger program="org.efaps.esjp.projects.Project"
                     method="updateFields4Contact"
@@ -136,6 +136,22 @@
             <property name="Columns">70</property>
             <property name="Rows">5</property>
         </field>
+         <field name="warehouse">
+            <property name="SelectAlternateOID">linkfrom[Projects_ProjectService2Warehouse#FromLink].linkto[ToLink].oid</property>
+            <property name="HRef">TREE</property>
+            <property name="Label">Products_Warehouse.Label</property>
+            <property name="Select">linkfrom[Projects_ProjectService2Warehouse#FromLink].linkto[ToLink].attribute[Name]</property>
+            <property name="ModeEdit">NONE</property>
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
+                method="configCheck"
+                name="Projects_ProjectForm.warehouse.UI_ACCESSCHECK"
+                event="UI_ACCESSCHECK">
+                <!-- Projects-Configuration -->
+                <property name="SystemConfig">7536a95f-c2bb-4e97-beb1-58ef3e75b80a</property>
+                <property name="Attribute">org.efaps.projects.Project.AssignWarehouse</property>
+            </trigger>
+        </field>
+
         <field name="javaScript">
             <property name="ModePrint">NONE</property>
             <property name="ModeCreate">HIDDEN</property>
