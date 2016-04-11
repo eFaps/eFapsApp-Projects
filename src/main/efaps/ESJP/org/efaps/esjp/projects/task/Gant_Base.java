@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.efaps.admin.datamodel.ui.FieldValue;
+import org.efaps.admin.datamodel.ui.IUIValue;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
@@ -90,7 +90,7 @@ public abstract class Gant_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final FieldValue fieldValue = (FieldValue) _parameter.get(ParameterValues.UIOBJECT);
+        final IUIValue fieldValue = (IUIValue) _parameter.get(ParameterValues.UIOBJECT);
         final StringBuilder html = new StringBuilder();
         // title
         if (Display.NONE.equals(fieldValue.getDisplay())) {

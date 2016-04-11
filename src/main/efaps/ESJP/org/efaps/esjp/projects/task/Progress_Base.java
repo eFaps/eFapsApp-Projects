@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.efaps.admin.datamodel.Dimension;
 import org.efaps.admin.datamodel.Dimension.UoM;
-import org.efaps.admin.datamodel.ui.FieldValue;
+import org.efaps.admin.datamodel.ui.IUIValue;
 import org.efaps.admin.datamodel.ui.UIInterface;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -60,8 +60,8 @@ public abstract class Progress_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final FieldValue fieldValue = (FieldValue) _parameter.get(ParameterValues.UIOBJECT);
-        final Long uomValue = (Long) fieldValue.getValue();
+        final IUIValue fieldValue = (IUIValue) _parameter.get(ParameterValues.UIOBJECT);
+        final Long uomValue = (Long) fieldValue.getObject();
         final StringBuilder html = new StringBuilder();
         if (Display.EDITABLE.equals(fieldValue.getDisplay())) {
             final Instance instance = _parameter.getInstance();

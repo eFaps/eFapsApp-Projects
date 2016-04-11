@@ -31,7 +31,7 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.BooleanUtils;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
-import org.efaps.admin.datamodel.ui.FieldValue;
+import org.efaps.admin.datamodel.ui.IUIValue;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
@@ -641,14 +641,14 @@ public abstract class Project_Base
 
             @Override
             public DropDownPosition getDropDownPosition(final Parameter _parameter,
-                                                           final Object _value,
-                                                           final Object _option)
+                                                        final Object _value,
+                                                        final Object _option)
                 throws EFapsException
             {
                 final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-                final FieldValue fieldValue = (FieldValue) _parameter.get(ParameterValues.UIOBJECT);
+                final IUIValue fieldValue = (IUIValue) _parameter.get(ParameterValues.UIOBJECT);
                 final DropDownPosition pos;
-                if (TargetMode.EDIT.equals(fieldValue.getTargetMode())) {
+                if ( TargetMode.EDIT.equals(_parameter.get(ParameterValues.ACCESSMODE))) {
                     pos = new DropDownPosition(_value, _option) {
                         /**  */
                         private static final long serialVersionUID = 1L;
@@ -657,7 +657,7 @@ public abstract class Project_Base
                         public boolean isSelected()
                         {
                             boolean ret = false;
-                            final Long persId = (Long) fieldValue.getValue();
+                            final Long persId = (Long) fieldValue.getObject();
                             ret = getValue().equals(persId);
                             return ret;
                         }
