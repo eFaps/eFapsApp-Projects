@@ -65,7 +65,7 @@
         <field name="progress">
             <property name="Label">Projects_TaskCreateProgressTable.progress.Label</property>
             <property name="ModeEdit">EDITABLE</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <property name="Width">2</property>
         </field>
     </definition>

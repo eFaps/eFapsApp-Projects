@@ -91,7 +91,7 @@
             <property name="Label">Projects_ProjectForm.contactData.Label</property>
             <property name="ModePrint">NONE</property>
             <property name="ModeView">NONE</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <property name="ModeEdit">NONE</property>
             <property name="ModeCreate">READONLY</property>
         </field>
@@ -157,7 +157,7 @@
             <property name="ModeCreate">HIDDEN</property>
             <property name="ModeView">NONE</property>
             <property name="ModeEdit">NONE</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger program="org.efaps.esjp.projects.Project"
                 method="getJavaScriptUIValue"
                 name="Projects_ProjectForm.javaScript.UI_Field_Value"

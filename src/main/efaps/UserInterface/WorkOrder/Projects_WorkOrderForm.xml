@@ -77,7 +77,7 @@
             <property name="Phrase">$&lt;linkto[Salesperson].attribute[LastName]&gt;, $&lt;linkto[Salesperson].attribute[FirstName]&gt;</property>
             <property name="ModeEdit">NONE</property>
             <property name="Label">Projects_WorkOrder/Salesperson.Label</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
         </field>
         <field name="createGroup" character="Group">
             <property name="GroupCount">2</property>
@@ -138,7 +138,7 @@
             <property name="SelectAlternateOID">linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].oid</property>
             <property name="Phrase">$&lt;linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].type.label&gt; - $&lt;linkfrom[Projects_Project2DocumentAbstract#ToAbstract].linkto[FromAbstract].attribute[Name]&gt;</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <property name="Label">Projects_WorkOrderForm.project.Label</property>
             <property name="Required">true</property>
             <trigger program="org.efaps.esjp.projects.Project"
@@ -194,7 +194,7 @@
             <property name="ModeEdit">NONE</property>
             <property name="ModeCreate">READONLY</property>
             <property name="Label">Projects_ServiceRequestForm.contactData.Label</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
         </field>
         <field name="note">
             <property name="Attribute">Note</property>
@@ -208,7 +208,7 @@
             <property name="ModeCreate">HIDDEN</property>
             <property name="ModeView">NONE</property>
             <property name="ModeEdit">NONE</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger program="org.efaps.esjp.projects.document.WorkOrder"
                 method="getJavaScriptUIValue"
                 name="Projects_ProjectForm.javaScript.UI_Field_Value"

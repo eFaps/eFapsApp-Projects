@@ -33,7 +33,7 @@
             <property name="ModeCreate">HIDDEN</property>
             <property name="ModeView">NONE</property>
             <property name="ModeEdit">HIDDEN</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger event="UI_FIELD_VALUE" method="getStoreOIDsFieldValue"
                 name="Projects_TaskUpDownForm.parentOID.UI_FIELD_VALUE"
                 program="org.efaps.esjp.common.uiform.Field" />
@@ -44,7 +44,7 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="Label">Projects_TaskUpDownForm.count.Label</property>
             <property name="Required">true</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
         </field>
         <field name="upDown">
             <property name="Columns">5</property>
@@ -52,7 +52,7 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="Label">Projects_TaskUpDownForm.upDown.Label</property>
             <property name="Required">true</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger event="UI_FIELD_VALUE" method="radioFieldValue"
                 name="Projects_TaskUpDownForm.upDown.UI_FIELD_VALUE"
                 program="org.efaps.esjp.common.uiform.Field">

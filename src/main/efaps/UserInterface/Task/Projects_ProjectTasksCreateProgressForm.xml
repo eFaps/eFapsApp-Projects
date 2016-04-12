@@ -45,7 +45,7 @@
         <field name="progressDate">
             <property name="Label">Projects_ProjectTasksCreateProgressForm.progressDate.Label</property>
             <property name="ModeEdit">EDITABLE</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.DateUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.DateUI</property>
         </field>
         <field name="taskTable" character="Target">
             <property name="ModeEdit">READONLY</property>

@@ -34,7 +34,7 @@
             <property name="SelectAlternateOID">linkto[DefinitionLinkAbstract].oid</property>
             <property name="Select">linkto[DefinitionLinkAbstract].attribute[Name]</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <property name="Label">Projects_EventScheduleForm.eventDefinition.Label</property>
             <property name="Required">true</property>
             <trigger program="org.efaps.esjp.projects.EventSchedule"
