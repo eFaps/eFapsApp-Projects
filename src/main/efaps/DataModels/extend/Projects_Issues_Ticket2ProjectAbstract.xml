@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2010 The eFaps Team
+ Copyright 2003 - 2016 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,35 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- Author:          The eFaps Team
- Revision:        $Rev$
- Last Changed:    $Date$
- Last Changed By: $Author$
-
 -->
 
-<datamodel-type  xmlns="http://www.efaps.org/xsd"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+<datamodel-type xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>4aae76ec-412a-4765-b16f-8aa778d0c4d7</uuid>
-    <file-application>eFapsApp-Issues</file-application>
-    <file-revision>$Rev$</file-revision>
+    <file-application>eFapsApp-Projects</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <profiles>
-            <profile name="eFaps"/>
+            <profile name="eFaps" />
         </profiles>
         <name>Projects_Issues_Ticket2ProjectAbstract</name>
     </definition>
-
     <definition>
         <version-expression>(version==latest)</version-expression>
         <profiles>
-            <profile name="issues"/>
+            <profile name="issues" />
         </profiles>
         <name>Projects_Issues_Ticket2ProjectAbstract</name>
         <parent>Issues_Ticket2ObjectAbstract</parent>
-        <purpose abstract="true"/>
+        <purpose abstract="true" />
         <attribute>
             <name>ToAbstract</name>
             <type>Link</type>
