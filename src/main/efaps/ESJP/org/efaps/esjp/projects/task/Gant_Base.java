@@ -41,7 +41,6 @@ import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIProjects;
-import org.efaps.esjp.projects.task.ProgressChart_Base.ProgressSeries;
 import org.efaps.util.EFapsException;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -99,7 +98,7 @@ public abstract class Gant_Base
             @SuppressWarnings("unchecked")
             Map<Instance, String> values = (Map<Instance, String>) Context.getThreadContext()
                             .getRequestAttribute(Gant_Base.GANTREUQESTKEY);
-            if (values == null || (values != null && !values.containsKey(_parameter.getInstance()))) {
+            if (values == null || values != null && !values.containsKey(_parameter.getInstance())) {
                 values = new HashMap<Instance, String>();
                 Context.getThreadContext().setRequestAttribute(Gant_Base.GANTREUQESTKEY, values);
                 @SuppressWarnings("unchecked")
@@ -346,11 +345,6 @@ public abstract class Gant_Base
             }
         }
 
-        final ProgressSeries pgS = new ProgressChart().getSubTaskProgressSeries(_parameter, _taskInstance,
-                        new DateTime().minusDays(1), new DateTime().plusDays(1));
-        if (pgS != null && !pgS.isEmpty()) {
-            ret = pgS.lastEntry().getValue();
-        }
         return ret;
     }
 
