@@ -116,6 +116,7 @@
             <property name="Attribute">UoM</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="ModeCreate">EDITABLE</property>
+            <property name="UIType">DROPDOWN</property>
             <trigger program="org.efaps.esjp.common.uiform.Field"
                 method="getUoMDropDownFieldValue"
                 name="Projects_TaskForm.uoM.UI_FIELD_VALUE"
