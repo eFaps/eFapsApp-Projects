@@ -32,8 +32,6 @@ import org.efaps.db.Instance;
 import org.efaps.db.QueryBuilder;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.ui.structurbrowser.StandartStructurBrowser;
-import org.efaps.ui.wicket.models.cell.UIHiddenCell;
-import org.efaps.ui.wicket.models.objects.UIStructurBrowser;
 import org.efaps.util.EFapsException;
 
 
@@ -85,23 +83,4 @@ public abstract class TaskStructurBrowser_Base
         return super.onNodeRemove(_parameter);
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("rawtypes")
-    protected Comparable getComparable(final Parameter _parameter,
-                                       final UIStructurBrowser _structurBrowser)
-    {
-
-        Comparable ret;
-        if (_structurBrowser.getHidden().isEmpty()) {
-            ret = super.getComparable(_parameter, _structurBrowser);
-        } else {
-            ret = new StringBuilder().append(((UIHiddenCell) _structurBrowser.getHidden().get(0)).getCellValue())
-                            .toString();
-        }
-        return ret;
-    }
 }

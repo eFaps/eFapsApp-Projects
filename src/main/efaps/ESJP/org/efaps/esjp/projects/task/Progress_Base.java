@@ -22,7 +22,6 @@ import java.util.Map;
 import org.efaps.admin.datamodel.Dimension;
 import org.efaps.admin.datamodel.Dimension.UoM;
 import org.efaps.admin.datamodel.ui.IUIValue;
-import org.efaps.admin.datamodel.ui.UIInterface;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
@@ -31,6 +30,7 @@ import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.ui.field.Field.Display;
+import org.efaps.api.ui.IUserInterface;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
@@ -80,13 +80,13 @@ public abstract class Progress_Base
             } else {
                 final Dimension dim = Dimension.getUoM(uoMId).getDimension();
 
-                html.append("<select ").append(UIInterface.EFAPSTMPTAG).append("name=\"")
+                html.append("<select ").append(IUserInterface.EFAPSTMPTAG).append("name=\"")
                     .append(fieldValue.getField().getName()).append("\" size=\"1\">");
 
                 for (final UoM uom : dim.getUoMs()) {
                     html.append("<option value=\"").append(uom.getId());
-                    if ((uomValue == null && uom.equals(dim.getBaseUoM()))
-                                    || (uomValue != null && uomValue.equals(uom))) {
+                    if (uomValue == null && uom.equals(dim.getBaseUoM())
+                                    || uomValue != null && uomValue.equals(uom)) {
                         html.append("\" selected=\"selected");
                     }
                     html.append("\">").append(uom.getName()).append("</option>");
