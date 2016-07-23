@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2009 The eFaps Team
+ Copyright 2003 - 2016 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,18 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- Author:          The eFaps Team
- Revision:        $Rev$
- Last Changed:    $Date$
- Last Changed By: $Author$
 
 -->
 
-<dbproperties xmlns="http://www.efaps.org/xsd"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+<dbproperties xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>44e98cc8-585a-41ec-9356-2bd7e40050fb</uuid>
-    <bundle name="eFapsApp-Projects" sequence="0" />
+    <file-application>eFapsApp-Projects</file-application>
+    <bundle name="eFapsApp-Projects" sequence="1" />
     <resource>
         <type>Properties</type>
         <language></language>
