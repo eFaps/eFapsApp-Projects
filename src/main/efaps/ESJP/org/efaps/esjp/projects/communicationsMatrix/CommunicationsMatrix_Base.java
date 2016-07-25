@@ -21,7 +21,7 @@ package org.efaps.esjp.projects.communicationsMatrix;
 
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
@@ -39,7 +39,7 @@ import org.efaps.util.EFapsException;
  * @version $Id: DocumentAbstract.java 5526 2010-09-10 14:17:54Z miguel.a.aranya $
  */
 @EFapsUUID("d8c366c8-5a5c-43b8-80e2-708d4511c666")
-@EFapsRevision("$Rev: 5526 $")
+@EFapsApplication("eFapsApp-Projects")
 public class CommunicationsMatrix_Base
 {
 

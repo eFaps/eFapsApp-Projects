@@ -21,7 +21,7 @@
 
 package org.efaps.esjp.projects.task;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -31,10 +31,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 @EFapsUUID("412c4f17-e1ec-475d-9ed0-12dc2105b547")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class GantHtmlTable
     extends GantHtmlTable_Base
 {

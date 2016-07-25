@@ -21,8 +21,8 @@
 
 package org.efaps.esjp.projects.listener;
 
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsListener;
-import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -32,10 +32,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("9dfffee3-0d6a-4754-9596-3121a25d1b4e")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 @EFapsListener
 public class OnPurchaseRecord
     extends OnPurchaseRecord_Base

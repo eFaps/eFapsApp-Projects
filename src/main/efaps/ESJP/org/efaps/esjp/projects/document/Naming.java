@@ -24,7 +24,7 @@ import java.util.Date;
 
 import org.efaps.admin.common.NumberGenerator;
 import org.efaps.admin.datamodel.Type;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Instance;
 import org.efaps.util.EFapsException;
@@ -35,10 +35,10 @@ import org.efaps.util.EFapsException;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("1df73537-e1e6-415a-ad86-69cb508d3547")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class Naming
     extends Naming_Base
 {

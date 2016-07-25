@@ -21,8 +21,8 @@
 
 package org.efaps.esjp.projects.listener;
 
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsListener;
-import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -32,10 +32,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("7ab47d5d-6a39-46b5-9205-e52c008e170c")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 @EFapsListener
 public class OnLabel
     extends OnLabel_Base

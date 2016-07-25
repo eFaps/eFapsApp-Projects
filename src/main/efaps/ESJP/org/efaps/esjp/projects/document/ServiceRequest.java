@@ -20,7 +20,7 @@
 
 package org.efaps.esjp.projects.document;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 /**
@@ -29,10 +29,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("54029722-bea5-4a03-81ef-31dd92ba49a6")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class ServiceRequest
     extends ServiceRequest_Base
 {

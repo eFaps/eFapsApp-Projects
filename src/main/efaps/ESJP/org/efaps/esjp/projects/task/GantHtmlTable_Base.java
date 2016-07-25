@@ -34,7 +34,7 @@ import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Instance;
 import org.efaps.db.InstanceQuery;
@@ -51,10 +51,10 @@ import org.joda.time.Interval;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 @EFapsUUID("5829d1d9-bfb4-430e-93c4-a6e9467ea663")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class GantHtmlTable_Base
 {
     /**
@@ -67,7 +67,7 @@ public abstract class GantHtmlTable_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final List<Instance> instances = new ArrayList<Instance>();
+        final List<Instance> instances = new ArrayList<>();
         if (_parameter.getInstance().getType().isKindOf(CIProjects.ProjectAbstract.getType())) {
             final QueryBuilder queryBldr = new QueryBuilder(CIProjects.TaskAbstract);
             queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink,
@@ -78,7 +78,7 @@ public abstract class GantHtmlTable_Base
             instances.add(_parameter.getInstance());
         }
 
-        final Map<Instance, ATask> tasks = new HashMap<Instance, ATask>();
+        final Map<Instance, ATask> tasks = new HashMap<>();
         DateTime projectDate = null;
         DateTime projectDueDate = null;
         DateTime maxDate = null;
@@ -126,7 +126,7 @@ public abstract class GantHtmlTable_Base
                 maxDate = dateUntil;
             }
         }
-        final List<ATask> roots = new ArrayList<ATask>();
+        final List<ATask> roots = new ArrayList<>();
         for (final Entry<Instance, ATask> entry : tasks.entrySet()) {
             if (entry.getValue().isChild()) {
                 tasks.get(entry.getValue().getParentInstance()).add2Children(entry.getValue());
@@ -138,7 +138,7 @@ public abstract class GantHtmlTable_Base
         final DateTime startDate = minDate.isBefore(projectDate) ? minDate : projectDate;
         final DateTime endDate = maxDate.isAfter(projectDueDate) ? maxDate : projectDueDate;
         DateTime current = startDate;
-        final List<DateTime> dates = new ArrayList<DateTime>();
+        final List<DateTime> dates = new ArrayList<>();
         while (current.isBefore(endDate)) {
             dates.add(current);
             current = current.plusDays(1);
@@ -409,7 +409,7 @@ public abstract class GantHtmlTable_Base
         /**
          *
          */
-        private final List<GantHtmlTable_Base.ATask> children = new ArrayList<GantHtmlTable_Base.ATask>();
+        private final List<GantHtmlTable_Base.ATask> children = new ArrayList<>();
         /**
          *
          */
@@ -417,7 +417,7 @@ public abstract class GantHtmlTable_Base
         /**
          *
          */
-        private final Map<String, Object> attributes = new HashMap<String, Object>();
+        private final Map<String, Object> attributes = new HashMap<>();
         /**
          * @param _instance         instance of this task
          * @param _parentTaskInstance parent instance

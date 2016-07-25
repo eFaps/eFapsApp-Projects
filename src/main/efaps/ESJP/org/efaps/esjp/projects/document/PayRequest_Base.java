@@ -30,7 +30,7 @@ import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
@@ -49,7 +49,7 @@ import org.joda.time.DateTime;
  * @version $Id: WorkOrder_Base.java 6402 2011-04-05 15:30:11Z jan@moxter.net $
  */
 @EFapsUUID("2d28dc1c-33a6-4312-973f-8f9bbfefd882")
-@EFapsRevision("$Rev: 6402 $")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class PayRequest_Base
     extends DocumentAbstract
 {
@@ -167,8 +167,8 @@ public abstract class PayRequest_Base
         final Return retVal = new Return();
         final BigDecimal total = analizeTable(_parameter);
 
-        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        final Map<String, String> map = new HashMap<String, String>();
+        final List<Map<String, String>> list = new ArrayList<>();
+        final Map<String, String> map = new HashMap<>();
 
         map.put("netTotal", NumberFormatter.get().getTwoDigitsFormatter().format(total));
         list.add(map);

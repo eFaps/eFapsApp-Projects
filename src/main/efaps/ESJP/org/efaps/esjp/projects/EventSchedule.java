@@ -20,7 +20,7 @@
 
 package org.efaps.esjp.projects;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 /**
@@ -32,7 +32,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * @version $Id: Project.java 5526 2010-09-10 14:17:54Z miguel.a.aranya $
  */
 @EFapsUUID("b545299b-57f4-476d-81f0-f9bc5eeaa9d2")
-@EFapsRevision("$Rev: 5526 $")
+@EFapsApplication("eFapsApp-Projects")
 public class EventSchedule
     extends EventSchedule_Base
 {

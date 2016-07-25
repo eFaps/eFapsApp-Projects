@@ -22,7 +22,7 @@ package org.efaps.esjp.projects.document;
 
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Instance;
 import org.efaps.esjp.contacts.Contacts;
@@ -37,7 +37,7 @@ import org.efaps.util.EFapsException;
  *          $
  */
 @EFapsUUID("f50c42d3-f5c2-4537-a5d1-8f91dec485c5")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class DocumentAbstract_Base
     extends CommonDocument
 {

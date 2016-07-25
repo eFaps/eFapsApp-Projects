@@ -21,7 +21,7 @@
 
 package org.efaps.esjp.projects.task;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -31,10 +31,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 @EFapsUUID("0707905c-27ea-4d26-a900-dbdd9fae6ce8")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class TaskStructurBrowser
     extends TaskStructurBrowser_Base
 {

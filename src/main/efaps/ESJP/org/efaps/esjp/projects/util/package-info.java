@@ -21,6 +21,6 @@
  * Utility for the projects Package.
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 package org.efaps.esjp.projects.util;

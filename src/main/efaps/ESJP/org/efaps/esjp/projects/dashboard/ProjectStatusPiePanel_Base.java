@@ -30,7 +30,7 @@ import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.api.ui.IEsjpSnipplet;
 import org.efaps.db.MultiPrintQuery;
@@ -46,10 +46,10 @@ import org.efaps.util.EFapsException;
 /**
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("e62d7348-da53-4ca0-a004-8bedfcaf4fab")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class ProjectStatusPiePanel_Base
     implements IEsjpSnipplet
 {
@@ -62,7 +62,7 @@ public abstract class ProjectStatusPiePanel_Base
     public CharSequence getHtmlSnipplet()
         throws EFapsException
     {
-        final Map<Status, Integer> values = new HashMap<Status, Integer>();
+        final Map<Status, Integer> values = new HashMap<>();
         final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectService);
         add2QueryBldr(queryBldr);
         final MultiPrintQuery multi = queryBldr.getPrint();
@@ -79,7 +79,7 @@ public abstract class ProjectStatusPiePanel_Base
         }
         final PieChart pie = new PieChart();
 
-        final Serie<PieData> serie = new Serie<PieData>();
+        final Serie<PieData> serie = new Serie<>();
         pie.setTitle(getTitle());
         pie.addSerie(serie);
 

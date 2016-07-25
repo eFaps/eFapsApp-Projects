@@ -21,7 +21,7 @@
 
 package org.efaps.esjp.projects.report;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -29,10 +29,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("85fd02e4-ae90-4c99-b7fa-04f490d44497")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class AnalysisProductReport
     extends AnalysisProductReport_Base
 {

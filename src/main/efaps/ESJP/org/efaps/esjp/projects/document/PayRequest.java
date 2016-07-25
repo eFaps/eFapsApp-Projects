@@ -20,7 +20,7 @@
 
 package org.efaps.esjp.projects.document;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 /**
@@ -32,7 +32,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * @version $Id: WorkOrder.java 5526 2010-09-10 14:17:54Z miguel.a.aranya $
  */
 @EFapsUUID("3ed95cac-e576-4b92-8790-97cf4681daab")
-@EFapsRevision("$Rev: 5526 $")
+@EFapsApplication("eFapsApp-Projects")
 public class PayRequest
     extends PayRequest_Base
 {

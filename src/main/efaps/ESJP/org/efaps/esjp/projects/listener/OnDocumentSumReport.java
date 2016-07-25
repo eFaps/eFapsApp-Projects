@@ -21,8 +21,8 @@
 
 package org.efaps.esjp.projects.listener;
 
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsListener;
-import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -32,10 +32,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 * class.
 *
 * @author The eFaps Team
-* @version $Id$
+*
 */
 @EFapsUUID("f864e822-b31e-4058-8b9e-6c511170298b")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 @EFapsListener
 public class OnDocumentSumReport
     extends OnDocumentSumReport_Base

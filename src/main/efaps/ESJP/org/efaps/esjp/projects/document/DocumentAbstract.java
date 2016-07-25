@@ -20,7 +20,7 @@
 
 package org.efaps.esjp.projects.document;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 /**
@@ -29,10 +29,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("0edfd775-0c24-4ea8-9665-d409aca103c8")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class DocumentAbstract
     extends DocumentAbstract_Base
 {

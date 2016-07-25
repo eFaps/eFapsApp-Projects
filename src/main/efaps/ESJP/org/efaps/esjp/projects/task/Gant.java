@@ -21,7 +21,7 @@
 
 package org.efaps.esjp.projects.task;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -31,10 +31,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 @EFapsUUID("1312e50b-6ce9-4698-9237-04a841219617")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class Gant
     extends Gant_Base
 {

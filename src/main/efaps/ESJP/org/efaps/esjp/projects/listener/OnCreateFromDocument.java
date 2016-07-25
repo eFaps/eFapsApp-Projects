@@ -21,8 +21,8 @@
 
 package org.efaps.esjp.projects.listener;
 
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsListener;
-import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -32,10 +32,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("212eaa39-53d5-4964-a2a9-f86ebec32696")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 @EFapsListener
 public class OnCreateFromDocument
     extends OnCreateFromDocument_Base

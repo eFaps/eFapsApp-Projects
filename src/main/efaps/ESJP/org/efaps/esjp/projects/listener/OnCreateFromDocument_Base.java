@@ -37,10 +37,10 @@ import org.efaps.util.EFapsException;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("e761f76e-3ad4-4782-a743-636e53c4327a")
-@EFapsApplication("eFapsApp-Pojects")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class OnCreateFromDocument_Base
     extends CommonDocument
     implements IOnCreateFromDocument

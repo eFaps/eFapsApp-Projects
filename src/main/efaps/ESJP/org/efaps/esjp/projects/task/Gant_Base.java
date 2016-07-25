@@ -33,6 +33,8 @@ import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
+import org.efaps.admin.program.esjp.EFapsApplication;
+import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.db.Context;
 import org.efaps.db.Instance;
@@ -50,8 +52,10 @@ import org.joda.time.Days;
  * Class for Gant representation and calculation.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
+@EFapsUUID("ecf759c1-9c46-4213-bd09-8b2d9d76645e")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class Gant_Base
 {
     /**
@@ -99,7 +103,7 @@ public abstract class Gant_Base
             Map<Instance, String> values = (Map<Instance, String>) Context.getThreadContext()
                             .getRequestAttribute(Gant_Base.GANTREUQESTKEY);
             if (values == null || values != null && !values.containsKey(_parameter.getInstance())) {
-                values = new HashMap<Instance, String>();
+                values = new HashMap<>();
                 Context.getThreadContext().setRequestAttribute(Gant_Base.GANTREUQESTKEY, values);
                 @SuppressWarnings("unchecked")
                 final List<Instance> instances = (List<Instance>) _parameter

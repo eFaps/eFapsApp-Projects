@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.api.ui.IEsjpSnipplet;
 import org.efaps.db.MultiPrintQuery;
@@ -42,10 +42,10 @@ import org.efaps.util.EFapsException;
 /**
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("8d254e40-5892-48a6-bf27-59c5b532abd0")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class ProjectTypePiePanel_Base
     implements IEsjpSnipplet
 {
@@ -58,7 +58,7 @@ public abstract class ProjectTypePiePanel_Base
     public CharSequence getHtmlSnipplet()
         throws EFapsException
     {
-        final Map<String, Integer> values = new HashMap<String, Integer>();
+        final Map<String, Integer> values = new HashMap<>();
         final QueryBuilder queryBldr = new QueryBuilder(CIProjects.ProjectService);
         final MultiPrintQuery multi = queryBldr.getPrint();
         final SelectBuilder sel = SelectBuilder.get().linkto(CIProjects.ProjectService.ProjectTypeLink)
@@ -76,7 +76,7 @@ public abstract class ProjectTypePiePanel_Base
         }
         final PieChart pie = new PieChart();
 
-        final Serie<PieData> serie = new Serie<PieData>();
+        final Serie<PieData> serie = new Serie<>();
         pie.addSerie(serie);
 
         for (final Entry<String, Integer> entry : values.entrySet()) {

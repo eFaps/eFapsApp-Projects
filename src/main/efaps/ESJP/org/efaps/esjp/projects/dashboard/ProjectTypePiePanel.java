@@ -21,7 +21,7 @@
 
 package org.efaps.esjp.projects.dashboard;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -32,10 +32,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("8c2bcb01-f6ab-4f38-8789-c0ead9acb124")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public class ProjectTypePiePanel
     extends ProjectTypePiePanel_Base
 {

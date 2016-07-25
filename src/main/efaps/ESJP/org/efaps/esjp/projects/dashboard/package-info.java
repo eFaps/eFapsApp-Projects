@@ -22,6 +22,6 @@
  * Esjps that can be used for DashBoard.
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 package org.efaps.esjp.projects.dashboard;

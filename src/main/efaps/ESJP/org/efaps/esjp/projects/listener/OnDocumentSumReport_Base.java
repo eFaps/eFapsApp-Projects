@@ -24,14 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-import net.sf.dynamicreports.report.builder.DynamicReports;
-import net.sf.dynamicreports.report.builder.crosstab.CrosstabBuilder;
-import net.sf.dynamicreports.report.builder.crosstab.CrosstabRowGroupBuilder;
-
 import org.efaps.admin.common.MsgPhrase;
 import org.efaps.admin.event.Parameter;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Instance;
 import org.efaps.db.MultiPrintQuery;
@@ -45,14 +40,19 @@ import org.efaps.esjp.sales.listener.IOnDocumentSumReport;
 import org.efaps.esjp.sales.report.DocumentSumGroupedByDate_Base.ValueList;
 import org.efaps.util.EFapsException;
 
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.crosstab.CrosstabBuilder;
+import net.sf.dynamicreports.report.builder.crosstab.CrosstabRowGroupBuilder;
+
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ *
  */
 @EFapsUUID("e89020ac-c671-4549-b3e4-92b3696e6665")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class OnDocumentSumReport_Base
     implements IOnDocumentSumReport
 {
@@ -96,7 +96,7 @@ public abstract class OnDocumentSumReport_Base
                 project = (Boolean) filter.get("projectGroup");
             }
             if (project) {
-                final Map<Instance, String> map = new HashMap<Instance, String>();
+                final Map<Instance, String> map = new HashMap<>();
 
                 final QueryBuilder queryBldr = new QueryBuilder(CIProjects.Project2DocumentAbstract);
                 queryBldr.addWhereAttrEqValue(CIProjects.Project2DocumentAbstract.ToAbstract,

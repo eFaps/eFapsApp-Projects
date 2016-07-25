@@ -34,7 +34,7 @@ import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Context;
 import org.efaps.db.Insert;
@@ -55,7 +55,7 @@ import org.efaps.util.EFapsException;
  * @version $Id: Project_Base.java 11050 2013-11-20 22:25:09Z jorge.cueva@moxter.net $
  */
 @EFapsUUID("232949c1-26ed-4bc0-859f-512541cfb78b")
-@EFapsRevision("$Rev: 11050 $")
+@EFapsApplication("eFapsApp-Projects")
 public abstract class EventSchedule_Base
     extends CommonDocument
 {
@@ -134,7 +134,7 @@ public abstract class EventSchedule_Base
     {
         final String input = (String) _parameter.get(ParameterValues.OTHERS);
         final Map<?, ?> props =  (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final Map<String, Map<String, String>> sortMap = new TreeMap<String, Map<String, String>>();
+        final Map<String, Map<String, String>> sortMap = new TreeMap<>();
         if (input.length() > 0) {
             final String formatStr = props.containsKey("FormatStr") ? (String) props.get("FormatStr") : "%s - %s";
 
@@ -157,7 +157,7 @@ public abstract class EventSchedule_Base
                     formatter.format(formatStr, name, description);
                     final String choice = formatter.toString();
                     formatter.close();
-                    final Map<String, String> map = new HashMap<String, String>();
+                    final Map<String, String> map = new HashMap<>();
                     map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), oid);
                     map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
                     map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), choice);
@@ -166,7 +166,7 @@ public abstract class EventSchedule_Base
             }
         }
         final Return retVal = new Return();
-        final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        final List<Map<String, String>> list = new ArrayList<>();
         list.addAll(sortMap.values());
         retVal.put(ReturnValues.VALUES, list);
         return retVal;

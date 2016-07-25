@@ -21,6 +21,6 @@
  * Document package for project.
  *
  * @author The eFaps Team
- * @version $Id$
+ * 
  */
 package org.efaps.esjp.projects.document;
