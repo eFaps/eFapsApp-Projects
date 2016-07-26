@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2011 The eFaps Team
+ Copyright 2003 - 2016 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,11 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- Author:          The eFasp Team
- Revision:        $Rev: 3936 $
- Last Changed:    $Date: 2010-03-31 19:21:12 -0500 (Wed, 31 Mar 2010) $
- Last Changed By: $Author: jan.moxter $
-
  Original Author: Yusuke Kamiyamane
  Original Name:   clipboard_task.png
  Original Web:    Fugue
@@ -30,14 +25,10 @@
 
 -->
 
-<ui-image xmlns="http://www.efaps.org/xsd"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-
+<ui-image xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>972ffaad-c10b-467e-9edb-c17430a73b9a</uuid>
-    <file-application>eFaps-Kernel</file-application>
-    <file-revision>$Rev: 3936 $</file-revision>
-
+    <file-application>eFapsApp-Projects</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Projects_Task</name>
