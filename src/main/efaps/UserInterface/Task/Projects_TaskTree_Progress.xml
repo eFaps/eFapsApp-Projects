@@ -36,8 +36,8 @@
             <menu>Projects_TaskTree_Progress_Menu</menu>
             <table>Projects_ProgressTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ProgressTaskAbstract</property>
-                <property name="LinkFroms">TaskAbstractLink</property>
+                <property name="Type">Projects_ProgressTaskAbstract</property>
+                <property name="LinkFrom">TaskAbstractLink</property>
             </evaluate>
         </target>
         <!-- properties -->

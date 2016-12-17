@@ -41,8 +41,8 @@
             <menu>Projects_ProjectTree_Accounts_Menu</menu>
             <table>Projects_Project2AccountTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ProjectService2Account</property>
-                <property name="LinkFroms">FromLink</property>
+                <property name="Type">Projects_ProjectService2Account</property>
+                <property name="LinkFrom">FromLink</property>
             </evaluate>
         </target>
         <!-- properties -->

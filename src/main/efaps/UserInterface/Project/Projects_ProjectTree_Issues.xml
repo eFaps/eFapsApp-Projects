@@ -53,8 +53,8 @@
             <menu>Projects_ProjectTree_Issues_Menu</menu>
             <table>Projects_Project2IssuesTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_Issues_Ticket2ProjectService</property>
-                <property name="LinkFroms">ToLink</property>
+                <property name="Type">Projects_Issues_Ticket2ProjectService</property>
+                <property name="LinkFrom">ToLink</property>
             </evaluate>
             <help>org.efaps.wiki.projects.Projectissues.wiki</help>
         </target>

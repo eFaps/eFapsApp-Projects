@@ -41,8 +41,8 @@
             <menu>Contacts_ContactTree_MoveObject_Menu</menu>
             <table>Projects_Contacts_Project2ContactTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ProjectAbstract</property>
-                <property name="LinkFroms">Contact</property>
+                <property name="Type">Projects_ProjectAbstract</property>
+                <property name="LinkFrom">Contact</property>
             </evaluate>
         </target>
         <!-- properties -->

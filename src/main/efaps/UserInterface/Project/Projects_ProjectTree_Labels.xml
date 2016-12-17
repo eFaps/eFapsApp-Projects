@@ -41,8 +41,8 @@
             <menu>Projects_ProjectTree_Labels_Menu</menu>
             <table>Projects_Project2LabelTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ProjectService2Label</property>
-                <property name="LinkFroms">FromLink</property>
+                <property name="Type">Projects_ProjectService2Label</property>
+                <property name="LinkFrom">FromLink</property>
             </evaluate>
             <trigger program="org.efaps.esjp.accounting.Label"
                 method="accessCheck4Label"

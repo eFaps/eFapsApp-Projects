@@ -159,8 +159,8 @@
             <property name="ModeEdit">NONE</property>
             <table>Projects_ProgressTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ProgressTaskScheduled</property>
-                <property name="LinkFroms">TaskLink</property>
+                <property name="Type">Projects_ProgressTaskScheduled</property>
+                <property name="LinkFrom">TaskLink</property>
             </evaluate>
         </field>
     </definition>

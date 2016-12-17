@@ -39,7 +39,7 @@
             <menu>Projects_PayRequestMyDesk_Menu</menu>
             <table>ERP_DocumentAbstractTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_PayRequest</property>
+                <property name="Type">Projects_PayRequest</property>
             </evaluate>
         </target>
 

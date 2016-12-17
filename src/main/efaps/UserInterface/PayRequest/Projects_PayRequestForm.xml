@@ -147,8 +147,8 @@
             <property name="ModeCreate">EDITABLE</property>
             <table>Projects_PayRequestPositionTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_PayRequestPosition</property>
-                <property name="LinkFroms">PayRequest</property>
+                <property name="Type">Projects_PayRequestPosition</property>
+                <property name="LinkFrom">PayRequest</property>
             </evaluate>
         </field>
         <field name="note">

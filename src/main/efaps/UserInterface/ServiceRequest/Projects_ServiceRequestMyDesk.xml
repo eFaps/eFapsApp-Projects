@@ -41,7 +41,7 @@
             <menu>Projects_ServiceRequestMyDesk_Menu</menu>
             <table>ERP_DocumentAbstractTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_ServiceRequest</property>
+                <property name="Type">Projects_ServiceRequest</property>
             </evaluate>
         </target>
 

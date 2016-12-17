@@ -41,7 +41,7 @@
             <menu>Projects_WorkReportMyDesk_Menu</menu>
             <table>ERP_DocumentAbstractTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Projects_WorkReport</property>
+                <property name="Type">Projects_WorkReport</property>
             </evaluate>
         </target>
 
