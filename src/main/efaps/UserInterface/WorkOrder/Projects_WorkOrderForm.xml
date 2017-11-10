@@ -117,7 +117,7 @@
             <property name="Attribute">Name</property>
             <property name="Required">true</property>
             <property name="ModeSearch">EDITABLE</property>
-            <trigger program="org.efaps.esjp.admin.access.AccessOnField"
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
                 method="configCheck"
                 name="Projects_WorkOrderForm.name.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK">
@@ -146,7 +146,7 @@
                 name="Projects_WorkOrderForm.project.UI_FIELD_AUTOCOMPLETE"
                 event="UI_FIELD_AUTOCOMPLETE" >
             </trigger>
-             <trigger program="org.efaps.esjp.admin.access.AccessOnField"
+             <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
                 method="configCheck"
                 name="Projects_WorkOrderForm.project.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK">
@@ -173,7 +173,7 @@
                 method="updateFields4Contact"
                 name="Projects_WorkOrderForm.contact.UI_Field_Update"
                 event="UI_FIELD_UPDATE" />
-            <trigger program="org.efaps.esjp.admin.access.AccessOnField"
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
                 method="configCheck"
                 name="Projects_WorkOrderForm.project.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK">
