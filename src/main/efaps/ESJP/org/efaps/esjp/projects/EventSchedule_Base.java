@@ -143,7 +143,8 @@ public abstract class EventSchedule_Base
                 final Type type = Type.get(entry.getValue());
                 final QueryBuilder queryBldr = new QueryBuilder(type);
                 queryBldr.addWhereAttrMatchValue(CIERP.EventDefinitionAbstract.Name, input + "*").setIgnoreCase(true);
-                queryBldr.addWhereAttrEqValue(CIERP.EventDefinitionAbstract.Active, true);
+                queryBldr.addWhereAttrEqValue(CIERP.EventDefinitionAbstract.StatusAbstract,
+                                Status.find(CIERP.EventDefinitionStatus.Active));
 
                 final MultiPrintQuery print = queryBldr.getPrint();
                 print.addAttribute(CIERP.EventDefinitionAbstract.Name,
