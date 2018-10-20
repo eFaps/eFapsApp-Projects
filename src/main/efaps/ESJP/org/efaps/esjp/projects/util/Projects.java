@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2016 The eFaps Team
+ * Copyright 2003 - 2018 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,6 @@ import org.efaps.esjp.admin.common.systemconfiguration.BooleanSysConfAttribute;
 import org.efaps.util.cache.CacheReloadException;
 
 /**
- * TODO comment!
- *
  * @author The eFaps Team
  */
 @EFapsUUID("7536a95f-c2bb-4e97-beb1-58ef3e75b80a")
@@ -42,6 +40,13 @@ public final class Projects
 
     /** Projects-Configuration. */
     public static final UUID SYSCONFUUID = UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a");
+
+    /** See description. */
+    @EFapsSysConfAttribute
+    public static final BooleanSysConfAttribute ACTIVATE = new BooleanSysConfAttribute()
+                    .sysConfUUID(SYSCONFUUID)
+                    .key(Projects.BASE + "Activate")
+                    .description(" Main switch that permits to activate/deactivate Projects.");
 
     /** See description. */
     @EFapsSysConfAttribute
