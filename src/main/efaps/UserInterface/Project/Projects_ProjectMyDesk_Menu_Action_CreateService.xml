@@ -34,7 +34,9 @@
             <execute program="org.efaps.esjp.projects.Project" method="create" >
                 <property name="StatusGroup">Projects_ProjectServiceStatus</property>
                 <property name="Status">Open</property>
-                <property name="UseNumberGenerator4Name">true</property>
+                <!-- Projects-Configuration -->
+                <property name="NumGenSystemConfig">7536a95f-c2bb-4e97-beb1-58ef3e75b80a</property>
+                <property name="NumGenSystemConfigAttribute">org.efaps.projects.Project.NumberGenerator</property>
             </execute>
         </target>
         <property name="Target">modal</property>
