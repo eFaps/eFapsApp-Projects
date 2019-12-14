@@ -25,6 +25,8 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.api.annotation.EFapsSysConfAttribute;
 import org.efaps.api.annotation.EFapsSystemConfiguration;
 import org.efaps.esjp.admin.common.systemconfiguration.BooleanSysConfAttribute;
+import org.efaps.esjp.admin.common.systemconfiguration.StringSysConfAttribute;
+import org.efaps.esjp.ci.CINumGenProjects;
 import org.efaps.util.cache.CacheReloadException;
 
 /**
@@ -54,6 +56,14 @@ public final class Projects
                     .sysConfUUID(SYSCONFUUID)
                     .key(BASE + "Project.AssignWarehouse")
                     .description(" Create and assign a Warehouse on creation of a Project.");
+
+    /** See description. */
+    @EFapsSysConfAttribute
+    public static final StringSysConfAttribute PROJECT_NUMGEN = new StringSysConfAttribute()
+                    .sysConfUUID(SYSCONFUUID)
+                    .key(BASE + "Project.NumberGenerator")
+                    .defaultValue(CINumGenProjects.ProjectServiceSequence.uuid.toString())
+                    .description("NumberGenerator for Projects.");
 
     /**
      * Singelton.
