@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2015 The eFaps Team
+ * Copyright 2003 - 2019 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.efaps.esjp.projects.report;
 import java.awt.Color;
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -51,7 +52,6 @@ import org.efaps.esjp.common.jasperreport.AbstractDynamicReport;
 import org.efaps.esjp.erp.FilteredReport;
 import org.efaps.esjp.projects.listener.IOnResultReport;
 import org.efaps.esjp.projects.util.Projects;
-import org.efaps.esjp.projects.util.ProjectsSettings;
 import org.efaps.util.EFapsException;
 import org.efaps.util.cache.CacheReloadException;
 import org.joda.time.DateTime;
@@ -69,8 +69,6 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
 /**
- * TODO comment!
- *
  * @author The eFaps Team
  */
 @EFapsUUID("9b3c65df-97aa-4fe5-84f3-2931e4f66cc1")
@@ -164,7 +162,7 @@ public abstract class ProjectResultReport_Base
          */
         public DynProjectResultReport(final FilteredReport _filteredReport)
         {
-            this.filteredReport = _filteredReport;
+            filteredReport = _filteredReport;
         }
 
         @Override
@@ -182,8 +180,7 @@ public abstract class ProjectResultReport_Base
                 final Map<String, Object> totalMap = new HashMap<>();
                 totalMap.put("project", DBProperties.getProperty(ProjectResultReport.class.getName() + ".total.descr"));
                 totalMap.put("style", Style.TOTAL.toString());
-                final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
-                                ProjectsSettings.RESULTREPORT, true);
+                final Properties properties = Projects.RESULTREPORT.get();
                 for (final ProjectBean bean : getBeans(_parameter)) {
                     BigDecimal expenseNet = BigDecimal.ZERO;
                     BigDecimal estimateNet = BigDecimal.ZERO;
@@ -246,22 +243,22 @@ public abstract class ProjectResultReport_Base
 
                     if (estimateNet.compareTo(BigDecimal.ZERO) != 0) {
                         estimateGainPercentNet = BigDecimal.ONE.subtract(
-                                        expenseNet.divide(estimateNet, BigDecimal.ROUND_HALF_UP))
+                                        expenseNet.divide(estimateNet, RoundingMode.HALF_UP))
                                         .multiply(new BigDecimal(100));
                     }
                     if (estimateCross.compareTo(BigDecimal.ZERO) != 0) {
                         estimateGainPercentCross = BigDecimal.ONE.subtract(expenseCross
-                                        .divide(estimateCross, BigDecimal.ROUND_HALF_UP))
+                                        .divide(estimateCross, RoundingMode.HALF_UP))
                                         .multiply(new BigDecimal(100));
                     }
                     if (collectionNet.compareTo(BigDecimal.ZERO) != 0) {
                         collectionGainPercentNet = BigDecimal.ONE.subtract(
-                                        expenseNet.divide(collectionNet, BigDecimal.ROUND_HALF_UP))
+                                        expenseNet.divide(collectionNet, RoundingMode.HALF_UP))
                                         .multiply(new BigDecimal(100));
                     }
                     if (collectionCross.compareTo(BigDecimal.ZERO) != 0) {
                         collectionGainPercentCross = BigDecimal.ONE.subtract(expenseCross
-                                        .divide(collectionCross, BigDecimal.ROUND_HALF_UP))
+                                        .divide(collectionCross, RoundingMode.HALF_UP))
                                         .multiply(new BigDecimal(100));
                     }
 
@@ -299,22 +296,22 @@ public abstract class ProjectResultReport_Base
 
                 if (estimateNet.compareTo(BigDecimal.ZERO) != 0) {
                     estimateGainPercentNet = BigDecimal.ONE.subtract(
-                                    expenseNet.divide(estimateNet, BigDecimal.ROUND_HALF_UP))
+                                    expenseNet.divide(estimateNet, RoundingMode.HALF_UP))
                                     .multiply(new BigDecimal(100));
                 }
                 if (estimateCross.compareTo(BigDecimal.ZERO) != 0) {
                     estimateGainPercentCross = BigDecimal.ONE.subtract(expenseCross
-                                    .divide(estimateCross, BigDecimal.ROUND_HALF_UP))
+                                    .divide(estimateCross, RoundingMode.HALF_UP))
                                     .multiply(new BigDecimal(100));
                 }
                 if (collectionNet.compareTo(BigDecimal.ZERO) != 0) {
                     collectionGainPercentNet = BigDecimal.ONE.subtract(
-                                    expenseNet.divide(collectionNet, BigDecimal.ROUND_HALF_UP))
+                                    expenseNet.divide(collectionNet, RoundingMode.HALF_UP))
                                     .multiply(new BigDecimal(100));
                 }
                 if (collectionCross.compareTo(BigDecimal.ZERO) != 0) {
                     collectionGainPercentCross = BigDecimal.ONE.subtract(expenseCross
-                                    .divide(collectionCross, BigDecimal.ROUND_HALF_UP))
+                                    .divide(collectionCross, RoundingMode.HALF_UP))
                                     .multiply(new BigDecimal(100));
                 }
                 totalMap.put("estimateGain.gain.net", estimateNet.subtract(expenseNet));
@@ -379,8 +376,7 @@ public abstract class ProjectResultReport_Base
                                                    throws EFapsException
         {
             final Map<Type, String> ret = new HashMap<>();
-            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
-                            ProjectsSettings.RESULTREPORT, true);
+            final Properties properties = Projects.RESULTREPORT.get();
             int i = 1;
             String keyTmp = _key + String.format("%02d", i);
             while (properties.containsKey(keyTmp)) {
@@ -430,12 +426,12 @@ public abstract class ProjectResultReport_Base
                 BigDecimal netPercent = BigDecimal.ZERO;
                 BigDecimal crossPercent = BigDecimal.ZERO;
                 if (baseNetTotal.compareTo(BigDecimal.ZERO) != 0) {
-                    netPercent = BigDecimal.ONE.subtract(targetNetTotal.divide(baseNetTotal, BigDecimal.ROUND_HALF_UP))
+                    netPercent = BigDecimal.ONE.subtract(targetNetTotal.divide(baseNetTotal, RoundingMode.HALF_UP))
                                     .multiply(new BigDecimal(100));
                 }
                 if (baseCrossTotal.compareTo(BigDecimal.ZERO) != 0) {
                     crossPercent = BigDecimal.ONE.subtract(targetCrossTotal
-                                    .divide(baseCrossTotal, BigDecimal.ROUND_HALF_UP))
+                                    .divide(baseCrossTotal, RoundingMode.HALF_UP))
                                     .multiply(new BigDecimal(100));
                 }
                 estimateGainPercentMap.put(bean.getNetKey(), netPercent);
@@ -450,8 +446,7 @@ public abstract class ProjectResultReport_Base
         {
             final Map<String, Object> totalMap = new HashMap<>();
             totalMap.put("style", Style.TOTAL.toString());
-            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
-                            ProjectsSettings.RESULTREPORT, true);
+            final Properties properties = Projects.RESULTREPORT.get();
             int i = 1;
             String keyTmp = _key + String.format("%02d", i);
             while (properties.containsKey(keyTmp)) {
@@ -568,8 +563,7 @@ public abstract class ProjectResultReport_Base
                 _queryBldr.addWhereAttrInQuery(CISales.DocumentAbstract.ID,
                                 attrQueryBldr.getAttributeQuery(CIProjects.Project2DocumentAbstract.ToAbstract));
             }
-            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
-                            ProjectsSettings.RESULTREPORT, true);
+            final Properties properties = Projects.RESULTREPORT.get();
 
             final List<Status> statusList = getStatusListFromProperties(_parameter, properties);
             if (!statusList.isEmpty()) {
@@ -587,8 +581,7 @@ public abstract class ProjectResultReport_Base
             final ColumnTitleGroupBuilder ret = DynamicReports.grid.titleGroup(
                             DBProperties.getProperty(ProjectResultReport.class.getName() + "." + _propKey + ".descr"));
 
-            final Properties properties = Projects.getSysConfig().getAttributeValueAsProperties(
-                            ProjectsSettings.RESULTREPORT, true);
+            final Properties properties = Projects.RESULTREPORT.get();
             int i = 1;
             String keyTmp = _key + String.format("%02d", i);
             boolean result = true;
@@ -725,8 +718,8 @@ public abstract class ProjectResultReport_Base
         protected List<ProjectBean> getBeans(final Parameter _parameter)
             throws EFapsException
         {
-            if (this.beans == null) {
-                this.beans = new ArrayList<>();
+            if (beans == null) {
+                beans = new ArrayList<>();
                 final Map<Instance, ProjectBean> map = new HashMap<>();
                 final QueryBuilder queryBldr = new QueryBuilder(CISales.DocumentSumAbstract);
                 add2QueryBuilder(_parameter, queryBldr);
@@ -757,9 +750,9 @@ public abstract class ProjectResultReport_Base
                                     multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.NetTotal),
                                     multi.<BigDecimal>getAttribute(CISales.DocumentSumAbstract.CrossTotal));
                 }
-                this.beans.addAll(map.values());
+                beans.addAll(map.values());
             }
-            return this.beans;
+            return beans;
         }
 
         /**
@@ -769,7 +762,7 @@ public abstract class ProjectResultReport_Base
          */
         public FilteredReport getFilteredReport()
         {
-            return this.filteredReport;
+            return filteredReport;
         }
     }
 
@@ -789,7 +782,7 @@ public abstract class ProjectResultReport_Base
          */
         public Instance getInstance()
         {
-            return this.instance;
+            return instance;
         }
 
         /**
@@ -807,11 +800,11 @@ public abstract class ProjectResultReport_Base
         {
             final Type type = _instance.getType();
             DocBean docBean;
-            if (this.docs.containsKey(type)) {
-                docBean = this.docs.get(type);
+            if (docs.containsKey(type)) {
+                docBean = docs.get(type);
             } else {
                 docBean = new DocBean().setType(type);
-                this.docs.put(type, docBean);
+                docs.put(type, docBean);
             }
             boolean add = true;
             for (final IOnResultReport listener : Listener.get().<IOnResultReport>invoke(IOnResultReport.class)) {
@@ -830,7 +823,7 @@ public abstract class ProjectResultReport_Base
          */
         public ProjectBean setInstance(final Instance _instance)
         {
-            this.instance = _instance;
+            instance = _instance;
             return this;
         }
 
@@ -841,7 +834,7 @@ public abstract class ProjectResultReport_Base
          */
         public Map<Type, DocBean> getDocs()
         {
-            return this.docs;
+            return docs;
         }
 
         /**
@@ -851,7 +844,7 @@ public abstract class ProjectResultReport_Base
          */
         public String getName()
         {
-            return this.name;
+            return name;
         }
 
         /**
@@ -861,7 +854,7 @@ public abstract class ProjectResultReport_Base
          */
         public ProjectBean setName(final String _name)
         {
-            this.name = _name;
+            name = _name;
             return this;
         }
 
@@ -895,7 +888,7 @@ public abstract class ProjectResultReport_Base
          */
         public BigDecimal getCross()
         {
-            return this.cross;
+            return cross;
         }
 
         /**
@@ -906,7 +899,7 @@ public abstract class ProjectResultReport_Base
         public DocBean addCross(final BigDecimal _cross)
         {
             if (_cross != null) {
-                this.cross = this.cross.add(_cross);
+                cross = cross.add(_cross);
             }
             return this;
         }
@@ -918,7 +911,7 @@ public abstract class ProjectResultReport_Base
          */
         public BigDecimal getNet()
         {
-            return this.net;
+            return net;
         }
 
         /**
@@ -929,7 +922,7 @@ public abstract class ProjectResultReport_Base
         public DocBean addNet(final BigDecimal _net)
         {
             if (_net != null) {
-                this.net = this.net.add(_net);
+                net = net.add(_net);
             }
             return this;
         }
@@ -941,7 +934,7 @@ public abstract class ProjectResultReport_Base
          */
         public Type getType()
         {
-            return this.type;
+            return type;
         }
 
         /**
@@ -951,7 +944,7 @@ public abstract class ProjectResultReport_Base
          */
         public DocBean setType(final Type _type)
         {
-            this.type = _type;
+            type = _type;
             return this;
         }
 
@@ -963,7 +956,7 @@ public abstract class ProjectResultReport_Base
         public DocBean setCross(final BigDecimal _cross)
         {
             if (_cross != null) {
-                this.cross = _cross;
+                cross = _cross;
             }
             return this;
         }
@@ -975,7 +968,7 @@ public abstract class ProjectResultReport_Base
          */
         public DocBean setNet(final BigDecimal _net)
         {
-            this.net = _net;
+            net = _net;
             return this;
         }
     }

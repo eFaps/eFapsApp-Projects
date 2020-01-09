@@ -48,11 +48,6 @@
             <description>Show the fields to create the workorder by project ofr by client.</description>
         </attribute>
         <attribute>
-            <key>org.efaps.projects.ResultReport</key>
-            <value><![CDATA[Expense01=Sales_OrderOutbound
-Expense02=Sales_ServiceOrderOutbound ]]></value>
-        </attribute>
-        <attribute>
             <key>org.efaps.projects.Connect2Doc01</key>
             <value><![CDATA[ConnectType01=Projects_ProjectService2ConsignmentNote
 ConnectChildType01=Sales_ConsignmentNote

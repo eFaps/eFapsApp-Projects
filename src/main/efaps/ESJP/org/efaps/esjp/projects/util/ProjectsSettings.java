@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2013 The eFaps Team
+ * Copyright 2003 - 2019 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
-
 
 package org.efaps.esjp.projects.util;
 
@@ -28,7 +24,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * TODO comment!
  *
  * @author The eFaps Team
- * 
+ *
  */
 @EFapsUUID("eac97366-119e-4797-ad33-6c7481a9efce")
 @EFapsApplication("eFapsApp-Projects")
@@ -45,13 +41,6 @@ public interface ProjectsSettings
      * Set a Price List for a Type used to Calculator. Used for Sales Documents.
      */
     String NAMING = ProjectsSettings.BASE + "Naming";
-
-    /**
-     * Properties.<br/>
-     * Can be concatenated.<br/>
-     * Configure the ResultReport.
-     */
-    String RESULTREPORT = ProjectsSettings.BASE + "ResultReport";
 
     /**
      * Properties.<br/>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2018 The eFaps Team
+ * Copyright 2003 - 2019 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.api.annotation.EFapsSysConfAttribute;
 import org.efaps.api.annotation.EFapsSystemConfiguration;
 import org.efaps.esjp.admin.common.systemconfiguration.BooleanSysConfAttribute;
+import org.efaps.esjp.admin.common.systemconfiguration.PropertiesSysConfAttribute;
 import org.efaps.esjp.admin.common.systemconfiguration.StringSysConfAttribute;
 import org.efaps.esjp.ci.CINumGenProjects;
 import org.efaps.util.cache.CacheReloadException;
@@ -64,6 +65,17 @@ public final class Projects
                     .key(BASE + "Project.NumberGenerator")
                     .defaultValue(CINumGenProjects.ProjectServiceSequence.uuid.toString())
                     .description("NumberGenerator for Projects.");
+
+    /** See description. */
+    @EFapsSysConfAttribute
+    public static final PropertiesSysConfAttribute RESULTREPORT = new PropertiesSysConfAttribute()
+                    .sysConfUUID(SYSCONFUUID)
+                    .key(BASE + "report.ProjectResultReport")
+                    .addDefaultValue("Expense01", "Sales_OrderOutbound")
+                    .addDefaultValue("Expense02", "Sales_OrderOutbound")
+                    .description("Config for ProjectResultReport\n"
+                                    + "CollectionNN=Type\n"
+                                    + "EstimateNN=Type");
 
     /**
      * Singelton.
