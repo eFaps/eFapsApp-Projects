@@ -679,7 +679,7 @@ public abstract class Project_Base
                                     // nothing must be done at all
                                     e.printStackTrace();
                                 }
-                                ret = new Long(persId).equals(getValue());
+                                ret = Long.valueOf(persId).equals(getValue());
                                 return ret;
                             }
                         };
