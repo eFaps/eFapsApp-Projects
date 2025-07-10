@@ -34,7 +34,6 @@ import org.efaps.db.Instance;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIProjects;
-import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
 /**
@@ -114,7 +113,7 @@ public abstract class Progress_Base
     {
         @SuppressWarnings("unchecked")
         final Map<String, String> oid4ui = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
-        final String[] rowIds = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
+        final String[] rowIds = _parameter.getParameterValues("eFapsTRID");
         final String[] progress = _parameter.getParameterValues("progress");
         final String date = _parameter.getParameterValue("progressDate");
 

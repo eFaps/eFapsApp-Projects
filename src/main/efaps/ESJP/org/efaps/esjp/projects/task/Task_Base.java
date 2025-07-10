@@ -50,7 +50,6 @@ import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.ui.wicket.util.DateUtil;
-import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 import org.joda.time.DateTime;
 
@@ -393,8 +392,8 @@ public abstract class Task_Base
         final Return ret = new Return();
         final String[] descriptions = _parameter.getParameterValues("description");
         final Instance projectInst = _parameter.getInstance();
-        final String[] allowChilds = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_ALLOWSCHILDS.getKey());
-        final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
+        final String[] allowChilds = _parameter.getParameterValues("eFapsStructurBrowserNodeAllowsChilds");
+        final String[] levels = _parameter.getParameterValues("eFapsStructurBrowserNodeLevel");
         final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");
         final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
 
@@ -533,7 +532,7 @@ public abstract class Task_Base
                         UUID.fromString("7536a95f-c2bb-4e97-beb1-58ef3e75b80a"));
         String ret = "";
         if (config != null && config.getAttributeValueAsBoolean("Tasks_AutomaticNumbering")) {
-            final String[] levels = _parameter.getParameterValues(EFapsKey.STRUCBRWSR_LEVEL.getKey());
+            final String[] levels = _parameter.getParameterValues("eFapsStructurBrowserNodeLevel");
             final int level = Integer.parseInt(levels[_idx]);
             for (int i = 0; i < level; i++) {
                 if (i > 0) {
@@ -657,7 +656,7 @@ public abstract class Task_Base
         final Return ret = new Return();
         @SuppressWarnings("unchecked")
         final Map<String, String> oidMap = (Map<String, String>) _parameter.get(ParameterValues.OIDMAP4UI);
-        final String[] rowKeys = _parameter.getParameterValues(EFapsKey.TABLEROW_NAME.getKey());
+        final String[] rowKeys = _parameter.getParameterValues("eFapsTRID");
         final String[] descriptions = _parameter.getParameterValues("description");
         final String[] names = _parameter.getParameterValues("name");
         final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");

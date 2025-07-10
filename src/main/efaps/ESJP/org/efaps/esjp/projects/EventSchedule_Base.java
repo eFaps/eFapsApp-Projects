@@ -40,7 +40,6 @@ import org.efaps.esjp.ci.CIERP;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.esjp.erp.CommonDocument;
-import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
 /**
@@ -154,9 +153,9 @@ public abstract class EventSchedule_Base
                     final String choice = formatter.toString();
                     formatter.close();
                     final Map<String, String> map = new HashMap<>();
-                    map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), oid);
-                    map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), name);
-                    map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), choice);
+                    map.put("eFapsAutoCompleteKEY", oid);
+                    map.put("eFapsAutoCompleteVALUE", name);
+                    map.put("eFapsAutoCompleteCHOICE", choice);
                     sortMap.put(choice, map);
                 }
             }

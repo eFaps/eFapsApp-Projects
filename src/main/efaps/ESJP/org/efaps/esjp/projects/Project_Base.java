@@ -69,7 +69,6 @@ import org.efaps.esjp.projects.listener.IOnProject;
 import org.efaps.esjp.projects.listener.OnCreateFromDocument;
 import org.efaps.esjp.projects.util.Projects;
 import org.efaps.esjp.projects.util.ProjectsSettings;
-import org.efaps.ui.wicket.util.EFapsKey;
 import org.efaps.util.EFapsException;
 
 /**
@@ -275,9 +274,9 @@ public abstract class Project_Base
                                 description, contactName);
 
                 final Map<String, String> map = new HashMap<String, String>();
-                map.put(EFapsKey.AUTOCOMPLETE_KEY.getKey(), oid);
-                map.put(EFapsKey.AUTOCOMPLETE_VALUE.getKey(), value);
-                map.put(EFapsKey.AUTOCOMPLETE_CHOICE.getKey(), choice);
+                map.put("eFapsAutoCompleteKEY", oid);
+                map.put("eFapsAutoCompleteVALUE", value);
+                map.put("eFapsAutoCompleteCHOICE", choice);
                 sortMap.put(choice, map);
             }
         }
