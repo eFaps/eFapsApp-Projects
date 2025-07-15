@@ -17,7 +17,6 @@ package org.efaps.esjp.projects.task;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +47,7 @@ import org.efaps.db.SelectBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
+import org.efaps.esjp.common.datetime.JodaTimeUtils;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.util.EFapsException;
 import org.joda.time.DateTime;
@@ -307,7 +307,7 @@ public abstract class Task_Base
                         CIProjects.TaskAbstract.Weight, CIProjects.TaskAbstract.UoM,
                         CIProjects.TaskAbstract.Order);
         multi.execute();
-        final Map<Instance, TaskPOs> tmp = new HashMap<Instance, TaskPOs>();
+        final Map<Instance, TaskPOs> tmp = new HashMap<>();
 
         while (multi.next()) {
             final TaskPOs task = new TaskPOs(multi.getCurrentInstance(), 0);
@@ -333,7 +333,7 @@ public abstract class Task_Base
             task.setParentInstance(Instance.get(multi.<String>getSelect(sel)));
         }
 
-        final List<TaskPOs> roots = new ArrayList<TaskPOs>();
+        final List<TaskPOs> roots = new ArrayList<>();
         for (final Entry<Instance, TaskPOs> entry : tmp.entrySet()) {
             if (entry.getValue().isChild()) {
                 entry.getValue().setParent(tmp.get(entry.getValue().getParentInstance()));
@@ -341,16 +341,9 @@ public abstract class Task_Base
                 roots.add(entry.getValue());
             }
         }
-        Collections.sort(roots, new Comparator<TaskPOs>()
-        {
-            @Override
-            public int compare(final TaskPOs _arg0,
-                               final TaskPOs _arg1)
-            {
-                return ((Integer) _arg0.getAttrValue(CIProjects.TaskAbstract.Order.name)).compareTo((Integer) _arg1
-                                .getAttrValue(CIProjects.TaskAbstract.Order.name));
-            }
-        });
+        Collections.sort(roots, (_arg0,
+         _arg1) -> ((Integer) _arg0.getAttrValue(CIProjects.TaskAbstract.Order.name)).compareTo((Integer) _arg1
+                        .getAttrValue(CIProjects.TaskAbstract.Order.name)));
 
         return roots;
     }
@@ -372,8 +365,8 @@ public abstract class Task_Base
         queryBldr.addWhereAttrEqValue(CIProjects.TaskAbstract.ProjectAbstractLink, _parameter.getInstance().getId());
         final InstanceQuery query = queryBldr.getQuery();
         query.setLimit(1);
-        if ((query.execute().isEmpty() && TargetMode.CREATE.equals(mode))
-                        || (!query.execute().isEmpty() && TargetMode.EDIT.equals(mode))) {
+        if (query.execute().isEmpty() && TargetMode.CREATE.equals(mode)
+                        || !query.execute().isEmpty() && TargetMode.EDIT.equals(mode)) {
             ret.put(ReturnValues.TRUE, true);
         }
         return ret;
@@ -396,7 +389,7 @@ public abstract class Task_Base
         final String[] dateFroms = _parameter.getParameterValues("dateFrom_eFapsDate");
         final String[] dateUntils =  _parameter.getParameterValues("dateUntil_eFapsDate");
 
-        final Stack<TaskPOs> parents = new Stack<TaskPOs>();
+        final Stack<TaskPOs> parents = new Stack<>();
         Integer maxlevel = 0;
         for (final String levelStr : levels) {
             final int level = Integer.parseInt(levelStr);
@@ -434,8 +427,8 @@ public abstract class Task_Base
             insert.add(CIProjects.TaskAbstract.ProjectAbstractLink, projectInst.getId());
             insert.add(CIProjects.TaskAbstract.Name, getName(_parameter, i, numbering));
             insert.add(CIProjects.TaskAbstract.Description, descriptions[i]);
-            insert.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
-            insert.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
+            insert.add(CIProjects.TaskAbstract.DateFrom, JodaTimeUtils.getDateFromParameter(dateFroms[i]));
+            insert.add(CIProjects.TaskAbstract.DateUntil, JodaTimeUtils.getDateFromParameter(dateUntils[i]));
             insert.add(CIProjects.TaskAbstract.StatusAbstract,
                             Status.find(CIProjects.TaskScheduledStatus.uuid, "Open").getId());
             insert.execute();
@@ -444,15 +437,13 @@ public abstract class Task_Base
                 final TaskPOs posGrp = new TaskPOs(insert.getInstance(), level);
                 if (parents.isEmpty()) {
                     parents.push(posGrp);
+                } else if (parents.peek().level < posGrp.level) {
+                    parents.push(posGrp);
                 } else {
-                    if (parents.peek().level < posGrp.level) {
-                        parents.push(posGrp);
-                    } else {
-                        while (!parents.empty() && parents.peek().level >= posGrp.level) {
-                            parents.pop();
-                        }
-                        parents.push(posGrp);
+                    while (!parents.empty() && parents.peek().level >= posGrp.level) {
+                        parents.pop();
                     }
+                    parents.push(posGrp);
                 }
             }
         }
@@ -667,8 +658,8 @@ public abstract class Task_Base
                     final Update update = new Update(oidMap.get(rowKeys[i]));
                     update.add(CIProjects.TaskAbstract.Name, names[i]);
                     update.add(CIProjects.TaskAbstract.Description, descriptions[i]);
-                    update.add(CIProjects.TaskAbstract.DateFrom, DateUtil.getDateFromParameter(dateFroms[i]));
-                    update.add(CIProjects.TaskAbstract.DateUntil, DateUtil.getDateFromParameter(dateUntils[i]));
+                    update.add(CIProjects.TaskAbstract.DateFrom, JodaTimeUtils.getDateFromParameter(dateFroms[i]));
+                    update.add(CIProjects.TaskAbstract.DateUntil, JodaTimeUtils.getDateFromParameter(dateUntils[i]));
                     update.execute();
                 }
             }
@@ -827,7 +818,7 @@ public abstract class Task_Base
         /**
          * Mapping of attributes to values.
          */
-        private final Map<String, Object> attr2value = new HashMap<String, Object>();
+        private final Map<String, Object> attr2value = new HashMap<>();
 
         /**
          * The parent task.
@@ -837,7 +828,7 @@ public abstract class Task_Base
         /**
          * Children of this Task.
          */
-        private final List<Task_Base.TaskPOs> children  = new ArrayList<Task_Base.TaskPOs>();
+        private final List<Task_Base.TaskPOs> children  = new ArrayList<>();
 
         /**
          * @param _instance Instance
@@ -865,16 +856,9 @@ public abstract class Task_Base
         protected void addChild(final TaskPOs _taskPOs)
         {
             this.children.add(_taskPOs);
-            Collections.sort(this.children, new Comparator<TaskPOs>()
-            {
-                @Override
-                public int compare(final TaskPOs _arg0,
-                                   final TaskPOs _arg1)
-                {
-                    return ((Integer) _arg0.getAttrValue(CIProjects.TaskAbstract.Order.name)).compareTo((Integer) _arg1
-                                    .getAttrValue(CIProjects.TaskAbstract.Order.name));
-                }
-            });
+            Collections.sort(this.children, (_arg0,
+             _arg1) -> ((Integer) _arg0.getAttrValue(CIProjects.TaskAbstract.Order.name)).compareTo((Integer) _arg1
+                            .getAttrValue(CIProjects.TaskAbstract.Order.name)));
         }
 
         /**
