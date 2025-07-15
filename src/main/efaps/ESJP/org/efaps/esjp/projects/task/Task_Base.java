@@ -49,7 +49,6 @@ import org.efaps.db.Update;
 import org.efaps.esjp.ci.CIFormProjects;
 import org.efaps.esjp.ci.CIProjects;
 import org.efaps.esjp.common.uiform.Create;
-import org.efaps.ui.wicket.util.DateUtil;
 import org.efaps.util.EFapsException;
 import org.joda.time.DateTime;
 
